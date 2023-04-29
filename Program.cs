@@ -4,7 +4,7 @@ namespace OsmiumLang;
 
 public class Program
 {
-    static void Main(string[] args)
+    static void Main()
     {
         // todo: runtime lol
 
@@ -16,7 +16,7 @@ public class Program
 
             if (input.StartsWith("run "))
             {
-                var script = input.Substring(4);
+                var script = input[4..];
                 Log.Info($"running {script}");
                 Test.TryScript(script);
                 continue;
