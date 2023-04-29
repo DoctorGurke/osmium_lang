@@ -16,6 +16,12 @@ public class Test
         //TryScript("test/syntax/syntax_error.script");
     }
 
+    [TestCase("test/syntax/syntax_error.script")]
+    public void TestSyntaxError(string script)
+    {
+        TryError(script);
+    }
+
     [TestCase("test/lexer/control_flow.script")]
     [TestCase("test/lexer/assignment.script")]
     [TestCase("test/lexer/expressions.script")]
@@ -218,13 +224,13 @@ public class Test
         lexer.RemoveErrorListeners();
         lexer.AddErrorListener(listener_lexer);
 
-        if (listener_lexer.had_error)
-        {
-            Assert.Fail();
-        }
+        var error = listener_lexer.had_error;
+        Assert.False(error);
 
+        Log.Info($"Lexer {(error ? "Failed" : "Passed")}.");
+
+        // get parsed token stream
         tokenStream.Fill();
-
         var tokens = tokenStream.GetTokens();
 
         Log.Info($"[{input.Length} chars] -> [{tokens.Count} tokens]\n");
@@ -246,16 +252,13 @@ public class Test
             Log.Info($"[{testToken}] -> [{tokenName}]");
             var testTokenType = lexer.GetTokenType(testToken);
 
-            if (token.Type != testTokenType)
-                Assert.Fail();
+            Assert.True(token.Type == testTokenType);
         }
-
-        Assert.Pass();
     }
 
-    public static CommonTokenStream RunLexer(string input)
+    public static CommonTokenStream RunLexer(string input, bool verifyError = false)
     {
-        Log.Info($"> {input}");
+        Log.Info($">\t{input.Replace("\n", ">\t")}\n<EOF>");
         var str = new AntlrInputStream(input);
         var lexer = new ArithmeticLexer(str);
         var tokenStream = new CommonTokenStream(lexer);
@@ -264,16 +267,24 @@ public class Test
         lexer.RemoveErrorListeners();
         lexer.AddErrorListener(listener_lexer);
 
-        if (listener_lexer.had_error)
-            Assert.Fail();
-        else
-            Log.Info("Lexer Passed.");
+        var error = listener_lexer.had_error;
+        Log.Info($"\nLexer {(error ? "Failed" : "Passed")}.\n ");
+        // verify that input is erroneous 
+        if (verifyError && error)
+            Assert.Pass();
 
+        Assert.False(error);
+
+
+        // get parsed token stream
         tokenStream.Fill();
-
         var tokens = tokenStream.GetTokens();
 
-        Log.Info($"[{input.Length} chars] -> [{tokens.Count} tokens]\n");
+        Log.Info($"TOKENS:");
+        Log.Info($"[{input.Length} chars] -> [{tokens.Count} tokens]");
+        DumpTokens(tokenStream, lexer);
+        Log.Info("-----");
+
         foreach (var token in tokens)
         {
             var tokenName = lexer.Vocabulary.GetSymbolicName(token.Type);
@@ -282,7 +293,7 @@ public class Test
         return tokenStream;
     }
 
-    public static void RunParser(CommonTokenStream tokens)
+    public static bool RunParser(CommonTokenStream tokens, bool verifyError = false)
     {
         var parser = new ArithmeticParser(tokens);
         var listener_parser = new ErrorListener<IToken>();
@@ -290,21 +301,35 @@ public class Test
         parser.RemoveErrorListeners();
         parser.AddErrorListener(listener_parser);
 
+        // parse token stream
         var tree = parser.file();
-        if (listener_parser.had_error)
-            Assert.Fail();
-        else
-            Log.Info("Parser Passed.");
+
+        var error = listener_parser.had_error;
+        Log.Info($"Parser {(error ? "Failed" : "Passed")}.");
+        // verify that input is erroneous 
+        if (verifyError && error)
+            Assert.Pass();
+
+        Assert.False(error);
 
         Log.Info($"Syntax Tree:\n{tree.ToStringTree(parser)}");
         //Log.Info($"Info:\n{tree.ToInfoString(parser)}");
         Log.Info("\n");
+        return true;
     }
 
     public static void Try(string input)
     {
         var tokens = RunLexer(input);
         RunParser(tokens);
+    }
+
+    public static void TryError(string script)
+    {
+        var tokens = RunLexer(GetScript(script), true);
+        RunParser(tokens, true);
+
+        Assert.Fail();
     }
 
     public static void TryScript(string script)
@@ -316,7 +341,8 @@ public class Test
     {
         var executableLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         var scriptsPath = Path.Combine(executableLocation, "scripts");
-        var fileFullPath = Path.Combine(scriptsPath, script);
+
+        var fileFullPath = Path.IsPathFullyQualified(script) ? script : Path.Combine(scriptsPath, script);
 
         try
         {
@@ -326,27 +352,14 @@ public class Test
         catch
         {
             Log.Info($"script not found: {fileFullPath}");
-            return null;
+
+            throw new ScriptNotFoundException(script);
         }
     }
 
-    private static string DumpTokens(string input)
+    // used for building tests
+    private static string DumpTokens(CommonTokenStream tokenStream, ArithmeticLexer lexer)
     {
-        var str = new AntlrInputStream(input);
-        var lexer = new ArithmeticLexer(str);
-        var tokenStream = new CommonTokenStream(lexer);
-        var listener_lexer = new ErrorListener<int>();
-
-        lexer.RemoveErrorListeners();
-        lexer.AddErrorListener(listener_lexer);
-
-        if (listener_lexer.had_error)
-            Log.Info("Lexer Failed.");
-        else
-            Log.Info("Lexer Passed.");
-
-        tokenStream.Fill();
-
         var tokens = tokenStream.GetTokens();
 
         var sb = new StringBuilder();

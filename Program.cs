@@ -1,4 +1,6 @@
-﻿namespace OsmiumLang;
+﻿using System;
+
+namespace OsmiumLang;
 
 public class Program
 {
@@ -31,4 +33,9 @@ public static class Log
     {
         System.Console.WriteLine($"{content}");
     }
+}
+
+public class ScriptNotFoundException : Exception
+{
+    public ScriptNotFoundException(string message) : base(message) { }
 }
