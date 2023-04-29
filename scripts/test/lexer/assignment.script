@@ -1,0 +1,14 @@
+﻿x = 2 + 3;
+y = x * 4;
+z = y / 2;
+a = z - 1;
+b = (2 + 3) * 4 / (5 - 1);
+c = -x + y * -z;
+d = 5 % 2;
+e = (x > y) && (y < z);
+f = (x < y) || (y > z);
+g = x == y;
+h = x != y;
+i = true && false;
+j = true || false;
+k = !true;

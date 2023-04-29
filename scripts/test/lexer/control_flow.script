@@ -1,0 +1,34 @@
+﻿if(true): 
+	foo();
+	bar(x);
+	//comment
+	x = 5;
+	if(false): end;
+else:
+	foo();
+	// comment
+	if(true):
+		foo();
+	else if(true):
+		foo();
+	else if(true):
+		foo();
+	else if(true):
+		foo();
+	else if(true):
+		foo();
+	else:
+		foo();
+	end;
+end;
+
+for(5): end;
+
+while(true): end;
+
+return;
+return 0;
+return x;
+return function: end;
+continue;
+break;

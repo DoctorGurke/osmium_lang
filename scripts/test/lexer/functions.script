@@ -1,0 +1,28 @@
+﻿// functions
+
+// bare minimum. `function identifier: end;`
+function x: end;
+
+function x(): end;
+
+function x(x): end;
+
+function x(x, y): end;
+
+// anonymous funcs
+function: end;
+function (x): end;
+function (x, y): end;
+x = function: end;
+x = function (x): end;
+x = function (x, y): end;
+
+function:
+	function:
+		function: end;
+	end;
+end;
+
+x(function: end);
+x(x, function: end, x);
+x(1, function: end, "a");

@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net7.0</TargetFramework>
+    <RootNamespace>OsmiumLang</RootNamespace>
+    <StartupObject>OsmiumLang.Program</StartupObject>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <Antlr4 Include="ArithmeticLexer.g4">
+      <Package>OsmiumLang</Package>
+    </Antlr4>
+    <Antlr4 Include="ArithmeticParser.g4">
+      <Package>OsmiumLang</Package>
+    </Antlr4>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Antlr4.Runtime.Standard" Version="4.12.0" />
+    <PackageReference Include="Antlr4BuildTasks" Version="12.2" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
+    <PackageReference Include="NUnit" Version="3.13.3" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.4.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="scripts/**/*.script">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
