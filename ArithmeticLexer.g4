@@ -41,6 +41,7 @@ IN				: 'in' ;
 IF				: 'if' ;
 ELSE			: 'else' ;
 FOR				: 'for' ;
+DO				: 'do' ;
 WHILE			: 'while' ;
 LAMBDA			: 'lambda' ;
 FUNCTION		: 'function' ;

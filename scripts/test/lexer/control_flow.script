@@ -32,6 +32,8 @@ for(i in 1..10): end;
 
 while(true): end;
 
+do while(true): end;
+
 {};
 
 {

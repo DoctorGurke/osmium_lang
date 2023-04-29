@@ -54,6 +54,7 @@ control_flow :
 	scope |
 	if_statement |
 	for_statement |
+	do_while_statement |
 	while_statement
 	;
 
@@ -75,6 +76,10 @@ for_statement :
 	FOR LEFT_BRACKET local_identifier IN (identifier | literal) RIGHT_BRACKET COLON program_block END |
 	FOR LEFT_BRACKET range RIGHT_BRACKET COLON program_block END |
 	FOR LEFT_BRACKET int RIGHT_BRACKET COLON program_block END
+	;
+
+do_while_statement : 
+	DO WHILE LEFT_BRACKET expression RIGHT_BRACKET COLON program_block END
 	;
 
 while_statement :
