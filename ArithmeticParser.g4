@@ -92,6 +92,8 @@ continue_statement : CONTINUE ;
 
 expression_target : identifier | expression ;
 
+op_index : identifier LEFT_SQUARE_BRACKET (identifier | literal) RIGHT_SQUARE_BRACKET ;
+
 // evaluates to a value
 expression :
 	literal |
@@ -100,6 +102,8 @@ expression :
 	function_lambda | // anonymous implicit expression
 	function_expression | // anonymous function
 	LEFT_BRACKET expression_target RIGHT_BRACKET |
+
+	op_index |
 
 	// arithmetic
 	expression OP_POW expression_target |

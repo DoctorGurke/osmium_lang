@@ -88,7 +88,11 @@ fragment HEX_PREFIX : '0x' ;
 fragment HEX_INT : HEX_PREFIX [0-9a-fA-F]+ ;
 fragment PURE_INT : DIGIT+ ;
 
-RANGE : PURE_INT POINT POINT PURE_INT ;
+RANGE : 
+	PURE_INT POINT POINT PURE_INT	| // int to int
+	POINT POINT PURE_INT			| // start to int
+	PURE_INT POINT POINT			  // int to end
+	;
 
 INT : 
 	HEX_INT |
