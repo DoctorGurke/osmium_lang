@@ -42,6 +42,7 @@ IF				: 'if' ;
 ELSE			: 'else' ;
 FOR				: 'for' ;
 WHILE			: 'while' ;
+LAMBDA			: 'lambda' ;
 FUNCTION		: 'function' ;
 RETURN			: 'return' ;
 END				: 'end' ;

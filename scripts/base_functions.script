@@ -1,0 +1,30 @@
+﻿print("hello");
+print(4);
+print(lambda: "fancy" end);
+
+// map
+// perform action on every element in a list, returns list of new values
+// multiplies every value in list by 2
+// takes lambda expression with exactly one parameter, this parameter represents the iterated value
+out = map(list, lambda(x): x * 2 end);
+
+// reduce
+// perform action on collection to get a final 
+// sums up every value in the list
+// takes lambda expression with exactly two parameters. one is the previous value, one the current
+out = reduce(list, lambda(x, y): x + y end);
+
+// filter
+// filters values in a list
+// filters out every odd number
+// takes lambda epression with exactly one parameter. represents the value to evaluate for filtering
+// if lambda evaluates
+out = filter(list, lambda(x): x % 2 == 0 end);
+
+// foreach
+// doesn't return a list, just executes
+foreach(list, lambda(x): print(x) end);
+
+for (x in list):
+	print(x);
+end;

@@ -14,7 +14,7 @@ range : RANGE ;
 null : NULL ;
 
 file : 
-	program_block? EOF	// regular content
+	program_block EOF	// regular content
 	;
 
 // expressions are separated by semicolon
@@ -72,9 +72,8 @@ else_statement :
 local_identifier : identifier ;
 
 for_statement : 
-	FOR LEFT_BRACKET local_identifier IN int RIGHT_BRACKET COLON program_block END |
+	FOR LEFT_BRACKET local_identifier IN (identifier | literal) RIGHT_BRACKET COLON program_block END |
 	FOR LEFT_BRACKET range RIGHT_BRACKET COLON program_block END |
-	FOR LEFT_BRACKET local_identifier IN range RIGHT_BRACKET COLON program_block END |
 	FOR LEFT_BRACKET int RIGHT_BRACKET COLON program_block END
 	;
 
@@ -93,6 +92,7 @@ expression :
 	literal |
 	identifier |
 	invocation |
+	function_lambda | // anonymous implicit expression
 	function_expression | // anonymous function
 	LEFT_BRACKET expression_target RIGHT_BRACKET |
 	expression OP_POW expression_target |
@@ -116,6 +116,9 @@ expression :
 //
 // function
 //
+
+// anonymous function implicitly evaluated as an expression
+function_lambda : LAMBDA function_params? COLON expression? END ;
 
 // anonymous function
 function_expression : FUNCTION function_params? COLON program_block END ;
@@ -151,5 +154,5 @@ signed_literal : (OP_ADD | OP_SUB)+ (double | float | int | char) ;
 
 literal : 
 	signed_literal |
-	(double | float | int | char | string | boolean | null )
+	(double | float | int | char | string | boolean | null | range)
 	;
