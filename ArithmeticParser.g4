@@ -14,7 +14,7 @@ range : RANGE ;
 null : NULL ;
 
 file : 
-	program_block EOF	// regular content
+	program_block EOF // regular content
 	;
 
 // expressions are separated by semicolon
@@ -41,20 +41,20 @@ declaration :
 
 assignment : 
 	identifier ASSIGNMENT expression |
-	identifier ASSIGNMENT assignment | // multi assignment
+	identifier ASSIGNMENT assignment | // <-- do not touch
 	;
 
 jump_statement :
 	break_statement |
 	continue_statement |
-	return_statement |
+	return_statement
 	;
 
 control_flow : 
 	scope |
 	if_statement |
 	for_statement |
-	while_statement |
+	while_statement
 	;
 
 scope : LEFT_CURLY_BRACKET program_block RIGHT_CURLY_BRACKET ;
@@ -95,6 +95,8 @@ expression :
 	function_lambda | // anonymous implicit expression
 	function_expression | // anonymous function
 	LEFT_BRACKET expression_target RIGHT_BRACKET |
+
+	// arithmetic
 	expression OP_POW expression_target |
 	expression OP_MUL expression_target |
 	expression OP_DIV expression_target |
@@ -102,6 +104,7 @@ expression :
 	expression OP_ADD expression_target |
 	expression OP_SUB expression_target |
 
+	// boolean
 	NOT expression_target |
 	expression AND expression_target |
 	expression OR expression_target |
