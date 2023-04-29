@@ -13,7 +13,7 @@ public class Test
     public void Main()
     {
         //DumpTokens(GetScript("test/lexer/functions.script"));
-        //TryScript("test/syntax/syntax_error.script");
+        TryScript("test.script");
     }
 
     [TestCase("test/syntax/syntax_error.script")]
@@ -310,11 +310,11 @@ public class Test
         if (verifyError && error)
             Assert.Pass();
 
-        Assert.False(error);
-
         Log.Info($"Syntax Tree:\n{tree.ToStringTree(parser)}");
         //Log.Info($"Info:\n{tree.ToInfoString(parser)}");
         Log.Info("\n");
+
+        Assert.False(error);
         return true;
     }
 

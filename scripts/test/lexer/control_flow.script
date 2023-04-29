@@ -24,7 +24,38 @@ end;
 
 for(5): end;
 
+for(i in 5): end;
+
+for(1..10): end;
+
+for(i in 1..10): end;
+
 while(true): end;
+
+{};
+
+{
+{{};};
+{{{};};};
+{{};};
+};
+
+{{{{};};};};
+
+{
+	x = 5;
+	foo();
+	//comment
+	{
+		y = 4;
+		{
+			z = 0;
+		};
+	};
+	{
+		// hello
+	};
+};
 
 return;
 return 0;

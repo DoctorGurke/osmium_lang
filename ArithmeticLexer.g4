@@ -22,6 +22,9 @@ RIGHT_BRACKET : ')' ;
 LEFT_SQUARE_BRACKET : '[' ;
 RIGHT_SQUARE_BRACKET : ']' ;
 
+LEFT_CURLY_BRACKET: '{' ;
+RIGHT_CURLY_BRACKET: '}' ;
+
 POINT : '.' ;
 COMMA : ',' ;
 APOSTROPHE : '\'' ;
@@ -34,6 +37,7 @@ COLON : ':' ;
 // keywords
 //
 
+IN				: 'in' ;
 IF				: 'if' ;
 ELSE			: 'else' ;
 FOR				: 'for' ;
@@ -81,6 +85,8 @@ fragment DIGIT : '0'..'9' ;
 fragment HEX_PREFIX : '0x' ;
 fragment HEX_INT : HEX_PREFIX [0-9a-fA-F]+ ;
 fragment PURE_INT : DIGIT+ ;
+
+RANGE : PURE_INT POINT POINT PURE_INT ;
 
 INT : 
 	HEX_INT |

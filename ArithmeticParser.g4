@@ -4,6 +4,15 @@ options { tokenVocab = ArithmeticLexer; }
 
 terminator: SEMICOLON ;
 
+double : DOUBLE ;
+float : FLOAT ;
+int : INT ;
+char : CHAR ;
+string : STRING ;
+boolean : BOOLEAN ;
+range : RANGE ;
+null : NULL ;
+
 file : 
 	program_block? EOF	// regular content
 	;
@@ -22,6 +31,7 @@ program_block :
 statement : 
 	control_flow |
 	declaration | 
+	jump_statement
 	;
 
 declaration :
@@ -34,31 +44,42 @@ assignment :
 	identifier ASSIGNMENT assignment | // multi assignment
 	;
 
-control_flow : 
-	if_statement |
-	for_statement |
-	while_statement |
+jump_statement :
 	break_statement |
 	continue_statement |
 	return_statement |
 	;
 
-condition : expression ;
-
-if_statement : IF LEFT_BRACKET condition RIGHT_BRACKET COLON program_block? (else_if_statement* else_statement)? END;
-
-else_if_statement : ELSE IF LEFT_BRACKET condition RIGHT_BRACKET COLON program_block? ;
-
-else_statement : 
-	ELSE COLON program_block?
+control_flow : 
+	scope |
+	if_statement |
+	for_statement |
+	while_statement |
 	;
 
+scope : LEFT_CURLY_BRACKET program_block RIGHT_CURLY_BRACKET ;
+
+condition : expression ;
+
+if_statement : IF LEFT_BRACKET condition RIGHT_BRACKET COLON program_block (else_if_statement* else_statement)? END;
+
+else_if_statement : ELSE IF LEFT_BRACKET condition RIGHT_BRACKET COLON program_block ;
+
+else_statement : 
+	ELSE COLON program_block
+	;
+
+local_identifier : identifier ;
+
 for_statement : 
-	FOR LEFT_BRACKET INT RIGHT_BRACKET COLON program_block? END
+	FOR LEFT_BRACKET local_identifier IN int RIGHT_BRACKET COLON program_block END |
+	FOR LEFT_BRACKET range RIGHT_BRACKET COLON program_block END |
+	FOR LEFT_BRACKET local_identifier IN range RIGHT_BRACKET COLON program_block END |
+	FOR LEFT_BRACKET int RIGHT_BRACKET COLON program_block END
 	;
 
 while_statement :
-	WHILE LEFT_BRACKET expression RIGHT_BRACKET COLON program_block? END
+	WHILE LEFT_BRACKET expression RIGHT_BRACKET COLON program_block END
 	;
 
 break_statement : BREAK ;
@@ -97,11 +118,11 @@ expression :
 //
 
 // anonymous function
-function_expression : FUNCTION function_params? COLON program_block? END ;
-function_declaration : FUNCTION function_name function_params? COLON program_block? END ;
+function_expression : FUNCTION function_params? COLON program_block END ;
+function_declaration : FUNCTION function_name function_params? COLON program_block END ;
 
 function_name : identifier ;
-function_params : LEFT_BRACKET identifier_list? RIGHT_BRACKET ;
+function_params : LEFT_BRACKET (local_identifier (COMMA local_identifier)*)? RIGHT_BRACKET ;
 	
 return_statement : RETURN expression? ;
 
@@ -118,15 +139,6 @@ identifier_list :
 expression_list : 
 	expression (COMMA expression)*
 	;
-
-
-double : DOUBLE ;
-float : FLOAT ;
-int : INT ;
-char : CHAR ;
-string : STRING ;
-boolean : BOOLEAN ;
-null : NULL ;
 
 identifier : 
 	VARIABLE |
