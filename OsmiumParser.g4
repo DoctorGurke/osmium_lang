@@ -20,7 +20,7 @@ file :
 // expressions are separated by semicolon
 program_block : 
 	(statement | expression) |
-	((statement | expression) terminator)+ 
+	(control_flow | ((statement | expression) terminator))+ 
 	;
 
 //

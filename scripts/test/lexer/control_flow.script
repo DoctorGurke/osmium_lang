@@ -3,7 +3,7 @@
 	bar(x);
 	//comment
 	x = 5;
-	if(false): end;
+	if(false): end
 else:
 	foo();
 	// comment
@@ -19,30 +19,30 @@ else:
 		foo();
 	else:
 		foo();
-	end;
-end;
+	end
+end
 
-for(5): end;
+for(5): end
 
-for(i in 5): end;
+for(i in 5): end
 
-for(1..10): end;
+for(1..10): end
 
-for(i in 1..10): end;
+for(i in 1..10): end
 
-while(true): end;
+while(true): end
 
-do while(true): end;
+do while(true): end
 
-{};
+{}
 
 {
-{{};};
-{{{};};};
-{{};};
-};
+{{}}
+{{{}}}
+{{}}
+}
 
-{{{{};};};};
+{{{{}}}}
 
 {
 	x = 5;
@@ -52,12 +52,12 @@ do while(true): end;
 		y = 4;
 		{
 			z = 0;
-		};
-	};
+		}
+	}
 	{
 		// hello
-	};
-};
+	}
+}
 
 return;
 return 0;
