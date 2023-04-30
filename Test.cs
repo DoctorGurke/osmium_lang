@@ -4,7 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 
-namespace OsmiumLang;
+namespace Osmium;
 
 [TestFixture]
 public class Test
@@ -291,7 +291,7 @@ public class Test
     public static void TestTokenStream(string input, params string[] testTokens)
     {
         var str = new AntlrInputStream(input);
-        var lexer = new ArithmeticLexer(str);
+        var lexer = new OsmiumLexer(str);
         var tokenStream = new CommonTokenStream(lexer);
         var listener_lexer = new ErrorListener<int>();
 
@@ -334,7 +334,7 @@ public class Test
     {
         Log.Info($">\t{input.Replace("\n", ">\t")}\n<EOF>");
         var str = new AntlrInputStream(input);
-        var lexer = new ArithmeticLexer(str);
+        var lexer = new OsmiumLexer(str);
         var tokenStream = new CommonTokenStream(lexer);
         var listener_lexer = new ErrorListener<int>();
 
@@ -369,7 +369,7 @@ public class Test
 
     public static bool RunParser(CommonTokenStream tokens, bool verifyError = false)
     {
-        var parser = new ArithmeticParser(tokens);
+        var parser = new OsmiumParser(tokens);
         var listener_parser = new ErrorListener<IToken>();
 
         parser.RemoveErrorListeners();
@@ -432,7 +432,7 @@ public class Test
     }
 
     // used for building tests
-    private static string DumpTokens(CommonTokenStream tokenStream, ArithmeticLexer lexer)
+    private static string DumpTokens(CommonTokenStream tokenStream, OsmiumLexer lexer)
     {
         var tokens = tokenStream.GetTokens();
 

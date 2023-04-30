@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OsmiumLang;
+namespace Osmium;
 
 public class Program
 {
@@ -10,7 +10,7 @@ public class Program
 
         while (true)
         {
-            var input = System.Console.ReadLine();
+            var input = Console.ReadLine();
             if (input is null)
                 continue;
 
@@ -31,7 +31,7 @@ public static class Log
 {
     public static void Info(object content)
     {
-        System.Console.WriteLine($"{content}");
+        Console.WriteLine($"{content}");
     }
 }
 

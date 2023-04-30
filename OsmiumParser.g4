@@ -1,6 +1,6 @@
-﻿parser grammar ArithmeticParser;
+﻿parser grammar OsmiumParser;
 
-options { tokenVocab = ArithmeticLexer; }
+options { tokenVocab = OsmiumLexer; }
 
 terminator: SEMICOLON ;
 
