@@ -1,21 +1,21 @@
 ﻿// functions
 
 // bare minimum. `function identifier: end;`
-function x: end;
+function x1: end;
 
-function x(): end;
+function x2(): end;
 
-function x(x): end;
+function x3(x): end;
 
-function x(x, y): end;
+function x4(x, y): end;
 
 // anonymous funcs
 function: end;
 function (x): end;
 function (x, y): end;
-x = function: end;
-x = function (x): end;
-x = function (x, y): end;
+x5 = function: end;
+x6 = function (x): end;
+x7 = function (x, y): end;
 
 function:
 	function:
@@ -26,9 +26,10 @@ end;
 x(function: end);
 x(x, function: end, x);
 x(1, function: end, "a");
+x("hello_world");
 
 // evaluate lambda
-x = (lambda:end);
+x8 = (lambda:end);
 
 // lamba implicitly evaluates as an expression
 foo(lambda(x):function:end end);

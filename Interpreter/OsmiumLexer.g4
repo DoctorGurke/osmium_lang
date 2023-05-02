@@ -112,8 +112,8 @@ FLOAT :
 DOUBLE : DIGIT* POINT DIGIT+ ;
 
 // super basic string and char, only a-z chars and numbers
-CHAR: APOSTROPHE (LETTER | DIGIT)* APOSTROPHE;
-STRING : QUOTE (LETTER | DIGIT)* QUOTE ;
+CHAR: APOSTROPHE (LETTER | DIGIT | '_')* APOSTROPHE;
+STRING : QUOTE (LETTER | DIGIT | '_')* QUOTE ;
 
 VARIABLE : VALID_VAR_START VALID_VAR_CHAR* ;			// x, _y, a3
 fragment VALID_VAR_START : LETTER | '_' ;				// var names start with a letter or _

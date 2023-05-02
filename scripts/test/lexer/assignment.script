@@ -12,3 +12,6 @@ h = x != y;
 i = true && false;
 j = true || false;
 k = !true;
+l = "asd";
+hn = "asdasdasdasdas";
+fdg = "asd_asd_asdASdas_asdas";

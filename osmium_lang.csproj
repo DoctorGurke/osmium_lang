@@ -18,12 +18,12 @@
 	<!--add our antlr4 lexer and parser definitions-->
 	<ItemGroup>
 
-		<Antlr4 Include="OsmiumLexer.g4">
-			<Package>Osmium</Package>
+		<Antlr4 Include="Interpreter\OsmiumLexer.g4">
+			<Package>Osmium.Interpreter</Package>
 		</Antlr4>
 
-		<Antlr4 Include="OsmiumParser.g4">
-			<Package>Osmium</Package>
+		<Antlr4 Include="Interpreter\OsmiumParser.g4">
+			<Package>Osmium.Interpreter</Package>
 		</Antlr4>
 
 	</ItemGroup>

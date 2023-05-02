@@ -4,9 +4,9 @@ options { tokenVocab = OsmiumLexer; }
 
 terminator: SEMICOLON ;
 
-double : DOUBLE ;
-float : FLOAT ;
 int : INT ;
+float : FLOAT ;
+double : DOUBLE ;
 char : CHAR ;
 string : STRING ;
 boolean : BOOLEAN ;

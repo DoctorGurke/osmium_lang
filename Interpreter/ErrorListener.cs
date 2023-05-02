@@ -1,4 +1,4 @@
-﻿namespace Osmium;
+﻿namespace Osmium.Interpreter;
 
 using Antlr4.Runtime;
 using System.IO;

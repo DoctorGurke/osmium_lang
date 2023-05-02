@@ -1,10 +1,11 @@
 ﻿using Antlr4.Runtime;
+using Antlr4.Runtime.Tree;
 using NUnit.Framework;
 using System.IO;
 using System.Reflection;
 using System.Text;
 
-namespace Osmium;
+namespace Osmium.Interpreter;
 
 [TestFixture]
 public class Test
@@ -149,6 +150,11 @@ public class Test
         "COLON",
         "END",
         "COMMA",
+        "STRING",
+        "RIGHT_BRACKET",
+        "SEMICOLON",
+        "VARIABLE",
+        "LEFT_BRACKET",
         "STRING",
         "RIGHT_BRACKET",
         "SEMICOLON",
@@ -375,8 +381,9 @@ public class Test
         parser.RemoveErrorListeners();
         parser.AddErrorListener(listener_parser);
 
-        // parse token stream
+        // start parsing token stream to tree
         var tree = parser.file();
+        var listener = new ParseTreeListener();
 
         var error = listener_parser.had_error;
         Log.Info($"Parser {(error ? "Failed" : "Passed")}.");
@@ -384,9 +391,22 @@ public class Test
         if (verifyError && error)
             Assert.Pass();
 
+        Log.Space();
+
         Log.Info($"Syntax Tree:\n{tree.ToStringTree(parser)}");
-        //Log.Info($"Info:\n{tree.ToInfoString(parser)}");
-        Log.Info("\n");
+
+        Log.Space();
+
+        Log.Info($"---Walk Tree---");
+        var walker = new ParseTreeWalker();
+        walker.Walk(listener, tree);
+
+        Log.Space();
+
+        Log.Info($"---Visit Tree---");
+        var visitor = new Visitor();
+        var target = visitor.Visit(tree);
+        Log.Info($"exit {target}");
 
         Assert.False(error);
         return true;

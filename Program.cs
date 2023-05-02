@@ -1,4 +1,5 @@
 ﻿using System;
+using Osmium.Interpreter;
 
 namespace Osmium;
 
@@ -22,6 +23,7 @@ public class Program
                 continue;
             }
 
+            //runtime.Evaluate(input);
             Test.Try(input);
         }
     }
@@ -29,6 +31,11 @@ public class Program
 
 public static class Log
 {
+    public static void Space()
+    {
+        Info(">");
+    }
+
     public static void Info(object content)
     {
         Console.WriteLine($"{content}");
