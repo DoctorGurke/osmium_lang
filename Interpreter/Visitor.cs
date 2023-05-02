@@ -1,18 +1,18 @@
 ﻿using Antlr4.Runtime.Misc;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Data;
 
 namespace Osmium.Interpreter;
 
 public class Visitor : OsmiumParserBaseVisitor<object>
 {
-    public Dictionary<string, object> SymbolTable = new Dictionary<string, object>();
+    public SymbolTable SymbolTable { get; private set; }
 
     public override object VisitFile([NotNull] OsmiumParser.FileContext context)
     {
         Log.Info($":: {OsmiumParser.ruleNames[context.RuleIndex]}");
+
+        SymbolTable = new SymbolTable();
 
         if (context.program_block() is OsmiumParser.Program_blockContext program_block)
         {
@@ -148,7 +148,7 @@ public class Visitor : OsmiumParserBaseVisitor<object>
 
         var identifier = context.identifier().GetText();
 
-        if (SymbolTable.ContainsKey(identifier))
+        if (SymbolTable.HasSymbol(identifier))
         {
             throw new InvalidOperationException($"Cannot re-define immutable identifier: {identifier}");
         }
