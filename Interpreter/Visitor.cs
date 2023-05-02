@@ -167,7 +167,7 @@ public class Visitor : OsmiumParserBaseVisitor<object>
         // int
         if (context.@int() is OsmiumParser.IntContext int_context)
         {
-            return VisitInt(int_context);
+            return int.Parse($"{context.sign()?.GetText()}{VisitInt(int_context)}");
         }
 
         // float

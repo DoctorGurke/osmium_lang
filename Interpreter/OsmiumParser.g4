@@ -90,8 +90,6 @@ break_statement : BREAK ;
 
 continue_statement : CONTINUE ;
 
-expression_target : identifier | expression ;
-
 op_index : identifier LEFT_SQUARE_BRACKET (identifier | literal) RIGHT_SQUARE_BRACKET ;
 
 // evaluates to a value
@@ -101,28 +99,28 @@ expression :
 	invocation |
 	function_lambda | // anonymous implicit expression
 	function_expression | // anonymous function
-	LEFT_BRACKET expression_target RIGHT_BRACKET |
+	LEFT_BRACKET expression RIGHT_BRACKET |
 
 	op_index |
 
 	// arithmetic
-	expression OP_POW expression_target |
-	expression OP_MUL expression_target |
-	expression OP_DIV expression_target |
-	expression OP_MOD expression_target |
-	expression OP_ADD expression_target |
-	expression OP_SUB expression_target |
+	expression OP_POW expression |
+	expression OP_MUL expression |
+	expression OP_DIV expression |
+	expression OP_MOD expression |
+	expression OP_ADD expression |
+	expression OP_SUB expression |
 
 	// boolean
-	NOT expression_target |
-	expression AND expression_target |
-	expression OR expression_target |
-	expression NOT_EQUALS expression_target |
-	expression EQUALS expression_target |
-	expression GREATER expression_target |
-	expression LESS expression_target |
-	expression GREATER_EQUALS expression_target |
-	expression LESS_EQUALS expression_target
+	NOT expression |
+	expression AND expression |
+	expression OR expression |
+	expression NOT_EQUALS expression |
+	expression EQUALS expression |
+	expression GREATER expression |
+	expression LESS expression |
+	expression GREATER_EQUALS expression |
+	expression LESS_EQUALS expression
 	;
 
 //
@@ -156,15 +154,11 @@ expression_list :
 	;
 
 identifier : 
-	VARIABLE |
-	signed_identifier
+	sign? VARIABLE
 	;
 
-signed_identifier : (OP_ADD | OP_SUB)+ identifier ;
-
-signed_literal : (OP_ADD | OP_SUB)+ (double | float | int | char) ;
+sign : (OP_ADD | OP_SUB)+;
 
 literal : 
-	signed_literal |
-	(double | float | int | char | string | boolean | null | range)
+	sign? (double | float | int | char | string | boolean | null | range)
 	;
