@@ -1,6 +1,9 @@
-﻿using Antlr4.Runtime.Misc;
+﻿using Antlr4.Runtime;
+using Antlr4.Runtime.Misc;
 using System;
 using System.Collections.Generic;
+using System.Text;
+using static Osmium.Interpreter.OsmiumParser;
 
 namespace Osmium.Interpreter;
 
@@ -8,13 +11,25 @@ public class Visitor : OsmiumParserBaseVisitor<object>
 {
     public SymbolTable SymbolTable { get; private set; }
 
-    public override object VisitFile([NotNull] OsmiumParser.FileContext context)
+    private static void PrintContext(ParserRuleContext context, object value = null)
     {
-        Log.Info($":: {OsmiumParser.ruleNames[context.RuleIndex]}");
+        var pad = new StringBuilder();
+
+        for (int i = 0; i < context.Depth() - 1; i++)
+        {
+            pad.Append("  ");
+        }
+
+        Log.Info($":: {pad}[] {ruleNames[context.RuleIndex]} {(value != null ? $" -> {value}" : "")}");
+    }
+
+    public override object VisitFile([NotNull] FileContext context)
+    {
+        PrintContext(context);
 
         SymbolTable = new SymbolTable();
 
-        if (context.program_block() is OsmiumParser.Program_blockContext program_block)
+        if (context.program_block() is Program_blockContext program_block)
         {
             VisitProgram_block(program_block);
         }
@@ -22,11 +37,11 @@ public class Visitor : OsmiumParserBaseVisitor<object>
         return 0;
     }
 
-    public override object VisitProgram_block([NotNull] OsmiumParser.Program_blockContext context)
+    public override object VisitProgram_block([NotNull] Program_blockContext context)
     {
-        Log.Info($":: {OsmiumParser.ruleNames[context.RuleIndex]}");
+        PrintContext(context);
 
-        if (context.statement() is OsmiumParser.StatementContext[] statement_context)
+        if (context.statement() is StatementContext[] statement_context)
         {
             foreach (var statement in statement_context)
             {
@@ -34,7 +49,7 @@ public class Visitor : OsmiumParserBaseVisitor<object>
             }
         }
 
-        if (context.expression() is OsmiumParser.ExpressionContext[] expression_contexts)
+        if (context.expression() is ExpressionContext[] expression_contexts)
         {
             foreach (var expression in expression_contexts)
             {
@@ -45,20 +60,20 @@ public class Visitor : OsmiumParserBaseVisitor<object>
         return null;
     }
 
-    public override object VisitExpression([NotNull] OsmiumParser.ExpressionContext context)
+    public override object VisitExpression([NotNull] ExpressionContext context)
     {
-        Log.Info($":: {OsmiumParser.ruleNames[context.RuleIndex]}");
+        PrintContext(context, context.GetText());
 
         // literal
-        if (context.literal() is OsmiumParser.LiteralContext literal_context)
+        if (context.literal() is LiteralContext literal_context)
         {
             return VisitLiteral(literal_context);
         }
 
         // identifier
-        if (context.identifier() is OsmiumParser.IdentifierContext identifier_context)
+        if (context.identifier() is IdentifierContext identifier_context)
         {
-            var identifier = identifier_context.GetText();
+            var identifier = (string)VisitIdentifier(identifier_context);
             if (SymbolTable.TryGetValue(identifier, out var value))
                 return value;
 
@@ -66,23 +81,37 @@ public class Visitor : OsmiumParserBaseVisitor<object>
         }
 
         // invocation
-        if (context.invocation() is OsmiumParser.InvocationContext invocation_context)
+        if (context.invocation() is InvocationContext invocation_context)
         {
             return VisitInvocation(invocation_context);
+        }
+
+        //op_index
+        //function_lambda
+        //function_expression
+
+        // bracket expression
+        if (context.LEFT_BRACKET() is not null && context.RIGHT_BRACKET() is not null)
+        {
+            if (context.expression() is not null)
+            {
+                var expression = context.expression()[0];
+                return VisitExpression(expression);
+            }
         }
 
         return null;
     }
 
-    public override object VisitInvocation([NotNull] OsmiumParser.InvocationContext context)
+    public override object VisitInvocation([NotNull] InvocationContext context)
     {
-        Log.Info($":: {OsmiumParser.ruleNames[context.RuleIndex]}");
+        PrintContext(context);
 
-        var identifier = context.identifier().GetText();
+        var identifier = (string)VisitIdentifier(context.identifier());
 
         IList<object> parameters = null;
 
-        if (context.expression_list() is OsmiumParser.Expression_listContext expression_list_context)
+        if (context.expression_list() is Expression_listContext expression_list_context)
         {
             parameters = (IList<object>)VisitExpression_list(expression_list_context);
         }
@@ -102,10 +131,10 @@ public class Visitor : OsmiumParserBaseVisitor<object>
         return null;
     }
 
-    public override object VisitExpression_list([NotNull] OsmiumParser.Expression_listContext context)
+    public override object VisitExpression_list([NotNull] Expression_listContext context)
     {
         IList<object> returned_objects = null;
-        if (context.expression() is OsmiumParser.ExpressionContext[] expression_contexts)
+        if (context.expression() is ExpressionContext[] expression_contexts)
         {
             returned_objects = new List<object>();
             foreach (var expression in expression_contexts)
@@ -118,11 +147,11 @@ public class Visitor : OsmiumParserBaseVisitor<object>
         return returned_objects;
     }
 
-    public override object VisitStatement([NotNull] OsmiumParser.StatementContext context)
+    public override object VisitStatement([NotNull] StatementContext context)
     {
-        Log.Info($":: {OsmiumParser.ruleNames[context.RuleIndex]}");
+        PrintContext(context);
 
-        if (context.declaration() is OsmiumParser.DeclarationContext declaration_context)
+        if (context.declaration() is DeclarationContext declaration_context)
         {
             VisitDeclaration(declaration_context);
         }
@@ -130,11 +159,11 @@ public class Visitor : OsmiumParserBaseVisitor<object>
         return null;
     }
 
-    public override object VisitDeclaration([NotNull] OsmiumParser.DeclarationContext context)
+    public override object VisitDeclaration([NotNull] DeclarationContext context)
     {
-        Log.Info($":: {OsmiumParser.ruleNames[context.RuleIndex]}");
+        PrintContext(context);
 
-        if (context.assignment() is OsmiumParser.AssignmentContext assignment_context)
+        if (context.assignment() is AssignmentContext assignment_context)
         {
             VisitAssignment(assignment_context);
         }
@@ -142,11 +171,11 @@ public class Visitor : OsmiumParserBaseVisitor<object>
         return null;
     }
 
-    public override object VisitAssignment([NotNull] OsmiumParser.AssignmentContext context)
+    public override object VisitAssignment([NotNull] AssignmentContext context)
     {
-        Log.Info($":: {OsmiumParser.ruleNames[context.RuleIndex]}");
+        var identifier = (string)VisitIdentifier(context.identifier());
 
-        var identifier = context.identifier().GetText();
+        PrintContext(context, identifier);
 
         if (SymbolTable.HasSymbol(identifier))
         {
@@ -160,112 +189,117 @@ public class Visitor : OsmiumParserBaseVisitor<object>
         return null;
     }
 
-    public override object VisitLiteral([NotNull] OsmiumParser.LiteralContext context)
+    public override object VisitLiteral([NotNull] LiteralContext context)
     {
-        Log.Info($":: {OsmiumParser.ruleNames[context.RuleIndex]}");
+        PrintContext(context);
 
         // int
-        if (context.@int() is OsmiumParser.IntContext int_context)
+        if (context.@int() is IntContext int_context)
         {
             return int.Parse($"{context.sign()?.GetText()}{VisitInt(int_context)}");
         }
 
         // float
-        if (context.@float() is OsmiumParser.FloatContext float_context)
+        if (context.@float() is FloatContext float_context)
         {
             return VisitFloat(float_context);
         }
 
         // double
-        if (context.@double() is OsmiumParser.DoubleContext double_context)
+        if (context.@double() is DoubleContext double_context)
         {
             return VisitDouble(double_context);
         }
 
         // char
-        if (context.@char() is OsmiumParser.CharContext char_context)
+        if (context.@char() is CharContext char_context)
         {
             return VisitChar(char_context);
         }
 
         // string
-        if (context.@string() is OsmiumParser.StringContext string_context)
+        if (context.@string() is StringContext string_context)
         {
             return VisitString(string_context);
         }
 
         // boolean
-        if (context.boolean() is OsmiumParser.BooleanContext boolean_context)
+        if (context.boolean() is BooleanContext boolean_context)
         {
             return VisitBoolean(boolean_context);
         }
 
         // range
-        if (context.range() is OsmiumParser.RangeContext range_context)
+        if (context.range() is RangeContext range_context)
         {
             return VisitRange(range_context);
         }
 
         // null
-        if (context.@null() is OsmiumParser.NullContext)
+        if (context.@null() is not null)
             return null;
 
         return null;
     }
 
-    public override object VisitInt([NotNull] OsmiumParser.IntContext context)
+    public override object VisitInt([NotNull] IntContext context)
     {
         var evaluate = int.Parse(context.GetText());
-        Log.Info($":: {OsmiumParser.ruleNames[context.RuleIndex]} -> {evaluate}");
 
+        PrintContext(context, evaluate);
         return evaluate;
     }
 
-    public override object VisitFloat([NotNull] OsmiumParser.FloatContext context)
+    public override object VisitFloat([NotNull] FloatContext context)
     {
         var evaluate = float.Parse(context.GetText().Trim('f'), System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
-        Log.Info($":: {OsmiumParser.ruleNames[context.RuleIndex]} -> {evaluate}");
 
+        PrintContext(context, evaluate);
         return evaluate;
     }
 
-    public override object VisitDouble([NotNull] OsmiumParser.DoubleContext context)
+    public override object VisitDouble([NotNull] DoubleContext context)
     {
         var evaluate = double.Parse(context.GetText(), System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
-        Log.Info($":: {OsmiumParser.ruleNames[context.RuleIndex]} -> {evaluate}");
 
+        PrintContext(context, evaluate);
         return evaluate;
     }
 
-    public override object VisitChar([NotNull] OsmiumParser.CharContext context)
+    public override object VisitChar([NotNull] CharContext context)
     {
         var content = context.GetText().Trim('\'');
         var evaluate = char.Parse(content);
 
-        Log.Info($":: {OsmiumParser.ruleNames[context.RuleIndex]} -> {evaluate}");
+        PrintContext(context, evaluate);
         return evaluate;
     }
 
-    public override object VisitString([NotNull] OsmiumParser.StringContext context)
+    public override object VisitString([NotNull] StringContext context)
     {
         var content = context.GetText().Trim('\"');
         var evaluate = new string(content);
 
-        Log.Info($":: {OsmiumParser.ruleNames[context.RuleIndex]} -> {evaluate}");
+        PrintContext(context, evaluate);
         return evaluate;
     }
 
-    public override object VisitBoolean([NotNull] OsmiumParser.BooleanContext context)
+    public override object VisitBoolean([NotNull] BooleanContext context)
     {
         var evaluate = bool.Parse(context.GetText());
 
-        Log.Info($":: {OsmiumParser.ruleNames[context.RuleIndex]} -> {evaluate}");
+        PrintContext(context, evaluate);
         return evaluate;
     }
 
-    public override object VisitRange([NotNull] OsmiumParser.RangeContext context)
+    public override object VisitRange([NotNull] RangeContext context)
     {
         //throw new NotImplementedException();
         return null;
+    }
+
+    public override object VisitIdentifier([NotNull] IdentifierContext context)
+    {
+        return $"{context.GetText()}";
     }
 }

@@ -119,6 +119,7 @@ expression
 	| op_index // indexof
 	| function_lambda // anonymous implicit expression
 	| function_expression // anonymous function 
+
 	| LEFT_BRACKET expression RIGHT_BRACKET 
 	
 	// arithmetic
