@@ -50,30 +50,43 @@ BREAK			: 'break' ;
 
 NULL			: 'null' ;
 
-OP_POW			: '**' ;
-OP_MUL			: '*' ;
-OP_DIV			: '/' ;
-OP_MOD			: '%' ;
-OP_ADD			: '+' ;
-OP_SUB			: '-' ;
+//
+// operators
+//
 
-NOT_EQUALS		: '!=' ;
-EQUALS			: '==' ;
-GREATER			: '>' ;
-LESS			: '<' ;
-GREATER_EQUALS	: '>=' ;
-LESS_EQUALS		: '<=' ;
+OP_LOGICAL_NOT				: 'not' | '!' ; // factorial? "!x, !5" or maybe inverse? "x!, 5!"
+OP_LOGICAL_AND				: 'and' | '&&' ;
+OP_LOGICAL_OR				: 'or' | '||' ;
 
-NOT				: 'not' | '!' ; // factorial? "!x, !5" or maybe inverse? "x!, 5!"
-AND				: 'and' | '&&' ;
-OR				: 'or' | '||' ;
+OP_ADDITION					: '+' ;
+OP_SUBTRACTION				: '-' ;
+OP_MULTIPLY					: '*' ;
+OP_DIVISION					: '/' ;
+OP_MODULUS					: '%' ;
 
-ASSIGNMENT		: '=' ;
+OP_BITWISE_AND				: '&' ;
+OP_BITWISE_OR				: '|' ;
+OP_EXCLUSIVE_OR				: '^' ;
+OP_ONES_COMPLEMENT			: '~' ;
+OP_LEFT_SHIFT				: '<<' ;
+OP_RIGHT_SHIFT				: '>>' ;
 
-ADD_ASSIGNMENT	: '+=' ;
-SUB_ASSIGNMENT	: '-=' ;
-MUL_ASSIGNMENT	: '*=' ;
-DIV_ASSIGNMENT	: '/=' ;
+OP_EQUALITY					: '==' ;
+OP_INEQUALITY				: '!=' ;
+OP_LESS_THAN				: '<' ;
+OP_GREATER_THAN				: '>' ;
+OP_LESS_THAN_OR_EQUALS		: '<=' ;
+OP_GREATER_THAN_OR_EQUALS	: '>=' ;
+
+OP_INCREMENT				: '++' ;
+OP_DECREMENT				: '--' ;
+
+OP_TRUE						: 'true' ;
+OP_FALSE					: 'false' ;
+
+OP_INDEX					: '[]' ;
+
+OP_ASSIGN					: '=' ;
 
 //
 // values & variables
@@ -81,52 +94,33 @@ DIV_ASSIGNMENT	: '/=' ;
 
 // numerics
 fragment DIGIT			: '0'..'9' ;
-fragment HEX_PREFIX		: '0x' ;
-fragment HEX_INT		: HEX_PREFIX [0-9a-fA-F]+ ;
-fragment PURE_INT		: DIGIT+ ;
+//fragment HEX_PREFIX		: '0x' ;
+//fragment HEX_INT		: HEX_PREFIX [0-9a-fA-F]+ ;
 
 // int
-INT : 
-	HEX_INT |
-	PURE_INT 
+INT
+	: DIGIT+ 
 	;
 
 // float
-fragment FLOAT_EXPONENTIAL 
-	: (PURE_INT | PURE_FLOAT | DOUBLE ) 'e' (OP_ADD | OP_SUB)? (PURE_INT | PURE_FLOAT | DOUBLE) 
-	;
-fragment PURE_FLOAT 
-	: DIGIT* POINT DIGIT+ 'f' 
-	| DIGIT+ 'f' 
-	;
-FLOAT 
-	: PURE_FLOAT 
-	| FLOAT_EXPONENTIAL
-	;
+//fragment FLOAT_EXPONENTIAL 
+//	: (PURE_INT | PURE_FLOAT | DOUBLE ) 'e' (OP_ADD | OP_SUB)? (PURE_INT | PURE_FLOAT | DOUBLE) 
+//	;
 
-DOUBLE : DIGIT* POINT DIGIT+ ;
+FLOAT 
+	: DIGIT* POINT DIGIT+ 'f'?
+	;
 
 fragment LETTER : ('a' .. 'z') | ('A' .. 'Z') ;
-
-// char
-CHAR: APOSTROPHE (LETTER | DIGIT | '_')* APOSTROPHE;
 
 // string
 STRING : QUOTE (LETTER | DIGIT | '_')* QUOTE ;
 
-
-// boolean
-fragment TRUE	: 'true' ;
-fragment FALSE	: 'false' ;
-BOOLEAN	
-	: TRUE | FALSE 
-	;
-
 // range
 RANGE 
-	: PURE_INT POINT POINT PURE_INT // 0..1
-	| POINT POINT PURE_INT			// ..1
-	| PURE_INT POINT POINT			// 0..
+	: DIGIT+ POINT POINT DIGIT+		// 0..1
+	| POINT POINT DIGIT+			// ..1
+	| DIGIT+ POINT POINT			// 0..
 	;
 
 // identifier

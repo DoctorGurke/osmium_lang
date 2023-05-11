@@ -28,7 +28,7 @@ j == true;
 k == false;
 foo();
 bar(1, 2, 3);
-x("a", 'a', 1.0f, 1.0, 0);
+x("a", 1.0f, 1.0, 0);
 qux(f(4), g(h()), "hello");
 f(function: end);
 

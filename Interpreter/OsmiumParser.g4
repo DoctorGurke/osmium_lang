@@ -6,10 +6,8 @@ terminator: SEMICOLON ;
 
 int : INT ;
 float : FLOAT ;
-double : DOUBLE ;
-char : CHAR ;
 string : STRING ;
-boolean : BOOLEAN ;
+boolean : OP_TRUE | OP_FALSE ;
 range : RANGE ;
 null : NULL ;
 
@@ -40,8 +38,8 @@ declaration
 	;
 
 assignment
-	: identifier ASSIGNMENT expression
-	| identifier ASSIGNMENT assignment 
+	: identifier OP_ASSIGN expression
+	| identifier OP_ASSIGN assignment 
 	| // <-- do not touch
 	;
 
@@ -123,23 +121,22 @@ expression
 	| LEFT_BRACKET expression RIGHT_BRACKET 
 	
 	// arithmetic
-	| expression OP_POW expression 
-	| expression OP_MUL expression 
-	| expression OP_DIV expression 
-	| expression OP_MOD expression 
-	| expression OP_ADD expression 
-	| expression OP_SUB expression 
+	| expression OP_MULTIPLY expression 
+	| expression OP_DIVISION expression 
+	| expression OP_MODULUS expression 
+	| expression OP_ADDITION expression 
+	| expression OP_SUBTRACTION expression 
 	
 	// boolean
-	| NOT expression 
-	| expression AND expression 
-	| expression OR expression 
-	| expression NOT_EQUALS expression 
-	| expression EQUALS expression 
-	| expression GREATER expression 
-	| expression LESS expression 
-	| expression GREATER_EQUALS expression 
-	| expression LESS_EQUALS expression
+	| OP_LOGICAL_NOT expression 
+	| expression OP_LOGICAL_AND expression 
+	| expression OP_LOGICAL_OR expression 
+	| expression OP_INEQUALITY expression 
+	| expression OP_EQUALITY expression 
+	| expression OP_GREATER_THAN expression 
+	| expression OP_LESS_THAN expression 
+	| expression OP_GREATER_THAN_OR_EQUALS expression 
+	| expression OP_LESS_THAN_OR_EQUALS expression
 	;
 
 //
@@ -184,9 +181,9 @@ identifier
 	;
 
 sign 
-	: (OP_ADD | OP_SUB)+
+	: (OP_ADDITION | OP_SUBTRACTION)+
 	;
 
 literal 
-	: sign? (double | float | int | char | string | boolean | null | range)
+	: sign? ( float | int | string | boolean | null | range)
 	;
