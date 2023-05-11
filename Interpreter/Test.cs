@@ -1,8 +1,6 @@
 ﻿using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using NUnit.Framework;
-using System.IO;
-using System.Reflection;
 using System.Text;
 
 namespace Osmium.Interpreter;
@@ -289,7 +287,7 @@ public class Test
         })]
     public void TestTokenStreamFromScript(string script, params string[] testTokens)
     {
-        var input = GetScript(script);
+        var input = Script.Load(script);
 
         TestTokenStream(input, testTokens);
     }
@@ -420,7 +418,7 @@ public class Test
 
     public static void TryError(string script)
     {
-        var tokens = RunLexer(GetScript(script), true);
+        var tokens = RunLexer(Script.Load(script), true);
         RunParser(tokens, true);
 
         Assert.Fail();
@@ -428,27 +426,7 @@ public class Test
 
     public static void TryScript(string script)
     {
-        Try(GetScript(script));
-    }
-
-    private static string GetScript(string script)
-    {
-        var executableLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        var scriptsPath = Path.Combine(executableLocation, "scripts");
-
-        var fileFullPath = Path.IsPathFullyQualified(script) ? script : Path.Combine(scriptsPath, script);
-
-        try
-        {
-            var fileContent = File.ReadAllText(fileFullPath);
-            return fileContent;
-        }
-        catch
-        {
-            Log.Info($"script not found: {fileFullPath}");
-
-            throw new ScriptNotFoundException(script);
-        }
+        Try(Script.Load(script));
     }
 
     // used for building tests

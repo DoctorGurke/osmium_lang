@@ -41,8 +41,3 @@ public static class Log
         Console.WriteLine($"{content}");
     }
 }
-
-public class ScriptNotFoundException : Exception
-{
-    public ScriptNotFoundException(string message) : base(message) { }
-}
