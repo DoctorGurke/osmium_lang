@@ -13,7 +13,7 @@ public class Function
         this.param_list = param_list;
     }
 
-    public object Invoke(Visitor visitor, object[] args)
+    public object Invoke(Interpreter visitor, object[] args)
     {
         var argCount = args?.Length ?? 0;
         var paramCount = param_list?.Length ?? 0;

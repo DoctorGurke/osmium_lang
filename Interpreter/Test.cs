@@ -402,7 +402,7 @@ public class Test
         Log.Space();
 
         Log.Info($"---Visit Tree---");
-        var visitor = new Visitor();
+        var visitor = new Interpreter();
         var target = visitor.Visit(tree);
         Log.Info($"exit {target}");
 

@@ -7,16 +7,16 @@ using static Osmium.Interpreter.OsmiumParser;
 
 namespace Osmium.Interpreter;
 
-public class Visitor : OsmiumParserBaseVisitor<object>
+public class Interpreter : OsmiumParserBaseVisitor<object>
 {
     public SymbolTable SymbolTable { get; private set; }
 
-    public Visitor()
+    public Interpreter()
     {
         SymbolTable = new SymbolTable();
     }
 
-    public Visitor(SymbolTable parentSymbolTable)
+    public Interpreter(SymbolTable parentSymbolTable)
     {
         SymbolTable = new SymbolTable();
         SymbolTable.Parent = parentSymbolTable;
@@ -196,7 +196,7 @@ public class Visitor : OsmiumParserBaseVisitor<object>
             if (symbol is not Function func)
                 throw new InvalidOperationException($"cannot invoke symbol: {identifier} : {symbol}");
 
-            var functionVisitor = new Visitor(SymbolTable);
+            var functionVisitor = new Interpreter(SymbolTable);
             func.Invoke(functionVisitor, parameters?.ToArray());
         }
 
@@ -288,6 +288,11 @@ public class Visitor : OsmiumParserBaseVisitor<object>
         if (context.declaration() is DeclarationContext declaration_context)
         {
             VisitDeclaration(declaration_context);
+        }
+
+        if (context.jump_statement() is Jump_statementContext jump_statement_context)
+        {
+            VisitJump_statement(jump_statement_context);
         }
 
         return null;
