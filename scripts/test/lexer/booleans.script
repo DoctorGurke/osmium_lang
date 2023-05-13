@@ -1,5 +1,9 @@
-﻿true;
-false;
+﻿x = 1;
+y = 2;
+
+a = false;
+b = true;
+c = false;
 
 x1 = true;
 x2 = false;
@@ -10,9 +14,9 @@ x5 = true && false;
 x6 = true and false;
 x7 = true || false;
 x8 = true or false;
-x9 = x > x;
+x9 = x > y;
 x10 = x < y;
 x11 = x >= x;
 x12 = x <= x;
 
-x13 = ((x or y) and z or (a or not b or c)) == true;
+x13 = ((x == y) && true || (a || !b || c)) == true;

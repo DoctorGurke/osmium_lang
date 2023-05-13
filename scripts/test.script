@@ -1,2 +1,26 @@
-﻿x = 5 + 3;
-print(x);
+﻿2 + 3;
+x = 1;
+x * 4;
+y = 2;
+y / 2;
+z - 1;
+(2 + 3) * 4 / (5 - 1);
+z = 1;
+x + y * z;
+5 % 2;
+(x > y) && (y < z);
+(x < y) || (y > z);
+x != y;
+true && false;
+true || false;
+!true;
+foo();
+bar(1, 2, 3);
+x("a", 1.0f, 1.0, 0);
+qux(f(4), g(h()), "hello");
+f(function: end);
+
+x[1];
+x[1..1];
+x[0..];
+x[..0];

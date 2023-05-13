@@ -1,5 +1,6 @@
 ﻿using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
+using Osmium.Interpreter.Operators;
 using System.Collections.Generic;
 using System.Text;
 using static Osmium.Interpreter.OsmiumParser;
@@ -101,31 +102,29 @@ public class Visitor : OsmiumParserBaseVisitor<object>
 
         if (context.op is not null)
         {
+            Log.Info($"{context.GetText()} {context.op} - {context.operand1} - {context.operand2}");
+            // unary operation
+            if (context.operand1 is not null && context.operand2 is null)
+            {
+                var operand = VisitExpression(context.operand1);
+                return Arithmetic.TryUnary(context.op.Type, operand);
+            }
+
+            // binary operation
             if (context.operand1 is null || context.operand2 is null)
                 return null;
 
+            // get object values of expressions (recursively)
             var operand1 = VisitExpression(context.operand1);
             var operand2 = VisitExpression(context.operand2);
-            Log.Info($"{operand1?.GetType()} {context.op.Text} {operand2?.GetType()}");
+            Log.Info($"operand2: {context.operand2.GetText()} {operand2}");
 
-            switch (context.op.Type)
-            {
-                case OP_MULTIPLY:
-                    break;
-                case OP_DIVISION:
-                    break;
-                case OP_MODULUS:
-                    break;
-                case OP_ADDITION:
-                    //return VisitExpression(context.operand1) * VisitExpression(context.operand2);
-                    break;
-                case OP_SUBTRACTION:
-                    break;
-            }
-            //Log.Info($"operation: {context.op.Type} [{context.GetText()}]");
-            //Log.Info(OP_SUB);
+            Log.Info($"operation: {context.op.Type} [{context.GetText()}]");
+            // evaluate binary expression
+            return Arithmetic.TryBinary(context.op.Type, operand1, operand2);
         }
 
+        Log.Info($"invalid expr: {context} {context.GetText()}");
         return null;
     }
 

@@ -125,7 +125,7 @@ expression
 	| operand1=expression op=OP_DIVISION operand2=expression 
 	| operand1=expression op=OP_MODULUS operand2=expression 
 	| operand1=expression op=OP_ADDITION operand2=expression 
-	| expression OP_SUBTRACTION operand2=expression 
+	| operand1=expression op=OP_SUBTRACTION operand2=expression 
 	
 	// boolean
 	| op=OP_LOGICAL_NOT operand1=expression 
