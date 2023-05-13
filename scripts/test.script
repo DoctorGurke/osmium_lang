@@ -1,6 +1,7 @@
-﻿function x(value, multiplier):
-	return value * multiplier;
-end;
+﻿{
+	value = 5;
+	print(value);
+}
 
-result = x(5, 10);
-print(result);
+value = 19;
+print(value);

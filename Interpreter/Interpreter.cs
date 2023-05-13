@@ -62,6 +62,14 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
 
         try
         {
+            if (context.control_flow() is Control_flowContext[] control_flow_contexts)
+            {
+                foreach (var control_flow in control_flow_contexts)
+                {
+                    VisitControl_flow(control_flow);
+                }
+            }
+
             if (context.statement() is StatementContext[] statement_context)
             {
                 foreach (var statement in statement_context)
@@ -75,14 +83,6 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
                 foreach (var expression in expression_contexts)
                 {
                     VisitExpression(expression);
-                }
-            }
-
-            if (context.control_flow() is Control_flowContext[] control_flow_contexts)
-            {
-                foreach (var control_flow in control_flow_contexts)
-                {
-                    VisitControl_flow(control_flow);
                 }
             }
         }
@@ -434,6 +434,8 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
     {
         PrintContext(context, context.GetText());
 
+        var control_flow_visitor = new Interpreter(SymbolTable);
+
         if (context.if_statement() is If_statementContext statement)
         {
             {
@@ -441,7 +443,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
                 //Log.Info($"condition: {condition}");
                 if (condition)
                 {
-                    VisitProgram_block(statement.program_block());
+                    control_flow_visitor.VisitProgram_block(statement.program_block());
                     return null;
                 }
             }
@@ -453,7 +455,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
                     var condition = (bool)VisitCondition(else_if.condition());
                     if (condition)
                     {
-                        VisitProgram_block(else_if.program_block());
+                        control_flow_visitor.VisitProgram_block(else_if.program_block());
                         return null;
                     }
                 }
@@ -461,10 +463,17 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
 
             if (statement.else_statement() is Else_statementContext else_statement)
             {
-                VisitProgram_block(else_statement.program_block());
+                control_flow_visitor.VisitProgram_block(else_statement.program_block());
                 return null;
             }
         }
+
+        if (context.scope() is ScopeContext scope)
+        {
+            if (scope.program_block() is not null)
+                control_flow_visitor.VisitProgram_block(scope.program_block());
+        }
+
         return null;
     }
 
