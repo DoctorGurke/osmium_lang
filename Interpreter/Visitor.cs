@@ -1,6 +1,5 @@
 ﻿using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
-using System;
 using System.Collections.Generic;
 using System.Text;
 using static Osmium.Interpreter.OsmiumParser;
@@ -100,6 +99,33 @@ public class Visitor : OsmiumParserBaseVisitor<object>
             }
         }
 
+        if (context.op is not null)
+        {
+            if (context.operand1 is null || context.operand2 is null)
+                return null;
+
+            var operand1 = VisitExpression(context.operand1);
+            var operand2 = VisitExpression(context.operand2);
+            Log.Info($"{operand1?.GetType()} {context.op.Text} {operand2?.GetType()}");
+
+            switch (context.op.Type)
+            {
+                case OP_MULTIPLY:
+                    break;
+                case OP_DIVISION:
+                    break;
+                case OP_MODULUS:
+                    break;
+                case OP_ADDITION:
+                    //return VisitExpression(context.operand1) * VisitExpression(context.operand2);
+                    break;
+                case OP_SUBTRACTION:
+                    break;
+            }
+            //Log.Info($"operation: {context.op.Type} [{context.GetText()}]");
+            //Log.Info(OP_SUB);
+        }
+
         return null;
     }
 
@@ -124,7 +150,7 @@ public class Visitor : OsmiumParserBaseVisitor<object>
             if (parameters.Count != 1)
                 Log.Info($"invalid param count for print");
 
-            Log.Info($"\n{parameters[0]}");
+            Log.Info($"\nprint::[{parameters[0]}]");
             //Log.Info();
         }
 
@@ -205,18 +231,6 @@ public class Visitor : OsmiumParserBaseVisitor<object>
             return VisitFloat(float_context);
         }
 
-        // double
-        if (context.@double() is DoubleContext double_context)
-        {
-            return VisitDouble(double_context);
-        }
-
-        // char
-        if (context.@char() is CharContext char_context)
-        {
-            return VisitChar(char_context);
-        }
-
         // string
         if (context.@string() is StringContext string_context)
         {
@@ -253,23 +267,6 @@ public class Visitor : OsmiumParserBaseVisitor<object>
     public override object VisitFloat([NotNull] FloatContext context)
     {
         var evaluate = float.Parse(context.GetText().Trim('f'), System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
-
-        PrintContext(context, evaluate);
-        return evaluate;
-    }
-
-    public override object VisitDouble([NotNull] DoubleContext context)
-    {
-        var evaluate = double.Parse(context.GetText(), System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
-
-        PrintContext(context, evaluate);
-        return evaluate;
-    }
-
-    public override object VisitChar([NotNull] CharContext context)
-    {
-        var content = context.GetText().Trim('\'');
-        var evaluate = char.Parse(content);
 
         PrintContext(context, evaluate);
         return evaluate;
