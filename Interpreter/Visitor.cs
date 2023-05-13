@@ -57,6 +57,14 @@ public class Visitor : OsmiumParserBaseVisitor<object>
             }
         }
 
+        if (context.control_flow() is Control_flowContext[] control_flow_contexts)
+        {
+            foreach (var control_flow in control_flow_contexts)
+            {
+                VisitControl_flow(control_flow);
+            }
+        }
+
         return null;
     }
 
@@ -102,7 +110,7 @@ public class Visitor : OsmiumParserBaseVisitor<object>
 
         if (context.op is not null)
         {
-            Log.Info($"{context.GetText()} {context.op} - {context.operand1} - {context.operand2}");
+            //Log.Info($"{context.GetText()} {context.op} - {context.operand1} - {context.operand2}");
             // unary operation
             if (context.operand1 is not null && context.operand2 is null)
             {
@@ -117,14 +125,14 @@ public class Visitor : OsmiumParserBaseVisitor<object>
             // get object values of expressions (recursively)
             var operand1 = VisitExpression(context.operand1);
             var operand2 = VisitExpression(context.operand2);
-            Log.Info($"operand2: {context.operand2.GetText()} {operand2}");
+            //Log.Info($"operand2: {context.operand2.GetText()} {operand2}");
 
-            Log.Info($"operation: {context.op.Type} [{context.GetText()}]");
+            //Log.Info($"operation: {context.op.Type} [{context.GetText()}]");
             // evaluate binary expression
             return Arithmetic.TryBinary(context.op.Type, operand1, operand2);
         }
 
-        Log.Info($"invalid expr: {context} {context.GetText()}");
+        //Log.Info($"invalid expr: {context} {context.GetText()}");
         return null;
     }
 
@@ -253,6 +261,51 @@ public class Visitor : OsmiumParserBaseVisitor<object>
             return null;
 
         return null;
+    }
+
+    public override object VisitControl_flow([NotNull] Control_flowContext context)
+    {
+        PrintContext(context, context.GetText());
+
+        if (context.if_statement() is If_statementContext statement)
+        {
+            {
+                var condition = (bool)VisitCondition(statement.condition());
+                Log.Info($"condition: {condition}");
+                if (condition)
+                {
+                    VisitProgram_block(statement.program_block());
+                    return null;
+                }
+            }
+
+            if (statement.else_if_statement() is Else_if_statementContext[] else_if_statements)
+            {
+                foreach (var else_if in else_if_statements)
+                {
+                    var condition = (bool)VisitCondition(else_if.condition());
+                    if (condition)
+                    {
+                        VisitProgram_block(else_if.program_block());
+                        return null;
+                    }
+                }
+            }
+
+            if (statement.else_statement() is Else_statementContext else_statement)
+            {
+                VisitProgram_block(else_statement.program_block());
+                return null;
+            }
+        }
+        return null;
+    }
+
+    public override object VisitCondition([NotNull] ConditionContext context)
+    {
+        PrintContext(context, context.GetText());
+
+        return VisitExpression(context.expression());
     }
 
     public override object VisitInt([NotNull] IntContext context)
