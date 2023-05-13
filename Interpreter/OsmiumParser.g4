@@ -18,7 +18,8 @@ file
 // expressions are separated by semicolon
 program_block 
 	: (statement | expression) 
-	| (control_flow | ((statement | expression) terminator))+ 
+	| (control_flow | ((statement | expression) terminator))+
+	|
 	;
 
 //
@@ -39,8 +40,7 @@ declaration
 
 assignment
 	: identifier OP_ASSIGN expression
-	| identifier OP_ASSIGN assignment 
-	| // <-- do not touch
+	| identifier OP_ASSIGN assignment
 	;
 
 jump_statement
