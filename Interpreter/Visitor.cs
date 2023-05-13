@@ -265,6 +265,23 @@ public class Visitor : OsmiumParserBaseVisitor<object>
             VisitAssignment(assignment_context);
         }
 
+        if (context.function_declaration() is Function_declarationContext function_declaration_context)
+        {
+            VisitFunction_declaration(function_declaration_context);
+        }
+
+        return null;
+    }
+
+    public override object VisitFunction_declaration([NotNull] Function_declarationContext context)
+    {
+        var identifier = (string)VisitIdentifier(context.identifier());
+
+        if (SymbolTable.HasSymbol(identifier))
+        {
+            throw new InvalidOperationException($"Cannot re-define immutable identifier: {identifier}");
+        }
+
         return null;
     }
 

@@ -1,4 +1,5 @@
-﻿list = [0, 1, 2, 3, 4, 5];
-x = list[2..4];
-print(list);
-print(x);
+﻿function x:
+	print("hello_world");
+end;
+
+x();
