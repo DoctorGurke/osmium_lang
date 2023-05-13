@@ -1,11 +1,4 @@
-﻿a = 5;
-b = 10;
-zero = 0;
-
-if(false):
-	print("hello_world");
-else if(a <= b):
-	print("success");
-else:
-	print("goodbye_world");
-end
+﻿list = [0, 1, 2, 3, 4, 5];
+x = list[2..4];
+print(list);
+print(x);

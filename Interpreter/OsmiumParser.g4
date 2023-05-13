@@ -10,6 +10,7 @@ string : STRING ;
 boolean : OP_TRUE | OP_FALSE ;
 range : RANGE ;
 null : NULL ;
+list : OP_INDEX | LEFT_SQUARE_BRACKET expression_list RIGHT_SQUARE_BRACKET ;
 
 file 
 	: program_block EOF // regular content
@@ -106,7 +107,7 @@ continue_statement
 return_statement : RETURN expression? ;
 
 op_index 
-	: identifier LEFT_SQUARE_BRACKET (identifier | literal) RIGHT_SQUARE_BRACKET 
+	: identifier LEFT_SQUARE_BRACKET (int | range) RIGHT_SQUARE_BRACKET
 	;
 
 // evaluates to a value
@@ -185,5 +186,5 @@ sign
 	;
 
 literal 
-	: sign? ( float | int | string | boolean | null | range)
+	: sign? ( float | int | string | boolean | null | range | list)
 	;

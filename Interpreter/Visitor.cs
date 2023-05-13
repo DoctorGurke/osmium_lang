@@ -94,6 +94,12 @@ public class Visitor : OsmiumParserBaseVisitor<object>
             return VisitInvocation(invocation_context);
         }
 
+        // indexof
+        if (context.op_index() is Op_indexContext op_index_context)
+        {
+            return VisitOp_index(op_index_context);
+        }
+
         //op_index
         //function_lambda
         //function_expression
@@ -142,11 +148,11 @@ public class Visitor : OsmiumParserBaseVisitor<object>
 
         var identifier = (string)VisitIdentifier(context.identifier());
 
-        IList<object> parameters = null;
+        List<object> parameters = null;
 
         if (context.expression_list() is Expression_listContext expression_list_context)
         {
-            parameters = (IList<object>)VisitExpression_list(expression_list_context);
+            parameters = (List<object>)VisitExpression_list(expression_list_context);
         }
 
         if ($"{identifier}" == "print")
@@ -157,16 +163,74 @@ public class Visitor : OsmiumParserBaseVisitor<object>
             if (parameters.Count != 1)
                 Log.Info($"invalid param count for print");
 
-            Log.Info($"\nprint::[{parameters[0]}]");
+            var parameter = parameters[0];
+            string printString = parameter?.ToString();
+
+            if (parameter is List<object> list)
+            {
+                var sb = new StringBuilder();
+
+                foreach (var item in list)
+                {
+                    sb.Append($"{item}, ");
+                }
+
+                printString = sb.ToString().Trim().Trim(',');
+            }
+
+            Log.Info($"\nprint::[{printString}]");
             //Log.Info();
         }
 
         return null;
     }
 
+    public override object VisitOp_index([NotNull] Op_indexContext context)
+    {
+        // TODO: this should be an operator so I can override it
+
+        if (context.identifier() is IdentifierContext ident)
+        {
+            var identifier = (string)VisitIdentifier(ident);
+            if (SymbolTable.TryGetValue(identifier, out var value))
+                if (value is List<object> list)
+                {
+                    // direct index
+                    if (context.@int() is IntContext index)
+                    {
+                        var intIndex = (int)VisitInt(index);
+                        return list[intIndex];
+                    }
+
+                    // sublist
+                    if (context.range() is RangeContext range)
+                    {
+                        var indexRange = (Range)VisitRange(range);
+                        Log.Info($"RANGE: {indexRange}");
+                        return GetSublist(list, indexRange);
+                    }
+                }
+        }
+        return null;
+    }
+
+    public static List<object> GetSublist(List<object> list, Range range)
+    {
+        int startIndex = range.StartIndex ?? 0;
+        int endIndex = range.EndIndex ?? list.Count - 1;
+        int count = endIndex - startIndex + 1;
+
+        if (count < 0)
+        {
+            count = 0;
+        }
+
+        return list.GetRange(startIndex, count);
+    }
+
     public override object VisitExpression_list([NotNull] Expression_listContext context)
     {
-        IList<object> returned_objects = null;
+        List<object> returned_objects = null;
         if (context.expression() is ExpressionContext[] expression_contexts)
         {
             returned_objects = new List<object>();
@@ -256,6 +320,11 @@ public class Visitor : OsmiumParserBaseVisitor<object>
             return VisitRange(range_context);
         }
 
+        if (context.list() is ListContext list_context)
+        {
+            return VisitList(list_context);
+        }
+
         // null
         if (context.@null() is not null)
             return null;
@@ -271,7 +340,7 @@ public class Visitor : OsmiumParserBaseVisitor<object>
         {
             {
                 var condition = (bool)VisitCondition(statement.condition());
-                Log.Info($"condition: {condition}");
+                //Log.Info($"condition: {condition}");
                 if (condition)
                 {
                     VisitProgram_block(statement.program_block());
@@ -343,8 +412,25 @@ public class Visitor : OsmiumParserBaseVisitor<object>
 
     public override object VisitRange([NotNull] RangeContext context)
     {
-        //throw new NotImplementedException();
-        return null;
+        var evaluate = Range.Parse(context.GetText());
+
+        PrintContext(context, evaluate);
+        return evaluate;
+    }
+
+    public override object VisitList([NotNull] ListContext context)
+    {
+        var list = new List<object>();
+        if (context.expression_list() is Expression_listContext content)
+        {
+            var expressions = (List<object>)VisitExpression_list(context.expression_list());
+            foreach (var expression in expressions)
+            {
+                list.Add(expression);
+            }
+        }
+
+        return list;
     }
 
     public override object VisitIdentifier([NotNull] IdentifierContext context)
