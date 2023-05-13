@@ -121,22 +121,22 @@ expression
 	| LEFT_BRACKET expression RIGHT_BRACKET 
 	
 	// arithmetic
-	| expression OP_MULTIPLY expression 
-	| expression OP_DIVISION expression 
-	| expression OP_MODULUS expression 
-	| expression OP_ADDITION expression 
-	| expression OP_SUBTRACTION expression 
+	| operand1=expression op=OP_MULTIPLY operand2=expression 
+	| operand1=expression op=OP_DIVISION operand2=expression 
+	| operand1=expression op=OP_MODULUS operand2=expression 
+	| operand1=expression op=OP_ADDITION operand2=expression 
+	| expression OP_SUBTRACTION operand2=expression 
 	
 	// boolean
-	| OP_LOGICAL_NOT expression 
-	| expression OP_LOGICAL_AND expression 
-	| expression OP_LOGICAL_OR expression 
-	| expression OP_INEQUALITY expression 
-	| expression OP_EQUALITY expression 
-	| expression OP_GREATER_THAN expression 
-	| expression OP_LESS_THAN expression 
-	| expression OP_GREATER_THAN_OR_EQUALS expression 
-	| expression OP_LESS_THAN_OR_EQUALS expression
+	| op=OP_LOGICAL_NOT operand1=expression 
+	| operand1=expression op=OP_LOGICAL_AND operand2=expression 
+	| operand1=expression op=OP_LOGICAL_OR operand2=expression 
+	| operand1=expression op=OP_INEQUALITY operand2=expression 
+	| operand1=expression op=OP_EQUALITY operand2=expression 
+	| operand1=expression op=OP_GREATER_THAN operand2=expression 
+	| operand1=expression op=OP_LESS_THAN operand2=expression 
+	| operand1=expression op=OP_GREATER_THAN_OR_EQUALS operand2=expression 
+	| operand1=expression op=OP_LESS_THAN_OR_EQUALS operand2=expression
 	;
 
 //
