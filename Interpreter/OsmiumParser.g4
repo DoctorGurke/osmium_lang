@@ -78,12 +78,8 @@ else_statement
 	: ELSE COLON program_block
 	;
 
-local_identifier 
-	: identifier 
-	;
-
 for_statement 
-	: FOR LEFT_BRACKET local_identifier IN (identifier | literal) RIGHT_BRACKET COLON program_block END 
+	: FOR LEFT_BRACKET identifier IN (identifier | literal) RIGHT_BRACKET COLON program_block END 
 	| FOR LEFT_BRACKET range RIGHT_BRACKET COLON program_block END 
 	| FOR LEFT_BRACKET int RIGHT_BRACKET COLON program_block END
 	;
@@ -158,7 +154,7 @@ function_declaration
 	;
 
 params 
-	: LEFT_BRACKET (local_identifier (COMMA local_identifier)*)? RIGHT_BRACKET 
+	: LEFT_BRACKET identifier_list? RIGHT_BRACKET 
 	;
 	
 invocation 

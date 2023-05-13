@@ -1,5 +1,5 @@
-﻿function x:
-	print("hello_world");
+﻿function x(text):
+	print(text);
 end;
 
-x();
+x("hello_world");

@@ -11,6 +11,17 @@ public class Visitor : OsmiumParserBaseVisitor<object>
 {
     public SymbolTable SymbolTable { get; private set; }
 
+    public Visitor()
+    {
+        SymbolTable = new SymbolTable();
+    }
+
+    public Visitor(SymbolTable parentSymbolTable)
+    {
+        SymbolTable = new SymbolTable();
+        SymbolTable.Parent = parentSymbolTable;
+    }
+
     private static void PrintContext(ParserRuleContext context, object value = null)
     {
         var pad = new StringBuilder();
@@ -26,8 +37,6 @@ public class Visitor : OsmiumParserBaseVisitor<object>
     public override object VisitFile([NotNull] FileContext context)
     {
         PrintContext(context);
-
-        SymbolTable = new SymbolTable();
 
         if (context.program_block() is Program_blockContext program_block)
         {
@@ -182,6 +191,15 @@ public class Visitor : OsmiumParserBaseVisitor<object>
             //Log.Info();
         }
 
+        if (SymbolTable.TryGetValue(identifier, out var symbol))
+        {
+            if (symbol is not Function func)
+                throw new InvalidOperationException($"cannot invoke symbol: {identifier} : {symbol}");
+
+            var functionVisitor = new Visitor(SymbolTable);
+            func.Invoke(functionVisitor, parameters?.ToArray());
+        }
+
         return null;
     }
 
@@ -244,6 +262,25 @@ public class Visitor : OsmiumParserBaseVisitor<object>
         return returned_objects;
     }
 
+    public override object VisitIdentifier_list([NotNull] Identifier_listContext context)
+    {
+        if (context is null)
+            return null;
+
+        List<string> returned_objects = null;
+        if (context.identifier() is IdentifierContext[] identifier_contexts)
+        {
+            returned_objects = new List<string>();
+            foreach (var identifier in identifier_contexts)
+            {
+                returned_objects.Add((string)VisitIdentifier(identifier));
+            }
+        }
+
+        // may be null
+        return returned_objects;
+    }
+
     public override object VisitStatement([NotNull] StatementContext context)
     {
         PrintContext(context);
@@ -281,6 +318,13 @@ public class Visitor : OsmiumParserBaseVisitor<object>
         {
             throw new InvalidOperationException($"Cannot re-define immutable identifier: {identifier}");
         }
+
+        var program = context.program_block();
+
+        // lol
+        var param_list = ((List<string>)VisitIdentifier_list(context.@params()?.identifier_list()))?.ToArray();
+
+        SymbolTable[identifier] = new Function(program, param_list);
 
         return null;
     }
