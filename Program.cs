@@ -1,4 +1,4 @@
-﻿using System;
+﻿global using System;
 using Osmium.Interpreter;
 
 namespace Osmium;
