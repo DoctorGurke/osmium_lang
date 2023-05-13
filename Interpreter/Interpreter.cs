@@ -9,6 +9,16 @@ namespace Osmium.Interpreter;
 
 public class Interpreter : OsmiumParserBaseVisitor<object>
 {
+    public class ReturnException : Exception
+    {
+        public object Value { get; private set; }
+
+        public ReturnException(object value)
+        {
+            Value = value;
+        }
+    }
+
     public SymbolTable SymbolTable { get; private set; }
 
     public Interpreter()
@@ -40,7 +50,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
 
         if (context.program_block() is Program_blockContext program_block)
         {
-            VisitProgram_block(program_block);
+            return VisitProgram_block(program_block);
         }
 
         return 0;
@@ -50,35 +60,45 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
     {
         PrintContext(context);
 
-        if (context.statement() is StatementContext[] statement_context)
+        try
         {
-            foreach (var statement in statement_context)
+            if (context.statement() is StatementContext[] statement_context)
             {
-                VisitStatement(statement);
+                foreach (var statement in statement_context)
+                {
+                    VisitStatement(statement);
+                }
+            }
+
+            if (context.expression() is ExpressionContext[] expression_contexts)
+            {
+                foreach (var expression in expression_contexts)
+                {
+                    VisitExpression(expression);
+                }
+            }
+
+            if (context.control_flow() is Control_flowContext[] control_flow_contexts)
+            {
+                foreach (var control_flow in control_flow_contexts)
+                {
+                    VisitControl_flow(control_flow);
+                }
             }
         }
-
-        if (context.expression() is ExpressionContext[] expression_contexts)
+        catch (ReturnException returnException)
         {
-            foreach (var expression in expression_contexts)
-            {
-                VisitExpression(expression);
-            }
+            return returnException.Value;
         }
 
-        if (context.control_flow() is Control_flowContext[] control_flow_contexts)
-        {
-            foreach (var control_flow in control_flow_contexts)
-            {
-                VisitControl_flow(control_flow);
-            }
-        }
-
-        return null;
+        return 0;
     }
 
     public override object VisitExpression([NotNull] ExpressionContext context)
     {
+        if (context is null)
+            return null;
+
         PrintContext(context, context.GetText());
 
         // literal
@@ -197,7 +217,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
                 throw new InvalidOperationException($"cannot invoke symbol: {identifier} : {symbol}");
 
             var functionVisitor = new Interpreter(SymbolTable);
-            func.Invoke(functionVisitor, parameters?.ToArray());
+            return func.Invoke(functionVisitor, parameters?.ToArray());
         }
 
         return null;
@@ -293,6 +313,18 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
         if (context.jump_statement() is Jump_statementContext jump_statement_context)
         {
             VisitJump_statement(jump_statement_context);
+        }
+
+        return null;
+    }
+
+    public override object VisitJump_statement([NotNull] Jump_statementContext context)
+    {
+        PrintContext(context);
+
+        if (context.return_statement() is Return_statementContext return_context)
+        {
+            throw new ReturnException(VisitExpression(return_context.expression()));
         }
 
         return null;

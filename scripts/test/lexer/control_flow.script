@@ -1,6 +1,6 @@
 ﻿if(true): 
-	foo();
-	bar(x);
+	//foo();
+	//bar(x);
 	//comment
 	x = 5;
 	if(false): end

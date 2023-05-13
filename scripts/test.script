@@ -1,5 +1,6 @@
-﻿function x(text):
-	print(text);
+﻿function x(value, multiplier):
+	return value * multiplier;
 end;
 
-x("hello_world");
+result = x(5, 10);
+print(result);
