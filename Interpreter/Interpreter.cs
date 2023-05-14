@@ -48,50 +48,53 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
     {
         PrintContext(context);
 
-        if (context.program_block() is Program_blockContext program_block)
+        try
         {
-            return VisitProgram_block(program_block);
+            if (context.program_block() is Program_blockContext program_block)
+            {
+                return VisitProgram_block(program_block);
+            }
+        }
+        catch (ReturnException programReturn)
+        {
+            return programReturn.Value;
         }
 
-        return 0;
+        return null;
     }
 
     public override object VisitProgram_block([NotNull] Program_blockContext context)
     {
         PrintContext(context);
 
-        try
+        // TODO: currently interprets program_block components based on priority
+        // instead of actual order in code....
+
+        if (context.control_flow() is Control_flowContext[] control_flow_contexts)
         {
-            if (context.control_flow() is Control_flowContext[] control_flow_contexts)
+            foreach (var control_flow in control_flow_contexts)
             {
-                foreach (var control_flow in control_flow_contexts)
-                {
-                    VisitControl_flow(control_flow);
-                }
-            }
-
-            if (context.statement() is StatementContext[] statement_context)
-            {
-                foreach (var statement in statement_context)
-                {
-                    VisitStatement(statement);
-                }
-            }
-
-            if (context.expression() is ExpressionContext[] expression_contexts)
-            {
-                foreach (var expression in expression_contexts)
-                {
-                    VisitExpression(expression);
-                }
+                VisitControl_flow(control_flow);
             }
         }
-        catch (ReturnException returnException)
+
+        if (context.statement() is StatementContext[] statement_context)
         {
-            return returnException.Value;
+            foreach (var statement in statement_context)
+            {
+                VisitStatement(statement);
+            }
         }
 
-        return 0;
+        if (context.expression() is ExpressionContext[] expression_contexts)
+        {
+            foreach (var expression in expression_contexts)
+            {
+                VisitExpression(expression);
+            }
+        }
+
+        return null;
     }
 
     public override object VisitExpression([NotNull] ExpressionContext context)
@@ -112,7 +115,10 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
         {
             var identifier = (string)VisitIdentifier(identifier_context);
             if (SymbolTable.TryGetValue(identifier, out var value))
+            {
+                PrintContext(identifier_context, value);
                 return value;
+            }
 
             return null;
         }
@@ -216,8 +222,17 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
             if (symbol is not Function func)
                 throw new InvalidOperationException($"cannot invoke symbol: {identifier} : {symbol}");
 
-            var functionVisitor = new Interpreter(SymbolTable);
-            return func.Invoke(functionVisitor, parameters?.ToArray());
+            // new local interpreter for local symboltable => pure funcs
+            var functionVisitor = new Interpreter();
+
+            try
+            {
+                func.Invoke(functionVisitor, parameters?.ToArray());
+            }
+            catch (ReturnException returnValue)
+            {
+                return returnValue.Value;
+            }
         }
 
         return null;
@@ -315,6 +330,11 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
             VisitJump_statement(jump_statement_context);
         }
 
+        if (context.control_flow() is Control_flowContext control_flow_context)
+        {
+            VisitControl_flow(control_flow_context);
+        }
+
         return null;
     }
 
@@ -349,6 +369,8 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
 
     public override object VisitFunction_declaration([NotNull] Function_declarationContext context)
     {
+        PrintContext(context);
+
         var identifier = (string)VisitIdentifier(context.identifier());
 
         if (SymbolTable.HasSymbol(identifier))
@@ -361,7 +383,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
         // lol
         var param_list = ((List<string>)VisitIdentifier_list(context.@params()?.identifier_list()))?.ToArray();
 
-        SymbolTable[identifier] = new Function(program, param_list);
+        SymbolTable[identifier] = new Function(identifier, program, param_list);
 
         return null;
     }
@@ -378,7 +400,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
         }
 
         var value = VisitExpression(context.expression());
-
+        Log.Info($"assign expr: {value}");
         SymbolTable[identifier] = value;
 
         return null;

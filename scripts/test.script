@@ -1,7 +1,10 @@
-﻿{
-	value = 5;
-	print(value);
-}
+﻿function foo(x):
+	if(x <= 3):
+		return foo(x + 1);
+	else:
+		return x;
+	end;
+end;
 
-value = 19;
-print(value);
+result = foo(0);
+print(result);

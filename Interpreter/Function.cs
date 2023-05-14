@@ -4,11 +4,13 @@ namespace Osmium.Interpreter;
 
 public class Function
 {
+    public string Identifier { get; set; }
     public Program_blockContext program { get; set; }
     public string[] param_list { get; set; }
 
-    public Function(Program_blockContext program, string[] param_list)
+    public Function(string ident, Program_blockContext program, string[] param_list)
     {
+        Identifier = ident;
         this.program = program;
         this.param_list = param_list;
     }
@@ -33,7 +35,11 @@ public class Function
             visitor.SymbolTable[symbol] = args[i];
         }
 
+        // func should know about itself
+        visitor.SymbolTable[Identifier] = this;
+
         // visit program
-        return visitor.VisitProgram_block(program);
+        visitor.VisitProgram_block(program); ;
+        return null;
     }
 }
