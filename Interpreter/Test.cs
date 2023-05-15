@@ -403,7 +403,10 @@ public class Test
 
         Log.Info($"---Visit Tree---");
         var visitor = new Interpreter();
+        Interpreter.Debug = true;
         var target = visitor.Visit(tree);
+        Interpreter.Debug = false;
+
         Log.Info($"exit {target}");
 
         Assert.False(error);

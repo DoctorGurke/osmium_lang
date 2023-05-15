@@ -19,12 +19,14 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
         }
     }
 
-    public SymbolTable SymbolTable { get; private set; }
+    public SymbolTable SymbolTable { get; set; }
 
     public Interpreter()
     {
         SymbolTable = new SymbolTable();
     }
+
+    public static bool Debug { get; set; } = false;
 
     public Interpreter(SymbolTable parentSymbolTable)
     {
@@ -34,6 +36,9 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
 
     private static void PrintContext(ParserRuleContext context, object value = null)
     {
+        if (!Debug)
+            return;
+
         var pad = new StringBuilder();
 
         for (int i = 0; i < context.Depth() - 1; i++)
@@ -417,7 +422,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
         }
 
         var value = VisitExpression(context.expression());
-        Log.Info($"assign expr: {value}");
+        //Log.Info($"assign expr: {value}");
         SymbolTable[identifier] = value;
 
         return null;

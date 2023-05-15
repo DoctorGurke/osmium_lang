@@ -8,6 +8,7 @@ public class Program
     static void Main()
     {
         // todo: runtime lol
+        var runtime = new Runtime();
 
         while (true)
         {
@@ -23,8 +24,9 @@ public class Program
                 continue;
             }
 
+            runtime.Run(input);
             //runtime.Evaluate(input);
-            Test.Try(input);
+            //Test.Try(input);
         }
     }
 }
