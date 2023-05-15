@@ -1,18 +1,15 @@
-﻿using static Osmium.Interpreter.Interpreter;
-using static Osmium.Interpreter.OsmiumParser;
+﻿using static Osmium.Interpreter.OsmiumParser;
 
 namespace Osmium.Interpreter;
 
-public class Function
+public class Lambda
 {
-    public string Identifier { get; set; }
-    public Program_blockContext program { get; set; }
+    public ExpressionContext expression { get; set; }
     public string[] param_list { get; set; }
 
-    public Function(string ident, Program_blockContext program, string[] param_list)
+    public Lambda(ExpressionContext expression, string[] param_list)
     {
-        Identifier = ident;
-        this.program = program;
+        this.expression = expression;
         this.param_list = param_list;
     }
 
@@ -26,8 +23,6 @@ public class Function
             throw new ArgumentException($"Invalid parameter count.");
         }
 
-        // func should know about itself
-        visitor.SymbolTable[Identifier] = this;
         visitor.SymbolTable["this"] = this;
 
         // set param symbols based on param_list identifiers and args objects
@@ -40,16 +35,7 @@ public class Function
             visitor.SymbolTable[symbol] = args[i];
         }
 
-        try
-        {
-            // visit program
-            visitor.VisitProgram_block(program); ;
-        }
-        catch (ReturnException returnEx)
-        {
-            return returnEx.Value;
-        }
-
-        return null;
+        // evaluate expression
+        return visitor.VisitExpression(expression);
     }
 }

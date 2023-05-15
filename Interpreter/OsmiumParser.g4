@@ -142,7 +142,7 @@ expression
 
 // anonymous function implicitly evaluated as an expression
 function_lambda 
-	: LAMBDA params? COLON expression? END 
+	: LAMBDA params? COLON expression END 
 	;
 
 // anonymous function

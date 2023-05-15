@@ -1,7 +1,6 @@
 ﻿using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
 using Osmium.Interpreter.Operators;
-using System.Collections.Generic;
 using System.Text;
 using static Osmium.Interpreter.OsmiumParser;
 
@@ -36,7 +35,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
 
     private static void PrintContext(ParserRuleContext context, object value = null)
     {
-        if (!Debug)
+        if (!Debug || context is null)
             return;
 
         var pad = new StringBuilder();
@@ -72,8 +71,8 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
     {
         PrintContext(context);
 
-        // TODO: currently interprets program_block components based on priority
-        // instead of actual order in code....
+        if (context is null || context.children is null)
+            return null;
 
         if (context.children is not null)
             foreach (var child in context.children)
@@ -157,6 +156,11 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
             return VisitOp_index(op_index_context);
         }
 
+        if (context.function_lambda() is Function_lambdaContext lambda_context)
+        {
+            return VisitFunction_lambda(lambda_context);
+        }
+
         //op_index
         //function_lambda
         //function_expression
@@ -212,31 +216,16 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
             parameters = (List<object>)VisitExpression_list(expression_list_context);
         }
 
-        if ($"{identifier}" == "print")
+        switch (identifier)
         {
-            if (parameters is null)
+            case "print":
+                Intrinsics.Print(parameters);
                 return null;
-
-            if (parameters.Count != 1)
-                Log.Info($"invalid param count for print");
-
-            var parameter = parameters[0];
-            string printString = parameter?.ToString();
-
-            if (parameter is List<object> list)
-            {
-                var sb = new StringBuilder();
-
-                foreach (var item in list)
-                {
-                    sb.Append($"{item}, ");
-                }
-
-                printString = sb.ToString().Trim().Trim(',');
-            }
-
-            Log.Info($"\nprint::[{printString}]");
-            //Log.Info();
+            case "length":
+                return Intrinsics.Length(parameters);
+            case "foreach":
+                Intrinsics.ForEach(parameters);
+                return null;
         }
 
         if (SymbolTable.TryGetValue(identifier, out var symbol))
@@ -247,17 +236,12 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
             // new local interpreter for local symboltable => pure funcs
             var functionVisitor = new Interpreter();
 
-            try
-            {
-                func.Invoke(functionVisitor, parameters?.ToArray());
-            }
-            catch (ReturnException returnValue)
-            {
-                return returnValue.Value;
-            }
+            return func.Invoke(functionVisitor, parameters?.ToArray());
         }
-
-        return null;
+        else
+        {
+            throw new InvalidOperationException($"unknown symbol: {identifier}");
+        }
     }
 
     public override object VisitOp_index([NotNull] Op_indexContext context)
@@ -281,7 +265,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
                     if (context.range() is RangeContext range)
                     {
                         var indexRange = (Range)VisitRange(range);
-                        Log.Info($"RANGE: {indexRange}");
+                        //Log.Info($"RANGE: {indexRange}");
                         return GetSublist(list, indexRange);
                     }
                 }
@@ -303,8 +287,21 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
         return list.GetRange(startIndex, count);
     }
 
+    public override object VisitFunction_lambda([NotNull] Function_lambdaContext context)
+    {
+        PrintContext(context);
+
+        var expression = context.expression();
+
+        var param_list = ((List<string>)VisitIdentifier_list(context.@params()?.identifier_list()))?.ToArray();
+
+        return new Lambda(expression, param_list);
+    }
+
     public override object VisitExpression_list([NotNull] Expression_listContext context)
     {
+        PrintContext(context);
+
         List<object> returned_objects = null;
         if (context.expression() is ExpressionContext[] expression_contexts)
         {
@@ -321,6 +318,8 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
 
     public override object VisitIdentifier_list([NotNull] Identifier_listContext context)
     {
+        PrintContext(context);
+
         if (context is null)
             return null;
 
@@ -405,9 +404,11 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
         // lol
         var param_list = ((List<string>)VisitIdentifier_list(context.@params()?.identifier_list()))?.ToArray();
 
-        SymbolTable[identifier] = new Function(identifier, program, param_list);
+        var func = new Function(identifier, program, param_list);
 
-        return null;
+        SymbolTable[identifier] = func;
+
+        return func;
     }
 
     public override object VisitAssignment([NotNull] AssignmentContext context)

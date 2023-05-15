@@ -1,0 +1,13 @@
+﻿list = [0, 1, 2, 3, 4];
+
+//0, 1, 2, 3, 4
+
+function foo(x):
+	print(x[0]);
+	len = length(x);
+	if(len > 1):
+		foo(x[1..]);
+	end;
+end;
+
+foo(list);

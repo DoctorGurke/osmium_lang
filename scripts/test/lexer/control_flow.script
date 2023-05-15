@@ -1,4 +1,6 @@
-﻿if(true): 
+﻿function foo(): end;
+
+if(true): 
 	//foo();
 	//bar(x);
 	//comment
@@ -22,17 +24,17 @@ else:
 	end
 end
 
-for(5): end
+//for(5): end
 
-for(i in 5): end
+//for(i in 5): end
 
-for(1..10): end
+//for(1..10): end
 
-for(i in 1..10): end
+//for(i in 1..10): end
 
-while(true): end
+//while(true): end
 
-do while(true): end
+//do while(true): end
 
 {}
 

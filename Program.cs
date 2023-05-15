@@ -1,4 +1,5 @@
 ﻿global using System;
+global using System.Collections.Generic;
 using Osmium.Interpreter;
 
 namespace Osmium;
