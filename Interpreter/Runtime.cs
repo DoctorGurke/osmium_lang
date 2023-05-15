@@ -13,7 +13,35 @@ public class Runtime
 
     public void Run(string input)
     {
-        //Log.Info($">\t{input.Replace("\n", ">\t")}\n<EOF>");
+        var program = Evaluate(input);
+        InterpretTree(program);
+    }
+
+    public void RunLocal(string input)
+    {
+        var program = Evaluate(input);
+        InterpretTree(program, true);
+    }
+
+    private void InterpretTree(OsmiumParser.FileContext file, bool local = false)
+    {
+        var visitor = new Interpreter();
+
+        // attach runtime symbol table for non-local evaluation (direct command line input)
+        if (!local)
+            visitor.SymbolTable = SymbolTable;
+
+        var target = visitor.Visit(file);
+        Log.Info($"{target}"); // program exit
+    }
+
+    /// <summary>
+    /// Run lexer and parser to get FileContext of given input program.
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    private OsmiumParser.FileContext Evaluate(string input)
+    {
         var str = new AntlrInputStream(input);
         var lexer = new OsmiumLexer(str);
         var tokenStream = new CommonTokenStream(lexer);
@@ -44,16 +72,6 @@ public class Runtime
         if (error)
             Log.Info($"Parser failed!");
 
-        Log.Space();
-
-        var visitor = new Interpreter();
-        visitor.SymbolTable = SymbolTable;
-        var target = visitor.Visit(tree);
-        Log.Info($"{target}");
-    }
-
-    public void RunLocal(string program)
-    {
-
+        return tree;
     }
 }

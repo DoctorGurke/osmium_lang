@@ -20,7 +20,8 @@ public class Program
             {
                 var script = input[4..];
                 Log.Info($"running {script}");
-                Test.TryScript(script);
+                //Test.TryScript(script);
+                runtime.RunLocal(Script.Load(script));
                 continue;
             }
 
