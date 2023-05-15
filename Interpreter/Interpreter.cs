@@ -91,30 +91,6 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
                 }
             }
 
-        //if (context.control_flow() is Control_flowContext[] control_flow_contexts)
-        //{
-        //    foreach (var control_flow in control_flow_contexts)
-        //    {
-        //        VisitControl_flow(control_flow);
-        //    }
-        //}
-
-        //if (context.statement() is StatementContext[] statement_context)
-        //{
-        //    foreach (var statement in statement_context)
-        //    {
-        //        VisitStatement(statement);
-        //    }
-        //}
-
-        //if (context.expression() is ExpressionContext[] expression_contexts)
-        //{
-        //    foreach (var expression in expression_contexts)
-        //    {
-        //        VisitExpression(expression);
-        //    }
-        //}
-
         return null;
     }
 
@@ -216,6 +192,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
             parameters = (List<object>)VisitExpression_list(expression_list_context);
         }
 
+        // TODO: find intrinsics with attribute?
         switch (identifier)
         {
             case "print":
@@ -226,6 +203,8 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
             case "foreach":
                 Intrinsics.ForEach(parameters);
                 return null;
+            case "map":
+                return Intrinsics.Map(parameters);
         }
 
         if (SymbolTable.TryGetValue(identifier, out var symbol))

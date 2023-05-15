@@ -1,3 +1,4 @@
 ﻿list = [1, 2, 3, 4];
 
-foreach(list, lambda(x): print(x) end);
+out = map(list, lambda(x): x * 2 end);
+print(out);
