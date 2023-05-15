@@ -21,6 +21,12 @@ public class Test
         TryError(script);
     }
 
+    [TestCase("examples/map.script")]
+    [TestCase("examples/reduce.script")]
+    [TestCase("examples/filter.script")]
+    [TestCase("examples/foreach.script")]
+    [TestCase("examples/print.script")]
+    [TestCase("examples/range_index_recursion.script")]
     [TestCase("base_functions.script")]
     [TestCase("test/lexer/control_flow.script")]
     [TestCase("test/lexer/assignment.script")]
