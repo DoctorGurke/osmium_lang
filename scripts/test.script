@@ -8,3 +8,5 @@ end;
 
 result = foo(0);
 print(result);
+
+return 0;

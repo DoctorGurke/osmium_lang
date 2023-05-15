@@ -70,29 +70,46 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
         // TODO: currently interprets program_block components based on priority
         // instead of actual order in code....
 
-        if (context.control_flow() is Control_flowContext[] control_flow_contexts)
-        {
-            foreach (var control_flow in control_flow_contexts)
+        if (context.children is not null)
+            foreach (var child in context.children)
             {
-                VisitControl_flow(control_flow);
+                if (child is StatementContext statement)
+                {
+                    VisitStatement(statement);
+                }
+                else if (child is Control_flowContext control_flow)
+                {
+                    VisitControl_flow(control_flow);
+                }
+                else if (child is ExpressionContext expression)
+                {
+                    VisitExpression(expression);
+                }
             }
-        }
 
-        if (context.statement() is StatementContext[] statement_context)
-        {
-            foreach (var statement in statement_context)
-            {
-                VisitStatement(statement);
-            }
-        }
+        //if (context.control_flow() is Control_flowContext[] control_flow_contexts)
+        //{
+        //    foreach (var control_flow in control_flow_contexts)
+        //    {
+        //        VisitControl_flow(control_flow);
+        //    }
+        //}
 
-        if (context.expression() is ExpressionContext[] expression_contexts)
-        {
-            foreach (var expression in expression_contexts)
-            {
-                VisitExpression(expression);
-            }
-        }
+        //if (context.statement() is StatementContext[] statement_context)
+        //{
+        //    foreach (var statement in statement_context)
+        //    {
+        //        VisitStatement(statement);
+        //    }
+        //}
+
+        //if (context.expression() is ExpressionContext[] expression_contexts)
+        //{
+        //    foreach (var expression in expression_contexts)
+        //    {
+        //        VisitExpression(expression);
+        //    }
+        //}
 
         return null;
     }
