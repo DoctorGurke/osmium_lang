@@ -49,7 +49,6 @@ public static class Intrinsics
 
         foreach (var item in collection)
         {
-            Log.Info($"foreach: {item}");
             lambda.Invoke(new Interpreter(), new object[] { item });
         }
     }
