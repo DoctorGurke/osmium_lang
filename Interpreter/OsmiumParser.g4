@@ -126,14 +126,14 @@ expression
 	
 	// boolean
 	| op=OP_LOGICAL_NOT operand1=expression 
-	| operand1=expression op=OP_LOGICAL_AND operand2=expression 
-	| operand1=expression op=OP_LOGICAL_OR operand2=expression 
-	| operand1=expression op=OP_INEQUALITY operand2=expression 
-	| operand1=expression op=OP_EQUALITY operand2=expression 
 	| operand1=expression op=OP_GREATER_THAN operand2=expression 
 	| operand1=expression op=OP_LESS_THAN operand2=expression 
 	| operand1=expression op=OP_GREATER_THAN_OR_EQUALS operand2=expression 
 	| operand1=expression op=OP_LESS_THAN_OR_EQUALS operand2=expression
+	| operand1=expression op=OP_LOGICAL_AND operand2=expression 
+	| operand1=expression op=OP_LOGICAL_OR operand2=expression 
+	| operand1=expression op=OP_INEQUALITY operand2=expression 
+	| operand1=expression op=OP_EQUALITY operand2=expression 
 	;
 
 //

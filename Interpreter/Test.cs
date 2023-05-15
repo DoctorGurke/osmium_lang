@@ -21,6 +21,7 @@ public class Test
         TryError(script);
     }
 
+    [TestCase("examples/arithmetic.script")]
     [TestCase("examples/map.script")]
     [TestCase("examples/reduce.script")]
     [TestCase("examples/filter.script")]

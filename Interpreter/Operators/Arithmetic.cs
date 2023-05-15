@@ -84,7 +84,7 @@ public static class Arithmetic
             }
         }
 
-        throw new InvalidOperationException($"Invalid int operation: {op} {obj} {operand}|{operand?.GetType()}");
+        throw new InvalidOperationException($"Invalid int operation: op:{op} obj:{obj} operand:{operand}|{operand?.GetType()}");
     }
 
     // check for binary operation against float
