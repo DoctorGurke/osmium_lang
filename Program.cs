@@ -8,7 +8,6 @@ public class Program
 {
     static void Main()
     {
-        // todo: runtime lol
         var runtime = new Runtime();
 
         while (true)
@@ -21,7 +20,6 @@ public class Program
             {
                 var script = input[4..];
                 Log.Info($"running {script}");
-                //Test.TryScript(script);
                 runtime.RunLocal(Script.Load(script));
                 continue;
             }
@@ -34,8 +32,6 @@ public class Program
             }
 
             runtime.Run(input);
-            //runtime.Evaluate(input);
-            //Test.Try(input);
         }
     }
 }
