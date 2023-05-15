@@ -21,7 +21,7 @@ out2 = reduce(list, lambda(x, y): x + y end, 0);
 // filters out every odd number
 // takes lambda epression with exactly one parameter. represents the value to evaluate for filtering
 // if lambda evaluates
-//out3 = filter(list, lambda(x): x % 2 == 0 end);
+out3 = filter(list, lambda(x): x % 2 == 0 end);
 
 // foreach
 // doesn't return a list, just executes

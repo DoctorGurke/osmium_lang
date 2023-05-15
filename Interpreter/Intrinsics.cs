@@ -89,4 +89,24 @@ public static class Intrinsics
 
         return acc;
     }
+
+    public static List<object> Filter(List<object> args)
+    {
+        if (args is null || args.Count != 2)
+            throw new ArgumentException($"Invalid arg count for intrinsic Filter. Expected: list, lambda");
+
+        if (args[0] is not IList<object> collection || args[1] is not Lambda lambda)
+            throw new ArgumentException($"Invalid arg types for intrinsic Filter. Expected: list, lambda. Got: {args[0].GetType()}, {args[1].GetType()}");
+
+        var returnCollection = new List<object>();
+
+        foreach (var item in collection)
+        {
+            var cond = (bool)lambda.Invoke(new Interpreter(), new object[] { item });
+            if (cond)
+                returnCollection.Add(item);
+        }
+
+        return returnCollection;
+    }
 }

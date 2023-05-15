@@ -1,4 +1,4 @@
 ﻿list = [1, 2, 3, 4];
 
-out = reduce(list, lambda(x, y): x + y end, 0);
+out = filter(list, lambda(x): x % 2 == 0 end);
 print(out);
