@@ -5,12 +5,16 @@ namespace Osmium.Interpreter;
 
 public class Function
 {
+    private bool _expr;
     public string Identifier { get; set; }
     public Program_blockContext program { get; set; }
     public string[] param_list { get; set; }
 
     public Function(string ident, Program_blockContext program, string[] param_list)
     {
+        if (ident is null)
+            _expr = true;
+
         Identifier = ident;
         this.program = program;
         this.param_list = param_list;
@@ -27,7 +31,8 @@ public class Function
         }
 
         // func should know about itself
-        visitor.SymbolTable[Identifier] = this;
+        if (!_expr)
+            visitor.SymbolTable[Identifier] = this;
         visitor.SymbolTable["this"] = this;
 
         // set param symbols based on param_list identifiers and args objects

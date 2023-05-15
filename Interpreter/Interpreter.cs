@@ -137,6 +137,11 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
             return VisitFunction_lambda(lambda_context);
         }
 
+        if (context.function_expression() is Function_expressionContext function_expression_context)
+        {
+            return VisitFunction_expression(function_expression_context);
+        }
+
         //op_index
         //function_lambda
         //function_expression
@@ -270,6 +275,29 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
         return list.GetRange(startIndex, count);
     }
 
+    public override object VisitFunction_declaration([NotNull] Function_declarationContext context)
+    {
+        PrintContext(context);
+
+        var identifier = (string)VisitIdentifier(context.identifier());
+
+        if (SymbolTable.HasSymbol(identifier))
+        {
+            throw new InvalidOperationException($"Cannot re-define immutable identifier: {identifier}");
+        }
+
+        var program = context.program_block();
+
+        // lol
+        var param_list = ((List<string>)VisitIdentifier_list(context.@params()?.identifier_list()))?.ToArray();
+
+        var func = new Function(identifier, program, param_list);
+
+        SymbolTable[identifier] = func;
+
+        return func;
+    }
+
     public override object VisitFunction_lambda([NotNull] Function_lambdaContext context)
     {
         PrintContext(context);
@@ -279,6 +307,20 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
         var param_list = ((List<string>)VisitIdentifier_list(context.@params()?.identifier_list()))?.ToArray();
 
         return new Lambda(expression, param_list);
+    }
+
+    public override object VisitFunction_expression([NotNull] Function_expressionContext context)
+    {
+        PrintContext(context);
+
+        var program = context.program_block();
+
+        // lol
+        var param_list = ((List<string>)VisitIdentifier_list(context.@params()?.identifier_list()))?.ToArray();
+
+        var func = new Function(null, program, param_list);
+
+        return func;
     }
 
     public override object VisitExpression_list([NotNull] Expression_listContext context)
@@ -369,29 +411,6 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
         }
 
         return null;
-    }
-
-    public override object VisitFunction_declaration([NotNull] Function_declarationContext context)
-    {
-        PrintContext(context);
-
-        var identifier = (string)VisitIdentifier(context.identifier());
-
-        if (SymbolTable.HasSymbol(identifier))
-        {
-            throw new InvalidOperationException($"Cannot re-define immutable identifier: {identifier}");
-        }
-
-        var program = context.program_block();
-
-        // lol
-        var param_list = ((List<string>)VisitIdentifier_list(context.@params()?.identifier_list()))?.ToArray();
-
-        var func = new Function(identifier, program, param_list);
-
-        SymbolTable[identifier] = func;
-
-        return func;
     }
 
     public override object VisitAssignment([NotNull] AssignmentContext context)
