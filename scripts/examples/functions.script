@@ -1,3 +1,17 @@
-﻿foo = function(x): print(x); end;
-
+﻿// anonymous function expression
+foo = function(x): print(x); end;
 foo("test");
+
+// explicit identifier
+function bar(x):
+	print(x);
+end;
+
+bar("test");
+
+// function parameter
+function foobar(x, y):
+	x(y);
+end;
+
+foobar(function(x): print(x); end, "test");

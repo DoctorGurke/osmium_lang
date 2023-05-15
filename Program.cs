@@ -25,6 +25,13 @@ public class Program
                 runtime.RunLocal(Script.Load(script));
                 continue;
             }
+            else if (input.StartsWith("include "))
+            {
+                var script = input[8..];
+                Log.Info($"including {script}");
+                runtime.Run(Script.Load(script));
+                continue;
+            }
 
             runtime.Run(input);
             //runtime.Evaluate(input);

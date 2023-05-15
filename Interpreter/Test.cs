@@ -21,6 +21,12 @@ public class Test
         TryError(script);
     }
 
+    [TestCase("examples/scopes.script")]
+    [TestCase("examples/fibonacci.script")]
+    [TestCase("examples/control_flow.script")]
+    [TestCase("examples/pure_functions.script")]
+    [TestCase("examples/functions.script")]
+    [TestCase("examples/list.script")]
     [TestCase("examples/arithmetic.script")]
     [TestCase("examples/map.script")]
     [TestCase("examples/reduce.script")]

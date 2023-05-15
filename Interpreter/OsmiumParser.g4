@@ -115,7 +115,7 @@ expression
 	| function_lambda // anonymous implicit expression
 	| function_expression // anonymous function 
 
-	| LEFT_BRACKET expression RIGHT_BRACKET 
+	| LEFT_BRACKET expression RIGHT_BRACKET
 	
 	// arithmetic
 	| operand1=expression op=OP_MULTIPLY operand2=expression 
@@ -130,10 +130,10 @@ expression
 	| operand1=expression op=OP_LESS_THAN operand2=expression 
 	| operand1=expression op=OP_GREATER_THAN_OR_EQUALS operand2=expression 
 	| operand1=expression op=OP_LESS_THAN_OR_EQUALS operand2=expression
-	| operand1=expression op=OP_LOGICAL_AND operand2=expression 
-	| operand1=expression op=OP_LOGICAL_OR operand2=expression 
 	| operand1=expression op=OP_INEQUALITY operand2=expression 
 	| operand1=expression op=OP_EQUALITY operand2=expression 
+	| operand1=expression op=OP_LOGICAL_AND operand2=expression 
+	| operand1=expression op=OP_LOGICAL_OR operand2=expression 
 	;
 
 //

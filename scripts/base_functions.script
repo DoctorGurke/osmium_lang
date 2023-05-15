@@ -25,5 +25,4 @@ out3 = filter(list, lambda(x): x % 2 == 0 end);
 
 // foreach
 // doesn't return a list, just executes
-
 foreach(list, lambda(x): print(x) end);

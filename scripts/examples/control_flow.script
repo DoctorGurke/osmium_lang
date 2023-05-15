@@ -1,0 +1,13 @@
+﻿cond = true;
+
+if(cond):
+	print("if");
+else:
+	print("else");
+end;
+
+if(!cond):
+	print("if");
+else:
+	print("else");
+end;

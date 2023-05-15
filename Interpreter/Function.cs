@@ -27,7 +27,7 @@ public class Function
 
         if (argCount != paramCount)
         {
-            throw new ArgumentException($"Invalid parameter count.");
+            throw new ArgumentException($"Invalid parameter count. Expected: {paramCount}, Given: {argCount}");
         }
 
         // func should know about itself

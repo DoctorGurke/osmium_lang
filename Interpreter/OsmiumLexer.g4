@@ -8,7 +8,7 @@ WHITESPACE				: [ \r\n\t]+ -> skip ;
 //
 
 COMMENT					: '//' ~[\r\n]* -> skip ;
-MULTILINE_COMMENT		: '/*' .*? '*/' -> skip ;
+MULTILINE_COMMENT		: '/*' .*? ('*/' | EOF) -> skip ;
 
 //
 // delimiters
