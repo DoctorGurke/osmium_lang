@@ -14,7 +14,7 @@ out1 = map(list, lambda(x): x * 2 end);
 // perform action on collection to get a final 
 // sums up every value in the list
 // takes lambda expression with exactly two parameters. one is the previous value, one the current
-//out2 = reduce(list, lambda(x, y): x + y end);
+out2 = reduce(list, lambda(x, y): x + y end, 0);
 
 // filter
 // filters values in a list

@@ -1,4 +1,4 @@
 ﻿list = [1, 2, 3, 4];
 
-out = map(list, lambda(x): x * 2 end);
+out = reduce(list, lambda(x, y): x + y end, 0);
 print(out);

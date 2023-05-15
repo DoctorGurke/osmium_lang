@@ -71,4 +71,22 @@ public static class Intrinsics
 
         return returnCollection;
     }
+
+    public static object Reduce(List<object> args)
+    {
+        if (args is null || args.Count != 3)
+            throw new ArgumentException($"Invalid arg count for intrinsic Reduce. Expected: list, lambda, object");
+
+        if (args[0] is not IList<object> collection || args[1] is not Lambda lambda)
+            throw new ArgumentException($"Invalid arg types for intrinsic Reduce. Expected: list, lambda, object. Got: {args[0].GetType()}, {args[1].GetType()}, {args[2].GetType()}");
+
+        var acc = args[2];
+
+        foreach (var item in collection)
+        {
+            acc = lambda.Invoke(new Interpreter(), new object[] { acc, item });
+        }
+
+        return acc;
+    }
 }

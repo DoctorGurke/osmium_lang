@@ -205,6 +205,8 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
                 return null;
             case "map":
                 return Intrinsics.Map(parameters);
+            case "reduce":
+                return Intrinsics.Reduce(parameters);
         }
 
         if (SymbolTable.TryGetValue(identifier, out var symbol))
