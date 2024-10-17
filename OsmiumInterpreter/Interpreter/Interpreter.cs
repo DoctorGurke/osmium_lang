@@ -33,7 +33,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
         SymbolTable.Parent = parentSymbolTable;
     }
 
-    private static void PrintContext(ParserRuleContext context, object value = null)
+    private static void PrintContext(ParserRuleContext context, object? value = null)
     {
         if (!Debug || context is null)
             return;

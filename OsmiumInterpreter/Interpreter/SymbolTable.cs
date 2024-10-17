@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace Osmium.Interpreter;
 
@@ -31,7 +31,7 @@ public class SymbolTable
         return Symbols.ContainsKey(symbol);
     }
 
-    public bool TryGetValue(string symbol, out object value)
+    public bool TryGetValue(string symbol, [NotNullWhen(returnValue: true)] out object? value)
     {
         if (!IsRoot)
         {

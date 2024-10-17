@@ -6,11 +6,11 @@ namespace Osmium.Interpreter;
 public class Function
 {
     private bool _expr;
-    public string Identifier { get; set; }
+    public string? Identifier { get; set; }
     public Program_blockContext program { get; set; }
     public string[] param_list { get; set; }
 
-    public Function(string ident, Program_blockContext program, string[] param_list)
+    public Function(string? ident, Program_blockContext program, string[] param_list)
     {
         if (ident is null)
             _expr = true;
@@ -23,7 +23,7 @@ public class Function
     public object Invoke(Interpreter visitor, object[] args)
     {
         var argCount = args?.Length ?? 0;
-        var paramCount = param_list?.Length ?? 0;
+        var paramCount = param_list.Length;
 
         if (argCount != paramCount)
         {
@@ -31,7 +31,7 @@ public class Function
         }
 
         // func should know about itself
-        if (!_expr)
+        if (Identifier is not null)
             visitor.SymbolTable[Identifier] = this;
         visitor.SymbolTable["this"] = this;
 

@@ -10,7 +10,7 @@ public static class Intrinsics
             throw new ArgumentException($"Invalid arg count for intrinsic Print. Expected: object");
 
         var parameter = args[0];
-        string printString = parameter?.ToString();
+        string printString = $"{parameter}";
 
         // list parameter
         if (parameter is List<object> list)
