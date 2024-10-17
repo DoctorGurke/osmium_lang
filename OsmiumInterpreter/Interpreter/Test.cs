@@ -12,13 +12,13 @@ public class Test
     public void Main()
     {
         //DumpTokens(GetScript("test/lexer/functions.script"));
-        TryScript("test.script");
+        TryScriptFile("test.script");
     }
 
     [TestCase("test/syntax/syntax_error.script")]
     public void TestSyntaxError(string script)
     {
-        TryError(script);
+        TryScript(Script.Load(script), verifyFailure: true);
     }
 
     [TestCase("examples/scopes.script")]
@@ -42,7 +42,7 @@ public class Test
     [TestCase("test/lexer/functions.script")]
     public void TestScriptFile(string script)
     {
-        TryScript(script);
+        TryScriptFile(script);
     }
 
     [TestCase("test/lexer/functions.script", new string[]
@@ -372,7 +372,7 @@ public class Test
         lexer.AddErrorListener(listener_lexer);
 
         var error = listener_lexer.had_error;
-        Assert.False(error);
+        Assert.That(error, Is.False);
 
         Log.Info($"Lexer {(error ? "Failed" : "Passed")}.");
 
@@ -399,7 +399,7 @@ public class Test
             Log.Info($"[{testToken}] -> [{tokenName}]");
             var testTokenType = lexer.GetTokenType(testToken);
 
-            Assert.True(token.Type == testTokenType);
+            Assert.That(token.Type == testTokenType, Is.True);
         }
     }
 
@@ -420,7 +420,7 @@ public class Test
         if (verifyError && error)
             Assert.Pass();
 
-        Assert.False(error);
+        Assert.That(error, Is.False);
 
 
         // get parsed token stream
@@ -478,27 +478,23 @@ public class Test
 
         Log.Info($"exit {target}");
 
-        Assert.False(error);
+        Assert.That(error, Is.False);
         return true;
     }
 
-    public static void Try(string input)
+    public static void TryScript(string input, bool verifyFailure = false)
     {
-        var tokens = RunLexer(input);
-        RunParser(tokens);
+        var tokens = RunLexer(input, verifyError: verifyFailure);
+        RunParser(tokens, verifyError: verifyFailure);
+
+        // parser should pass assert on error
+        if (verifyFailure)
+            Assert.Fail();
     }
 
-    public static void TryError(string script)
+    public static void TryScriptFile(string script)
     {
-        var tokens = RunLexer(Script.Load(script), true);
-        RunParser(tokens, true);
-
-        Assert.Fail();
-    }
-
-    public static void TryScript(string script)
-    {
-        Try(Script.Load(script));
+        TryScript(Script.Load(script));
     }
 
     // used for building tests
