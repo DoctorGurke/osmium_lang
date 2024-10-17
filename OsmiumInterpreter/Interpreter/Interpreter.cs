@@ -289,7 +289,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
         var program = context.program_block();
 
         // lol
-        var param_list = ((List<string>)VisitIdentifier_list(context.@params()?.identifier_list()))?.ToArray();
+        var param_list = (string[])VisitIdentifier_list(context.@params()?.identifier_list());
 
         var func = new Function(identifier, program, param_list);
 
@@ -304,7 +304,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
 
         var expression = context.expression();
 
-        var param_list = ((List<string>)VisitIdentifier_list(context.@params()?.identifier_list()))?.ToArray();
+        var param_list = (string[])VisitIdentifier_list(context.@params()?.identifier_list());
 
         return new Lambda(expression, param_list);
     }
@@ -316,7 +316,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
         var program = context.program_block();
 
         // lol
-        var param_list = ((List<string>)VisitIdentifier_list(context.@params()?.identifier_list()))?.ToArray();
+        var param_list = (string[])VisitIdentifier_list(context.@params()?.identifier_list());
 
         var func = new Function(null, program, param_list);
 
@@ -341,14 +341,19 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
         return returned_objects;
     }
 
+    /// <summary>
+    /// Visit an identifier list.
+    /// </summary>
+    /// <param name="context"></param>
+    /// <returns>Returns string[] of identifiers. Empty array if none are parsed.</returns>
     public override object VisitIdentifier_list([NotNull] Identifier_listContext context)
     {
         PrintContext(context);
 
         if (context is null)
-            return null;
+            return new string[0];
 
-        List<string> returned_objects = null;
+        List<string> returned_objects = new();
         if (context.identifier() is IdentifierContext[] identifier_contexts)
         {
             returned_objects = new List<string>();
@@ -358,8 +363,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
             }
         }
 
-        // may be null
-        return returned_objects;
+        return returned_objects.ToArray();
     }
 
     public override object VisitStatement([NotNull] StatementContext context)
@@ -587,6 +591,11 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
         return list;
     }
 
+    /// <summary>
+    /// Visit identifier.
+    /// </summary>
+    /// <param name="context"></param>
+    /// <returns>String of identifier name.</returns>
     public override object VisitIdentifier([NotNull] IdentifierContext context)
     {
         return $"{context.GetText()}";
