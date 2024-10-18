@@ -5,24 +5,20 @@ namespace Osmium.Interpreter;
 
 public class Function
 {
-    private bool _expr;
     public string? Identifier { get; set; }
     public Program_blockContext program { get; set; }
     public string[] param_list { get; set; }
 
     public Function(string? ident, Program_blockContext program, string[] param_list)
     {
-        if (ident is null)
-            _expr = true;
-
         Identifier = ident;
         this.program = program;
         this.param_list = param_list;
     }
 
-    public object Invoke(Interpreter visitor, object[] args)
+    public object? Invoke(Interpreter visitor, object[] args)
     {
-        var argCount = args?.Length ?? 0;
+        var argCount = args.Length;
         var paramCount = param_list.Length;
 
         if (argCount != paramCount)
@@ -55,6 +51,7 @@ public class Function
             return returnEx.Value;
         }
 
+        // void return
         return null;
     }
 }

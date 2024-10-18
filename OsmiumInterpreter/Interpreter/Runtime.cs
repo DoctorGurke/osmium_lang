@@ -32,7 +32,8 @@ public class Runtime
             visitor.SymbolTable = SymbolTable;
 
         var target = visitor.Visit(file);
-        Log.Info($"{target}"); // program exit
+        if (target != null)
+            Log.Info($"{target}"); // program exit
     }
 
     /// <summary>

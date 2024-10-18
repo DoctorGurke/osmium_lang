@@ -64,10 +64,10 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
             return programReturn.Value;
         }
 
-        return null;
+        return 0;
     }
 
-    public override object VisitProgram_block([NotNull] Program_blockContext context)
+    public new object? VisitProgram_block([NotNull] Program_blockContext context)
     {
         PrintContext(context);
 
@@ -87,14 +87,14 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
                 }
                 else if (child is ExpressionContext expression)
                 {
-                    VisitExpression(expression);
+                    return VisitExpression(expression);
                 }
             }
 
         return null;
     }
 
-    public override object VisitExpression([NotNull] ExpressionContext context)
+    public new object VisitExpression([NotNull] ExpressionContext context)
     {
         if (context is null)
             return null;
@@ -142,10 +142,6 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
             return VisitFunction_expression(function_expression_context);
         }
 
-        //op_index
-        //function_lambda
-        //function_expression
-
         // bracket expression
         if (context.LEFT_BRACKET() is not null && context.RIGHT_BRACKET() is not null)
         {
@@ -163,7 +159,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
             if (context.operand1 is not null && context.operand2 is null)
             {
                 var operand = VisitExpression(context.operand1);
-                return Arithmetic.TryUnary(context.op.Type, operand);
+                return Arithmetic.TryUnary(context.op.Type, operand ?? false);
             }
 
             // binary operation
@@ -184,7 +180,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
         return null;
     }
 
-    public override object VisitInvocation([NotNull] InvocationContext context)
+    public new object? VisitInvocation([NotNull] InvocationContext context)
     {
         PrintContext(context);
 
