@@ -371,8 +371,8 @@ public class Test
         lexer.RemoveErrorListeners();
         lexer.AddErrorListener(listener_lexer);
 
-        var error = listener_lexer.had_error;
-        Assert.That(error, Is.False);
+        var error = listener_lexer.HadError;
+        Assert.That(actual: error, expression: Is.False, message: $"{listener_lexer.GetErrorMessage()}");
 
         Log.Info($"Lexer {(error ? "Failed" : "Passed")}.");
 
@@ -414,7 +414,7 @@ public class Test
         lexer.RemoveErrorListeners();
         lexer.AddErrorListener(listener_lexer);
 
-        var error = listener_lexer.had_error;
+        var error = listener_lexer.HadError;
         Log.Info($"\nLexer {(error ? "Failed" : "Passed")}.\n ");
         // verify that input is erroneous 
         if (verifyError && error)
@@ -452,7 +452,7 @@ public class Test
         var tree = parser.file();
         var listener = new ParseTreeListener();
 
-        var error = listener_parser.had_error;
+        var error = listener_parser.HadError;
         Log.Info($"Parser {(error ? "Failed" : "Passed")}.");
         // verify that input is erroneous 
         if (verifyError && error)

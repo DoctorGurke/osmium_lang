@@ -114,7 +114,7 @@ FLOAT
 fragment LETTER : ('a' .. 'z') | ('A' .. 'Z') ;
 
 // string
-STRING : QUOTE (LETTER | DIGIT | '_')* QUOTE ;
+STRING : QUOTE ('""'|~'"')* QUOTE ;
 
 // range
 RANGE 

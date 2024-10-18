@@ -15,3 +15,5 @@ k = !true;
 l = "asd";
 hn = "asdasdasdasdas";
 fdg = "asd_asd_asdASdas_asdas";
+msg = "Hello world!";
+msg2 = "test""test"; // result: test""test

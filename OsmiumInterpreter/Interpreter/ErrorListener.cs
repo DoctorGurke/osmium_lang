@@ -12,6 +12,7 @@ public class ErrorListener<S> : ConsoleErrorListener<S>
         int col, string msg, RecognitionException e)
     {
         HadError = true;
+        _message = msg;
         base.SyntaxError(output, recognizer, offendingSymbol, line, col, $"Syntax Error: {msg}", e);
     }
 
