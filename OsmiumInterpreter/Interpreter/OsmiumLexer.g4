@@ -54,9 +54,9 @@ NULL			: 'null' ;
 // operators
 //
 
-OP_LOGICAL_NOT				: 'not' | '!' ; // factorial? "!x, !5" or maybe inverse? "x!, 5!"
-OP_LOGICAL_AND				: 'and' | '&&' ;
-OP_LOGICAL_OR				: 'or' | '||' ;
+OP_LOGICAL_NOT				: '!' ; // factorial? "!x, !5" or maybe inverse? "x!, 5!"
+OP_LOGICAL_AND				: '&&' ;
+OP_LOGICAL_OR				: '||' ;
 
 OP_ADDITION					: '+' ;
 OP_SUBTRACTION				: '-' ;

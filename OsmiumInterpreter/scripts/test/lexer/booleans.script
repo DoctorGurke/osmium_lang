@@ -9,11 +9,8 @@ x1 = true;
 x2 = false;
 
 x3 = !true;
-x4 = not true;
 x5 = true && false;
-x6 = true and false;
 x7 = true || false;
-x8 = true or false;
 x9 = x > y;
 x10 = x < y;
 x11 = x >= x;
