@@ -288,8 +288,12 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
 
         var program = context.program_block();
 
-        // lol
-        var param_list = (string[])VisitIdentifier_list(context.@params()?.identifier_list());
+        string[] param_list = new string[0];
+
+        if (context.@params()?.identifier_list() is Identifier_listContext list)
+        {
+            param_list = (string[])VisitIdentifier_list(list);
+        }
 
         var func = new Function(identifier, program, param_list);
 
@@ -304,7 +308,12 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
 
         var expression = context.expression();
 
-        var param_list = (string[])VisitIdentifier_list(context.@params()?.identifier_list());
+        string[] param_list = new string[0];
+
+        if (context.@params()?.identifier_list() is Identifier_listContext list)
+        {
+            param_list = (string[])VisitIdentifier_list(list);
+        }
 
         return new Lambda(expression, param_list);
     }
@@ -315,8 +324,12 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
 
         var program = context.program_block();
 
-        // lol
-        var param_list = (string[])VisitIdentifier_list(context.@params()?.identifier_list());
+        string[] param_list = new string[0];
+
+        if (context.@params()?.identifier_list() is Identifier_listContext list)
+        {
+            param_list = (string[])VisitIdentifier_list(list);
+        }
 
         var func = new Function(null, program, param_list);
 
