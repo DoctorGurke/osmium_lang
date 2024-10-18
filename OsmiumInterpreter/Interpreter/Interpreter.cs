@@ -190,30 +190,30 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
 
         var identifier = (string)VisitIdentifier(context.identifier());
 
-        List<object> parameters = null;
+        object[] parameters = new object[0];
 
         if (context.expression_list() is Expression_listContext expression_list_context)
         {
-            parameters = ((List<object>)VisitExpression_list(expression_list_context));
+            parameters = (object[])VisitExpression_list(expression_list_context);
         }
 
         // TODO: find intrinsics with attribute?
         switch (identifier)
         {
             case "print":
-                Intrinsics.Print(parameters.ToArray());
+                Intrinsics.Print(parameters);
                 return null;
             case "length":
-                return Intrinsics.Length(parameters.ToArray());
+                return Intrinsics.Length(parameters);
             case "foreach":
-                Intrinsics.ForEach(parameters.ToArray());
+                Intrinsics.ForEach(parameters);
                 return null;
             case "map":
-                return Intrinsics.Map(parameters.ToArray());
+                return Intrinsics.Map(parameters);
             case "reduce":
-                return Intrinsics.Reduce(parameters.ToArray());
+                return Intrinsics.Reduce(parameters);
             case "filter":
-                return Intrinsics.Filter(parameters.ToArray());
+                return Intrinsics.Filter(parameters);
         }
 
         if (SymbolTable.TryGetValue(identifier, out var symbol))
@@ -224,7 +224,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
             // new local interpreter for local symboltable => pure funcs
             var functionVisitor = new Interpreter();
 
-            return func.Invoke(functionVisitor, parameters?.ToArray());
+            return func.Invoke(functionVisitor, parameters);
         }
         else
         {
@@ -327,7 +327,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
     {
         PrintContext(context);
 
-        List<object> returned_objects = null;
+        List<object> returned_objects = new();
         if (context.expression() is ExpressionContext[] expression_contexts)
         {
             returned_objects = new List<object>();
@@ -337,8 +337,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
             }
         }
 
-        // may be null
-        return returned_objects;
+        return returned_objects.ToArray();
     }
 
     /// <summary>
@@ -581,11 +580,8 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
         var list = new List<object>();
         if (context.expression_list() is Expression_listContext content)
         {
-            var expressions = (List<object>)VisitExpression_list(context.expression_list());
-            foreach (var expression in expressions)
-            {
-                list.Add(expression);
-            }
+            var expressions = (object[])VisitExpression_list(content);
+            list = expressions.ToList();
         }
 
         return list;
