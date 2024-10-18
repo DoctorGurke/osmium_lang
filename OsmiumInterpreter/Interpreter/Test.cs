@@ -478,7 +478,7 @@ public class Test
 
         Log.Info($"exit {target}");
 
-        Assert.That(error, Is.False);
+        Assert.That(actual: error, expression: Is.False, message: $"{listener_parser.GetErrorMessage()}");
         return true;
     }
 
