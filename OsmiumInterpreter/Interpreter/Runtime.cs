@@ -51,9 +51,9 @@ public class Runtime
         lexer.RemoveErrorListeners();
         lexer.AddErrorListener(listener_lexer);
 
-        var error = listener_lexer.had_error;
+        var error = listener_lexer.HadError;
         if (error)
-            Log.Info($"Lexer failed!");
+            Log.Info($"Lexer failed {listener_lexer.GetErrorMessage()}");
 
         // get parsed token stream
         tokenStream.Fill();
@@ -69,9 +69,9 @@ public class Runtime
         // start parsing token stream to tree
         var tree = parser.file();
 
-        error = listener_parser.had_error;
+        error = listener_parser.HadError;
         if (error)
-            Log.Info($"Parser failed!");
+            Log.Info($"Parser failed: {listener_parser.GetErrorMessage()}");
 
         return tree;
     }

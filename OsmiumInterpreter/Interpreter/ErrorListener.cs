@@ -5,12 +5,21 @@ using System.IO;
 
 public class ErrorListener<S> : ConsoleErrorListener<S>
 {
-    public bool had_error;
+    public bool HadError;
+    private string? _message;
 
     public override void SyntaxError(TextWriter output, IRecognizer recognizer, S offendingSymbol, int line,
         int col, string msg, RecognitionException e)
     {
-        had_error = true;
+        HadError = true;
         base.SyntaxError(output, recognizer, offendingSymbol, line, col, $"Syntax Error: {msg}", e);
+    }
+
+    public string GetErrorMessage()
+    {
+        if (!HadError || _message is null)
+            return "";
+
+        return _message;
     }
 }
