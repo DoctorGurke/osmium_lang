@@ -4,9 +4,9 @@ namespace Osmium.Interpreter;
 
 public static class Intrinsics
 {
-    public static void Print(List<object> args)
+    public static void Print(object[] args)
     {
-        if (args is null || args.Count != 1)
+        if (args is null || args.Length != 1)
             throw new ArgumentException($"Invalid arg count for intrinsic Print. Expected: object");
 
         var parameter = args[0];
@@ -28,9 +28,9 @@ public static class Intrinsics
         Log.Info($"{printString}");
     }
 
-    public static int Length(List<object> args)
+    public static int Length(object[] args)
     {
-        if (args is null || args.Count != 1)
+        if (args is null || args.Length != 1)
             throw new ArgumentException($"Invalid arg count for intrinsic Length. Expected: list");
 
         if (args[0] is not IList<object> collection)
@@ -39,9 +39,9 @@ public static class Intrinsics
         return collection.Count;
     }
 
-    public static void ForEach(List<object> args)
+    public static void ForEach(object[] args)
     {
-        if (args is null || args.Count != 2)
+        if (args is null || args.Length != 2)
             throw new ArgumentException($"Invalid arg count for intrinsic ForEach. Expected: list, lambda");
 
         if (args[0] is not IList<object> collection || args[1] is not Lambda lambda)
@@ -53,9 +53,9 @@ public static class Intrinsics
         }
     }
 
-    public static List<object> Map(List<object> args)
+    public static List<object> Map(object[] args)
     {
-        if (args is null || args.Count != 2)
+        if (args is null || args.Length != 2)
             throw new ArgumentException($"Invalid arg count for intrinsic Map. Expected: list, lambda");
 
         if (args[0] is not IList<object> collection || args[1] is not Lambda lambda)
@@ -72,9 +72,9 @@ public static class Intrinsics
         return returnCollection;
     }
 
-    public static object Reduce(List<object> args)
+    public static object Reduce(object[] args)
     {
-        if (args is null || args.Count != 3)
+        if (args is null || args.Length != 3)
             throw new ArgumentException($"Invalid arg count for intrinsic Reduce. Expected: list, lambda, object");
 
         if (args[0] is not IList<object> collection || args[1] is not Lambda lambda)
@@ -90,9 +90,9 @@ public static class Intrinsics
         return acc;
     }
 
-    public static List<object> Filter(List<object> args)
+    public static List<object> Filter(object[] args)
     {
-        if (args is null || args.Count != 2)
+        if (args is null || args.Length != 2)
             throw new ArgumentException($"Invalid arg count for intrinsic Filter. Expected: list, lambda");
 
         if (args[0] is not IList<object> collection || args[1] is not Lambda lambda)

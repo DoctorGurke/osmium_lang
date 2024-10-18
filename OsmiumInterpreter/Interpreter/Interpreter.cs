@@ -194,26 +194,26 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
 
         if (context.expression_list() is Expression_listContext expression_list_context)
         {
-            parameters = (List<object>)VisitExpression_list(expression_list_context);
+            parameters = ((List<object>)VisitExpression_list(expression_list_context));
         }
 
         // TODO: find intrinsics with attribute?
         switch (identifier)
         {
             case "print":
-                Intrinsics.Print(parameters);
+                Intrinsics.Print(parameters.ToArray());
                 return null;
             case "length":
-                return Intrinsics.Length(parameters);
+                return Intrinsics.Length(parameters.ToArray());
             case "foreach":
-                Intrinsics.ForEach(parameters);
+                Intrinsics.ForEach(parameters.ToArray());
                 return null;
             case "map":
-                return Intrinsics.Map(parameters);
+                return Intrinsics.Map(parameters.ToArray());
             case "reduce":
-                return Intrinsics.Reduce(parameters);
+                return Intrinsics.Reduce(parameters.ToArray());
             case "filter":
-                return Intrinsics.Filter(parameters);
+                return Intrinsics.Filter(parameters.ToArray());
         }
 
         if (SymbolTable.TryGetValue(identifier, out var symbol))
