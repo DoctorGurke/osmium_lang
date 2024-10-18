@@ -54,4 +54,9 @@ public class Function
         // void return
         return null;
     }
+
+    public override string ToString()
+    {
+        return $"{base.ToString()}:[{(Identifier is null ? "Lambda" : Identifier)}] ParamCount:[{param_list.Length}]";
+    }
 }
