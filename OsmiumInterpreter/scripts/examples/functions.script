@@ -1,17 +1,18 @@
 ﻿// anonymous function expression
-foo = function(x): print(x); end;
-foo("test");
+foo = function(msg): print(msg); end;
+foo("foo");
 
 // explicit identifier
-function bar(x):
-	print(x);
+function bar(msg):
+	print(msg);
 end;
 
-bar("test");
+x = bar("bar");
+print(x); // null due to void return
 
 // function parameter
-function foobar(x, y):
-	x(y);
+function foobar(func, arg):
+	func(arg);
 end;
 
-foobar(function(x): print(x); end, "test");
+foobar(function(msg): print(msg); end, "test");

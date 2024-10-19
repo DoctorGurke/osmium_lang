@@ -44,7 +44,7 @@ public static class Intrinsics
         if (args is null || args.Length != 2)
             throw new ArgumentException($"Invalid arg count for intrinsic ForEach. Expected: list, lambda");
 
-        if (args[0] is not IList<object> collection || args[1] is not Lambda lambda)
+        if (args[0] is not IList<object> collection || args[1] is not IFunction lambda)
             throw new ArgumentException($"Invalid arg types for intrinsic ForEach. Expected: list, lambda. Got: {args[0].GetType()}, {args[1].GetType()}");
 
         foreach (var item in collection)
@@ -58,7 +58,7 @@ public static class Intrinsics
         if (args is null || args.Length != 2)
             throw new ArgumentException($"Invalid arg count for intrinsic Map. Expected: list, lambda");
 
-        if (args[0] is not IList<object> collection || args[1] is not Lambda lambda)
+        if (args[0] is not IList<object> collection || args[1] is not IFunction lambda)
             throw new ArgumentException($"Invalid arg types for intrinsic Map. Expected: list, lambda. Got: {args[0].GetType()}, {args[1].GetType()}");
 
         var returnCollection = new List<object>();
@@ -77,7 +77,7 @@ public static class Intrinsics
         if (args is null || args.Length != 3)
             throw new ArgumentException($"Invalid arg count for intrinsic Reduce. Expected: list, lambda, object");
 
-        if (args[0] is not IList<object> collection || args[1] is not Lambda lambda)
+        if (args[0] is not IList<object> collection || args[1] is not IFunction lambda)
             throw new ArgumentException($"Invalid arg types for intrinsic Reduce. Expected: list, lambda, object. Got: {args[0].GetType()}, {args[1].GetType()}, {args[2].GetType()}");
 
         var acc = args[2];
@@ -95,14 +95,14 @@ public static class Intrinsics
         if (args is null || args.Length != 2)
             throw new ArgumentException($"Invalid arg count for intrinsic Filter. Expected: list, lambda");
 
-        if (args[0] is not IList<object> collection || args[1] is not Lambda lambda)
+        if (args[0] is not IList<object> collection || args[1] is not IFunction lambda)
             throw new ArgumentException($"Invalid arg types for intrinsic Filter. Expected: list, lambda. Got: {args[0].GetType()}, {args[1].GetType()}");
 
         var returnCollection = new List<object>();
 
         foreach (var item in collection)
         {
-            var cond = (bool)lambda.Invoke(new Interpreter(), new object[] { item });
+            var cond = (bool)(lambda.Invoke(new Interpreter(), new object[] { item }) ?? false);
             if (cond)
                 returnCollection.Add(item);
         }

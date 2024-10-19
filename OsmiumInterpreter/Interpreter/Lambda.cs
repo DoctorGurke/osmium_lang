@@ -2,7 +2,7 @@
 
 namespace Osmium.Interpreter;
 
-public class Lambda
+public class Lambda : IFunction
 {
     public ExpressionContext expression { get; set; }
     public string[] param_list { get; set; }
@@ -15,7 +15,7 @@ public class Lambda
 
     public object Invoke(Interpreter visitor, object[] args)
     {
-        var argCount = args?.Length ?? 0;
+        var argCount = args.Length;
         var paramCount = param_list?.Length ?? 0;
 
         if (argCount != paramCount)

@@ -3,7 +3,7 @@ using static Osmium.Interpreter.OsmiumParser;
 
 namespace Osmium.Interpreter;
 
-public class Function
+public class Function : IFunction
 {
     public string? Identifier { get; set; }
     public Program_blockContext program { get; set; }
