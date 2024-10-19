@@ -41,6 +41,7 @@ ELSE			: 'else' ;
 FOR				: 'for' ;
 DO				: 'do' ;
 WHILE			: 'while' ;
+ENUM			: 'enum' ;
 LAMBDA			: 'lambda' ;
 FUNCTION		: 'function' ;
 RETURN			: 'return' ;

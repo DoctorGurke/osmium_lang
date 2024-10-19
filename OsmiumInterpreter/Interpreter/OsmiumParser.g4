@@ -36,6 +36,7 @@ statement
 
 declaration 
 	: function_declaration
+	| enum_declaration
 	| assignment
 	;
 
@@ -135,6 +136,23 @@ expression
 	| operand1=expression op=OP_LOGICAL_AND operand2=expression 
 	| operand1=expression op=OP_LOGICAL_OR operand2=expression 
 	;
+
+//
+// enums
+//
+
+enum_member
+	: identifier (OP_ASSIGN int)?
+	;
+
+enum_member_list
+	: LEFT_SQUARE_BRACKET enum_member (COMMA enum_member)* RIGHT_SQUARE_BRACKET
+	;
+
+enum_declaration
+	: ENUM identifier OP_ASSIGN enum_member_list
+	;
+
 
 //
 // function

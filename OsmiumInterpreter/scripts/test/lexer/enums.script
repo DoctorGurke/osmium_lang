@@ -1,0 +1,10 @@
+﻿// list style initializer
+enum state_enum1 = [state_idle, state_active, state_ending];
+enum state_enum2 = [
+	state_idle, 
+	state_active, 
+	state_ending
+];
+
+//state = state_enum1.state_active;
+//print(state);

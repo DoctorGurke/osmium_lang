@@ -1,6 +1,12 @@
 ﻿// list initializer
 list = [1, 2, 3, 4, 5];
 print(list);
+list2 = [
+	"a",
+	"b",
+	"c"
+];
+print(list2);
 
 // indexing
 print(list[0]);
