@@ -41,6 +41,7 @@ public class Test
     [TestCase("test/lexer/expressions.script")]
     [TestCase("test/lexer/booleans.script")]
     [TestCase("test/lexer/functions.script")]
+    [TestCase("test/lexer/assert.script")]
     public void TestScriptFile(string script)
     {
         TryScriptFile(script);

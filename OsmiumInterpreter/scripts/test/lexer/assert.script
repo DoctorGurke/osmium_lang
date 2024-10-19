@@ -1,0 +1,17 @@
+﻿// assert test
+
+int1 = 1;
+int2 = 10;
+
+assert(int1 * 10 == int2);
+assert(int1 == 1);
+assert(int2 == 10);
+
+bool1 = true;
+bool2 = false;
+
+assert(bool1 != bool2);
+assert(bool1 == true);
+assert(bool2 == false);
+
+assert(bool1 == bool2, "Critical boolean error!");
