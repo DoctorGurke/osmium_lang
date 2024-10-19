@@ -109,4 +109,23 @@ public static class Intrinsics
 
         return returnCollection;
     }
+
+    public class AssertException : Exception
+    {
+        public AssertException(string message) : base(message) { }
+    }
+
+    public static void Assert(object[] args)
+    {
+        if (args.Length < 1)
+            throw new ArgumentException($"Invalid arg count for assert. Expected 2: condition, optional:message. Got {args.Length}.");
+
+        if (args[0] is not bool eval)
+            throw new ArgumentException($"Invalid arg types for assert. Expected condition. Got: {args[0].GetType()}");
+
+        if (eval)
+            return;
+
+        throw new AssertException((args.Length == 2) ? $"{args[1]}" : "");
+    }
 }

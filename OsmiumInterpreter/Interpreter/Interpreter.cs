@@ -87,14 +87,14 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
                 }
                 else if (child is ExpressionContext expression)
                 {
-                    return VisitExpression(expression);
+                    VisitExpression(expression);
                 }
             }
 
         return null;
     }
 
-    public new object VisitExpression([NotNull] ExpressionContext context)
+    public override object VisitExpression([NotNull] ExpressionContext context)
     {
         if (context is null)
             return null;
@@ -210,6 +210,9 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
                 return Intrinsics.Reduce(parameters);
             case "filter":
                 return Intrinsics.Filter(parameters);
+            case "assert":
+                Intrinsics.Assert(parameters);
+                return null;
         }
 
         if (SymbolTable.TryGetValue(identifier, out var symbol))
