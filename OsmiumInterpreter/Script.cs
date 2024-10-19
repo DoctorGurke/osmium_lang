@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace Osmium;
 
@@ -14,6 +13,8 @@ public abstract class Script
     public static string Load(string path)
     {
         var executableLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        if (executableLocation is null)
+            throw new Exception($"Couldn't find Executable location!");
         var scriptsPath = Path.Combine(executableLocation, "scripts");
 
         var fileFullPath = Path.IsPathFullyQualified(path) ? path : Path.Combine(scriptsPath, path);
