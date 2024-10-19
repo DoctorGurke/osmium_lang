@@ -1,3 +1,3 @@
 ﻿list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-foreach(list, lambda(x): print(x) end);
+foreach(list, function(msg): print(msg) end);

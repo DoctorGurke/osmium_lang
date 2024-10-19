@@ -15,4 +15,4 @@ function foobar(func, arg):
 	func(arg);
 end;
 
-foobar(function(msg): print(msg); end, "test");
+foobar(function(msg): print(msg); end, "foobar");

@@ -53,7 +53,7 @@ public static class Intrinsics
         }
     }
 
-    public static List<object> Map(object[] args)
+    public static List<object?> Map(object[] args)
     {
         if (args is null || args.Length != 2)
             throw new ArgumentException($"Invalid arg count for intrinsic Map. Expected: list, lambda");
@@ -61,7 +61,7 @@ public static class Intrinsics
         if (args[0] is not IList<object> collection || args[1] is not IFunction lambda)
             throw new ArgumentException($"Invalid arg types for intrinsic Map. Expected: list, lambda. Got: {args[0].GetType()}, {args[1].GetType()}");
 
-        var returnCollection = new List<object>();
+        var returnCollection = new List<object?>();
 
         foreach (var item in collection)
         {

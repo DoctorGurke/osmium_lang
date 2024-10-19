@@ -16,7 +16,7 @@ public class Lambda : IFunction
     public object Invoke(Interpreter visitor, object[] args)
     {
         var argCount = args.Length;
-        var paramCount = param_list?.Length ?? 0;
+        var paramCount = param_list.Length;
 
         if (argCount != paramCount)
         {
