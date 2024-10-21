@@ -7,12 +7,12 @@ public class SymbolTable : IMembers
     public SymbolTable Members => this;
     public bool IsRoot => Parent is null;
 
-    public SymbolTable Parent { get; set; }
+    public SymbolTable? Parent { get; set; }
 
     public Dictionary<string, object> Symbols { get; set; } = new Dictionary<string, object>();
 
 
-    public SymbolTable(SymbolTable parent = null)
+    public SymbolTable(SymbolTable? parent = null)
     {
         Parent = parent;
     }
@@ -25,9 +25,9 @@ public class SymbolTable : IMembers
 
     public bool HasSymbol(string symbol)
     {
-        if (!IsRoot)
+        if (!IsRoot && Parent is not null)
         {
-            return Parent.HasSymbol(symbol) || Symbols.ContainsKey(symbol);
+            return Parent?.HasSymbol(symbol) ?? false || Symbols.ContainsKey(symbol);
         }
 
         return Symbols.ContainsKey(symbol);
@@ -35,7 +35,7 @@ public class SymbolTable : IMembers
 
     public bool TryGetValue(string symbol, [NotNullWhen(returnValue: true)] out object? value)
     {
-        if (!IsRoot)
+        if (!IsRoot && Parent is not null)
         {
             if (Parent.TryGetValue(symbol, out value))
             {
