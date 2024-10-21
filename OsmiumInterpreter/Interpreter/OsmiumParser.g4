@@ -107,12 +107,24 @@ op_index
 	: identifier LEFT_SQUARE_BRACKET (int | range) RIGHT_SQUARE_BRACKET
 	;
 
+// type_name.member
+
+member
+	: VARIABLE
+	;
+
+op_member
+	: VARIABLE POINT member
+	| VARIABLE POINT op_member
+	;
+
 // evaluates to a value
 expression 
 	: literal 
 	| identifier 
 	| invocation 
 	| op_index // indexof
+	| op_member
 	| function_lambda // anonymous implicit expression
 	| function_expression // anonymous function 
 

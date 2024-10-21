@@ -1,10 +1,21 @@
 ﻿// list style initializer
-enum state_enum1 = [state_idle, state_active, state_ending];
-enum state_enum2 = [
+enum state_enum = [
 	state_idle, 
 	state_active, 
-	state_ending
+	state_ending,
+	state_invalid = 100
 ];
 
-//state = state_enum1.state_active;
-//print(state);
+assert(state_enum.state_idle == 0);
+assert(state_enum.state_active == 1);
+assert(state_enum.state_ending == 2);
+assert(state_enum.state_invalid == 100);
+
+state = state_enum.state_active;
+print(state);
+assert(state == 1);
+
+print("Get Enum name");
+name = state_enum[0];
+print(name);
+assert(name == "state_idle");

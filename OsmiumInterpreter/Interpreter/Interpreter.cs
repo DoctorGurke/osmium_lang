@@ -126,6 +126,11 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
             return VisitInvocation(invocation_context);
         }
 
+        if (context.op_member() is Op_memberContext op_member_context)
+        {
+            return VisitOp_member(op_member_context);
+        }
+
         // indexof
         if (context.op_index() is Op_indexContext op_index_context)
         {
@@ -231,32 +236,84 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
         }
     }
 
+    /// <summary>
+    /// Evaluate member.
+    /// </summary>
+    /// <param name="context"></param>
+    /// <returns></returns>
+    public override object VisitOp_member([NotNull] Op_memberContext context)
+    {
+        var identifier = context.VARIABLE().GetText();
+
+        PrintContext(context, identifier);
+
+        if (context.op_member() is Op_memberContext op_MemberContext)
+        {
+            return VisitOp_member(op_MemberContext);
+        }
+
+        var member = (string)VisitMember(context.member());
+
+        if (!SymbolTable.TryGetValue(identifier, out var obj))
+            throw new Exception($"Trying to access member of undeclared variable '{identifier}'!");
+
+        if (obj is not IMembers members)
+            throw new Exception($"Trying to access member of invalid type {obj.GetType()} for {identifier}!");
+
+        if (!members.Members.TryGetValue(member, out obj))
+            throw new Exception($"Trying to access undeclared member {identifier}.{member}!");
+
+        return obj;
+    }
+
+    /// <summary>
+    /// Return string name of member
+    /// </summary>
+    /// <param name="context"></param>
+    /// <returns></returns>
+    public override object VisitMember([NotNull] MemberContext context)
+    {
+        return context.VARIABLE().GetText();
+    }
+
     public override object VisitOp_index([NotNull] Op_indexContext context)
     {
         // TODO: this should be an operator so I can override it
 
-        if (context.identifier() is IdentifierContext ident)
-        {
-            var identifier = (string)VisitIdentifier(ident);
-            if (SymbolTable.TryGetValue(identifier, out var value))
-                if (value is List<object> list)
-                {
-                    // direct index
-                    if (context.@int() is IntContext index)
-                    {
-                        var intIndex = (int)VisitInt(index);
-                        return list[intIndex];
-                    }
+        if (context.identifier() is not IdentifierContext ident)
+            return null;
 
-                    // sublist
-                    if (context.range() is RangeContext range)
-                    {
-                        var indexRange = (Range)VisitRange(range);
-                        //Log.Info($"RANGE: {indexRange}");
-                        return GetSublist(list, indexRange);
-                    }
-                }
+        var identifier = (string)VisitIdentifier(ident);
+        if (!SymbolTable.TryGetValue(identifier, out var value))
+            return null;
+
+        if (value is List<object> list)
+        {
+            // direct index
+            if (context.@int() is IntContext index)
+            {
+                var intIndex = (int)VisitInt(index);
+                return list[intIndex];
+            }
+
+            // sublist
+            if (context.range() is RangeContext range)
+            {
+                var indexRange = (Range)VisitRange(range);
+                //Log.Info($"RANGE: {indexRange}");
+                return GetSublist(list, indexRange);
+            }
         }
+        else if (value is Enum members)
+        {
+            // direct index
+            if (context.@int() is IntContext index)
+            {
+                var intIndex = (int)VisitInt(index);
+                return members.GetIndexOf(intIndex);
+            }
+        }
+
         return null;
     }
 
@@ -272,33 +329,6 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
         }
 
         return list.GetRange(startIndex, count);
-    }
-
-    public override object VisitFunction_declaration([NotNull] Function_declarationContext context)
-    {
-        PrintContext(context);
-
-        var identifier = (string)VisitIdentifier(context.identifier());
-
-        if (SymbolTable.HasSymbol(identifier))
-        {
-            throw new InvalidOperationException($"Cannot re-define immutable identifier: {identifier}");
-        }
-
-        var program = context.program_block();
-
-        string[] param_list = new string[0];
-
-        if (context.@params()?.identifier_list() is Identifier_listContext list)
-        {
-            param_list = (string[])VisitIdentifier_list(list);
-        }
-
-        var func = new Function(identifier, program, param_list);
-
-        SymbolTable[identifier] = func;
-
-        return func;
     }
 
     public override object VisitFunction_lambda([NotNull] Function_lambdaContext context)
@@ -415,17 +445,122 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
     {
         PrintContext(context);
 
-        if (context.assignment() is AssignmentContext assignment_context)
-        {
-            VisitAssignment(assignment_context);
-        }
-
         if (context.function_declaration() is Function_declarationContext function_declaration_context)
         {
             VisitFunction_declaration(function_declaration_context);
         }
 
+        if (context.enum_declaration() is Enum_declarationContext enum_declaration_context)
+        {
+            VisitEnum_declaration(enum_declaration_context);
+        }
+
+        if (context.assignment() is AssignmentContext assignment_context)
+        {
+            VisitAssignment(assignment_context);
+        }
+
         return null;
+    }
+
+    public override object VisitFunction_declaration([NotNull] Function_declarationContext context)
+    {
+        PrintContext(context);
+
+        var identifier = (string)VisitIdentifier(context.identifier());
+
+        if (SymbolTable.HasSymbol(identifier))
+        {
+            throw new InvalidOperationException($"Cannot re-define immutable identifier: {identifier}");
+        }
+
+        var program = context.program_block();
+
+        string[] param_list = new string[0];
+
+        if (context.@params()?.identifier_list() is Identifier_listContext list)
+        {
+            param_list = (string[])VisitIdentifier_list(list);
+        }
+
+        var func_declaration = new Function(identifier, program, param_list);
+
+        SymbolTable[identifier] = func_declaration;
+
+        return func_declaration;
+    }
+
+    private struct _Member
+    {
+        public string Name;
+        public object? Value;
+
+        public _Member(string name, object? value)
+        {
+            Name = name;
+            Value = value;
+        }
+    }
+
+    public override object VisitEnum_declaration([NotNull] Enum_declarationContext context)
+    {
+        var identifier = (string)VisitIdentifier(context.identifier());
+
+        PrintContext(context, identifier);
+
+        if (SymbolTable.HasSymbol(identifier))
+        {
+            throw new InvalidOperationException($"Cannot re-define immutable identifier: {identifier}");
+        }
+
+        Dictionary<string, int?> members = new();
+        if (context.enum_member_list() is Enum_member_listContext enum_member_list_context)
+        {
+            var enum_members = (List<_Member>)VisitEnum_member_list(enum_member_list_context);
+
+            foreach (var member in enum_members)
+            {
+                members.Add(member.Name, (int?)member.Value);
+            }
+        }
+
+        var enum_declaration = new Enum(identifier, members);
+
+        SymbolTable[identifier] = enum_declaration;
+
+        return enum_declaration;
+    }
+
+    public override object VisitEnum_member_list([NotNull] Enum_member_listContext context)
+    {
+        PrintContext(context);
+
+        List<_Member> members = new();
+        if (context.enum_member() is Enum_memberContext[] enum_members)
+        {
+            foreach (var enum_member in enum_members)
+            {
+                members.Add((_Member)VisitEnum_member(enum_member));
+            }
+        }
+
+        return members;
+    }
+
+    public override object VisitEnum_member([NotNull] Enum_memberContext context)
+    {
+        var identifier = (string)VisitIdentifier(context.identifier());
+
+        int? value = null;
+
+        if (context.@int() is IntContext int_context)
+        {
+            value = (int)VisitInt(int_context);
+        }
+
+        PrintContext(context, $"{identifier} {value}");
+
+        return new _Member(identifier, value);
     }
 
     public override object VisitAssignment([NotNull] AssignmentContext context)
