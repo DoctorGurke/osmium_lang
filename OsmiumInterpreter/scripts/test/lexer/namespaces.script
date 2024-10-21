@@ -31,5 +31,5 @@ debug {
 
 debug.utils.error("error");
 
-//functions.foo(constants.foo);
-//functions.bar(constants.bar);
+functions.foo(constants.foo);
+functions.bar(constants.bar);
