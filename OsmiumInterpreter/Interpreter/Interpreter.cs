@@ -56,7 +56,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
         {
             if (context.program_block() is Program_blockContext program_block)
             {
-                return VisitProgram_block(program_block);
+                VisitProgram_block(program_block);
             }
         }
         catch (ReturnException programReturn)
@@ -111,6 +111,13 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
         if (context.identifier() is IdentifierContext identifier_context)
         {
             var identifier = (string)VisitIdentifier(identifier_context);
+
+            //if (!SymbolTable.TryGetValue(identifier, out var value))
+            //    throw new Exception($"Trying to access undeclared identifier {identifier}!");
+
+            //PrintContext(identifier_context, value);
+            //return value;
+
             if (SymbolTable.TryGetValue(identifier, out var value))
             {
                 PrintContext(identifier_context, value);
@@ -272,7 +279,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
             return VisitMember_invocation(member_InvocationContext, source);
         }
 
-        return null;
+        throw new NotImplementedException();
     }
 
     /// <summary>
