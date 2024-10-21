@@ -28,8 +28,10 @@ public static class Arithmetic
     {
         switch (op)
         {
-            case OsmiumParser.OP_EQUALITY: return operand1.Equals(operand2);
-            case OsmiumParser.OP_INEQUALITY: return !operand1.Equals(operand2);
+            case OsmiumParser.OP_EQUALITY:
+                return Equals(operand1, operand2);
+            case OsmiumParser.OP_INEQUALITY:
+                return !Equals(operand1, operand2);
         }
 
         if (operand1 is int @int)
