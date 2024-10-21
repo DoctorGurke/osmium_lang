@@ -43,6 +43,7 @@ public class Test
     [TestCase("test/lexer/functions.script")]
     [TestCase("test/lexer/assert.script")]
     [TestCase("test/lexer/enums.script")]
+    [TestCase("test/lexer/namespaces.script")]
     public void TestScriptFile(string script)
     {
         TryScriptFile(script);

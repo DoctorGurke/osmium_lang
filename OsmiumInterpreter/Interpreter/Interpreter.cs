@@ -245,25 +245,34 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
     {
         var identifier = context.VARIABLE().GetText();
 
-        PrintContext(context, identifier);
-
-        if (context.op_member() is Op_memberContext op_MemberContext)
-        {
-            return VisitOp_member(op_MemberContext);
-        }
-
-        var member = (string)VisitMember(context.member());
-
         if (!SymbolTable.TryGetValue(identifier, out var obj))
             throw new Exception($"Trying to access member of undeclared variable '{identifier}'!");
 
-        if (obj is not IMembers members)
+        PrintContext(context, $"{identifier} {obj}");
+
+        if (obj is not IMembers source)
             throw new Exception($"Trying to access member of invalid type {obj.GetType()} for {identifier}!");
 
-        if (!members.Members.TryGetValue(member, out obj))
-            throw new Exception($"Trying to access undeclared member {identifier}.{member}!");
+        if (context.op_member() is Op_memberContext op_MemberContext)
+        {
+            var member_visitor = new Interpreter(source.Members);
+            return member_visitor.VisitOp_member(op_MemberContext);
+        }
+        else if (context.member() is MemberContext member_context)
+        {
+            var member = (string)VisitMember(member_context);
 
-        return obj;
+            if (!source.Members.TryGetValue(member, out obj))
+                throw new Exception($"Trying to access undeclared member {identifier}.{member}!");
+
+            return obj;
+        }
+        else if (context.member_invocation() is Member_invocationContext member_InvocationContext)
+        {
+            return VisitMember_invocation(member_InvocationContext, source);
+        }
+
+        return null;
     }
 
     /// <summary>
@@ -274,6 +283,32 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
     public override object VisitMember([NotNull] MemberContext context)
     {
         return context.VARIABLE().GetText();
+    }
+
+    /// <summary>
+    /// Return evaluated member invocation.
+    /// </summary>
+    /// <param name="context"></param>
+    /// <returns></returns>
+    public object VisitMember_invocation([NotNull] Member_invocationContext context, IMembers source)
+    {
+        var identifier = context.VARIABLE().GetText();
+
+        if (!source.Members.TryGetValue(identifier, out var obj))
+            throw new Exception($"Trying to invoke undeclared member variable {identifier}!");
+
+        if (obj is not IFunction func)
+            throw new Exception($"Trying to invoke invalid type {obj.GetType()} {identifier}!");
+
+        object[] parameters = new object[0];
+
+        if (context.expression_list() is Expression_listContext expression_ListContext)
+        {
+            parameters = (object[])VisitExpression_list(expression_ListContext);
+        }
+
+        var function_visitor = new Interpreter();
+        return func.Invoke(function_visitor, parameters);
     }
 
     public override object VisitOp_index([NotNull] Op_indexContext context)
@@ -365,6 +400,11 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
         return func;
     }
 
+    /// <summary>
+    /// Returns expression list as object array.
+    /// </summary>
+    /// <param name="context"></param>
+    /// <returns></returns>
     public override object VisitExpression_list([NotNull] Expression_listContext context)
     {
         PrintContext(context);
@@ -458,6 +498,11 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
         if (context.assignment() is AssignmentContext assignment_context)
         {
             VisitAssignment(assignment_context);
+        }
+
+        if (context.namespace_declaration() is Namespace_declarationContext namespace_declaration_context)
+        {
+            VisitNamespace_declaration(namespace_declaration_context);
         }
 
         return null;
@@ -579,6 +624,23 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
         SymbolTable[identifier] = value;
 
         return null;
+    }
+
+    public override object VisitNamespace_declaration([NotNull] Namespace_declarationContext context)
+    {
+        var identifier = (string)context.VARIABLE().GetText();
+
+        if (SymbolTable.HasSymbol(identifier))
+            throw new Exception($"Invalid redefinition of identifier {identifier}!");
+
+        PrintContext(context, identifier);
+
+        var namespace_visitor = new Interpreter();
+        namespace_visitor.VisitProgram_block(context.scope().program_block());
+
+        SymbolTable[identifier] = namespace_visitor.SymbolTable;
+
+        return namespace_visitor.SymbolTable;
     }
 
     public override object VisitLiteral([NotNull] LiteralContext context)

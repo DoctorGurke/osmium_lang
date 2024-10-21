@@ -2,13 +2,15 @@
 
 namespace Osmium.Interpreter;
 
-public class SymbolTable
+public class SymbolTable : IMembers
 {
+    public SymbolTable Members => this;
     public bool IsRoot => Parent is null;
 
     public SymbolTable Parent { get; set; }
 
     public Dictionary<string, object> Symbols { get; set; } = new Dictionary<string, object>();
+
 
     public SymbolTable(SymbolTable parent = null)
     {

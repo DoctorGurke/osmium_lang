@@ -34,10 +34,15 @@ statement
 	| jump_statement
 	;
 
+namespace_declaration
+	:	VARIABLE scope
+	;
+
 declaration 
 	: function_declaration
 	| enum_declaration
 	| assignment
+	| namespace_declaration
 	;
 
 assignment
@@ -109,12 +114,17 @@ op_index
 
 // type_name.member
 
+member_invocation
+	: VARIABLE LEFT_BRACKET expression_list?  RIGHT_BRACKET
+	;
+
 member
 	: VARIABLE
 	;
 
 op_member
 	: VARIABLE POINT member
+	| VARIABLE POINT member_invocation
 	| VARIABLE POINT op_member
 	;
 

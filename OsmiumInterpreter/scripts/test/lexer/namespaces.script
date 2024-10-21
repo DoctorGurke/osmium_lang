@@ -1,0 +1,35 @@
+﻿functions {
+	
+	function foo(x): print(x); end;
+	function bar(x): print(x); end;
+
+};
+
+constants {
+
+	foo = 10;
+	bar = 50;
+
+	enum debug = [
+		debug_verbose,
+		debug_disabled,
+		debug_default,
+		debug_invalid = 100
+	];
+};
+
+print(constants.foo);
+print(constants.debug.debug_invalid);
+
+debug {
+	utils {
+		function error(msg):
+			print(msg);
+		end;
+	};
+};
+
+debug.utils.error("error");
+
+//functions.foo(constants.foo);
+//functions.bar(constants.bar);
