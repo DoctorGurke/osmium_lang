@@ -15,10 +15,11 @@ public static class Arithmetic
 
     public static object TryUnaryBooleanArithmetic(int op, bool obj)
     {
-        switch (op)
+        return op switch
         {
-            case OsmiumParser.OP_LOGICAL_NOT: return !obj;
-        }
+            OsmiumParser.OP_LOGICAL_NOT => !obj,
+            _ => throw new NotImplementedException()
+        };
 
         throw new InvalidOperationException($"Invalid bool operation: {op} {obj}");
     }
