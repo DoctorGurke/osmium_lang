@@ -95,9 +95,6 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
 
     public override object VisitExpression([NotNull] ExpressionContext context)
     {
-        if (context is null)
-            return null;
-
         PrintContext(context, context.GetText());
 
         // literal
@@ -475,6 +472,9 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
 
         if (context.return_statement() is Return_statementContext return_context)
         {
+            if (return_context.expression() is null)
+                throw new ReturnException(null);
+
             throw new ReturnException(VisitExpression(return_context.expression()));
         }
 
