@@ -18,18 +18,17 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
         }
     }
 
-    public SymbolTable SymbolTable { get; set; }
+    public SymbolTable SymbolTable { get; set; } = new();
 
     public Interpreter()
     {
-        SymbolTable = new SymbolTable();
+
     }
 
     public static bool Debug { get; set; } = false;
 
     public Interpreter(SymbolTable parentSymbolTable)
     {
-        SymbolTable = new SymbolTable();
         SymbolTable.Parent = parentSymbolTable;
     }
 
@@ -192,7 +191,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
 
         var identifier = (string)VisitIdentifier(context.identifier());
 
-        object[] parameters = new object[0];
+        object[] parameters = Array.Empty<object>();
 
         if (context.expression_list() is Expression_listContext expression_list_context)
         {
@@ -301,7 +300,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
         if (obj is not IFunction func)
             throw new Exception($"Trying to invoke invalid type {obj.GetType()} {identifier}!");
 
-        object[] parameters = new object[0];
+        object[] parameters = Array.Empty<object>();
 
         if (context.expression_list() is Expression_listContext expression_ListContext)
         {
@@ -373,7 +372,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
 
         var expression = context.expression();
 
-        string[] param_list = new string[0];
+        string[] param_list = Array.Empty<string>();
 
         if (context.@params()?.identifier_list() is Identifier_listContext list)
         {
@@ -389,7 +388,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
 
         var program = context.program_block();
 
-        string[] param_list = new string[0];
+        string[] param_list = Array.Empty<string>();
 
         if (context.@params()?.identifier_list() is Identifier_listContext list)
         {
@@ -433,7 +432,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
         PrintContext(context);
 
         if (context is null)
-            return new string[0];
+            return Array.Empty<string>();
 
         List<string> returned_objects = new();
         if (context.identifier() is IdentifierContext[] identifier_contexts)
@@ -522,7 +521,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
 
         var program = context.program_block();
 
-        string[] param_list = new string[0];
+        string[] param_list = Array.Empty<string>();
 
         if (context.@params()?.identifier_list() is Identifier_listContext list)
         {
