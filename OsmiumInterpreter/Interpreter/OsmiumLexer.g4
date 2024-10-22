@@ -110,6 +110,7 @@ INT
 
 FLOAT 
 	: DIGIT* POINT DIGIT+ 'f'?
+	| DIGIT+ (POINT DIGIT+)? 'f'
 	;
 
 fragment LETTER : ('a' .. 'z') | ('A' .. 'Z') ;

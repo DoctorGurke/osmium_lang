@@ -13,3 +13,11 @@ assert(x3 == 10);
 x4 = (1 + 1 + 1 + 1 + 1 + 1) * 5;
 print(x4);
 assert(x4 == 30);
+
+x5 = -3 * 10 - 5;
+print(x5);
+assert(x5 == -35);
+
+x6 = -5f * 3f;
+print(x6);
+assert(x5 < 0);

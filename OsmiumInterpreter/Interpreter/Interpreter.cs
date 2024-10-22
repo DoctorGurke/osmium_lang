@@ -646,46 +646,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
     {
         PrintContext(context);
 
-        // int
-        if (context.@int() is IntContext int_context)
-        {
-            return int.Parse($"{context.sign()?.GetText()}{VisitInt(int_context)}");
-        }
-
-        // float
-        if (context.@float() is FloatContext float_context)
-        {
-            return VisitFloat(float_context);
-        }
-
-        // string
-        if (context.@string() is StringContext string_context)
-        {
-            return VisitString(string_context);
-        }
-
-        // boolean
-        if (context.boolean() is BooleanContext boolean_context)
-        {
-            return VisitBoolean(boolean_context);
-        }
-
-        // range
-        if (context.range() is RangeContext range_context)
-        {
-            return VisitRange(range_context);
-        }
-
-        if (context.list() is ListContext list_context)
-        {
-            return VisitList(list_context);
-        }
-
-        // null
-        if (context.@null() is not null)
-            return null;
-
-        return null;
+        return VisitChildren(context);
     }
 
     public override object VisitControl_flow([NotNull] Control_flowContext context)

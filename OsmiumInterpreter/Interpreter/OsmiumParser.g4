@@ -4,8 +4,8 @@ options { tokenVocab = OsmiumLexer; }
 
 terminator: SEMICOLON ;
 
-int : INT ;
-float : FLOAT ;
+int : sign? INT ;
+float : sign? FLOAT ;
 string : STRING ;
 boolean : OP_TRUE | OP_FALSE ;
 range : RANGE ;
@@ -222,5 +222,5 @@ sign
 	;
 
 literal 
-	: sign? ( float | int | string | boolean | null | range | list)
+	: float | int | string | boolean | null | range | list
 	;

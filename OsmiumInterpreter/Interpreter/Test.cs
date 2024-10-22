@@ -45,6 +45,7 @@ public class Test
     [TestCase("test/lexer/enums.script")]
     [TestCase("test/lexer/namespaces.script")]
     [TestCase("test/lexer/operator_priority.script")]
+    [TestCase("test/lexer/types/float.script")]
     public void TestScriptFile(string script)
     {
         TryScriptFile(script);
