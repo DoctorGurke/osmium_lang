@@ -184,6 +184,8 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
         return null;
     }
 
+
+
     public new object? VisitInvocation([NotNull] InvocationContext context)
     {
         PrintContext(context);
@@ -534,12 +536,12 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
         return func_declaration;
     }
 
-    private struct _Member
+    private struct Member
     {
         public string Name;
         public object? Value;
 
-        public _Member(string name, object? value)
+        public Member(string name, object? value)
         {
             Name = name;
             Value = value;
@@ -560,7 +562,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
         Dictionary<string, int?> members = new();
         if (context.enum_member_list() is Enum_member_listContext enum_member_list_context)
         {
-            var enum_members = (List<_Member>)VisitEnum_member_list(enum_member_list_context);
+            var enum_members = (List<Member>)VisitEnum_member_list(enum_member_list_context);
 
             foreach (var member in enum_members)
             {
@@ -579,12 +581,12 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
     {
         PrintContext(context);
 
-        List<_Member> members = new();
+        List<Member> members = new();
         if (context.enum_member() is Enum_memberContext[] enum_members)
         {
             foreach (var enum_member in enum_members)
             {
-                members.Add((_Member)VisitEnum_member(enum_member));
+                members.Add((Member)VisitEnum_member(enum_member));
             }
         }
 
@@ -604,7 +606,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
 
         PrintContext(context, $"{identifier} {value}");
 
-        return new _Member(identifier, value);
+        return new Member(identifier, value);
     }
 
     public override object VisitAssignment([NotNull] AssignmentContext context)
