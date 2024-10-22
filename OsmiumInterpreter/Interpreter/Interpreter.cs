@@ -112,19 +112,11 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
         {
             var identifier = (string)VisitIdentifier(identifier_context);
 
-            //if (!SymbolTable.TryGetValue(identifier, out var value))
-            //    throw new Exception($"Trying to access undeclared identifier {identifier}!");
+            if (!SymbolTable.TryGetValue(identifier, out var value))
+                throw new Exception($"Trying to access undeclared identifier {identifier}!");
 
-            //PrintContext(identifier_context, value);
-            //return value;
-
-            if (SymbolTable.TryGetValue(identifier, out var value))
-            {
-                PrintContext(identifier_context, value);
-                return value;
-            }
-
-            return null;
+            PrintContext(identifier_context, value);
+            return value;
         }
 
         // invocation
