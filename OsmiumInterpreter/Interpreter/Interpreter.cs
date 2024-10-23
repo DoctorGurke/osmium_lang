@@ -18,18 +18,18 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
         }
     }
 
-    public SymbolTable SymbolTable { get; set; } = new();
+    public SymbolTable SymbolTable { get; set; }
 
     public Interpreter()
     {
-
+        SymbolTable = new SymbolTable();
     }
 
     public static bool Debug { get; set; } = false;
 
     public Interpreter(SymbolTable parentSymbolTable)
     {
-        SymbolTable.Parent = parentSymbolTable;
+        SymbolTable = new SymbolTable(parentSymbolTable);
     }
 
     private static void PrintContext(ParserRuleContext context, object? value = null)

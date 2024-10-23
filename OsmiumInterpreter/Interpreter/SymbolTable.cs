@@ -5,9 +5,9 @@ namespace Osmium.Interpreter;
 public class SymbolTable : IMembers
 {
     public SymbolTable Members => this;
-    public bool IsRoot => Parent is null;
+    private bool IsRoot => Parent is null;
 
-    public SymbolTable? Parent { get; set; }
+    private SymbolTable? Parent { get; set; }
 
     private Dictionary<string, object> Symbols { get; set; } = new Dictionary<string, object>();
 
@@ -16,6 +16,12 @@ public class SymbolTable : IMembers
         Parent = parent;
     }
 
+    /// <summary>
+    /// Set a symbol
+    /// </summary>
+    /// <param name="symbol"></param>
+    /// <param name="value"></param>
+    /// <exception cref="Exception"></exception>
     public void SetSymbol(string symbol, object value)
     {
         if (HasSymbol(symbol))
@@ -23,6 +29,12 @@ public class SymbolTable : IMembers
         Symbols[symbol] = value;
     }
 
+    /// <summary>
+    /// Get a value from the symbol table. 
+    /// </summary>
+    /// <param name="symbol">Symbol to check for.</param>
+    /// <returns>Value of symbol in symbol table.</returns>
+    /// <exception cref="Exception">Throws if symbol is undeclared.</exception>
     public object GetSymbol(string symbol)
     {
         if (Symbols.TryGetValue(symbol, out var value)) 
@@ -30,6 +42,11 @@ public class SymbolTable : IMembers
         throw new Exception($"Trying to access undeclared symbol '{symbol}'!");
     }
 
+    /// <summary>
+    /// Checks if the symbol table (or its parents) contains a value for a symbol.
+    /// </summary>
+    /// <param name="symbol">Symbol to check.</param>
+    /// <returns>True - Table contains symbol :: False - Table does not contain symbol.</returns>
     public bool HasSymbol(string symbol)
     {
         if (!IsRoot && Parent is not null)
@@ -40,6 +57,12 @@ public class SymbolTable : IMembers
         return Symbols.ContainsKey(symbol);
     }
 
+    /// <summary>
+    /// Try get a value from a symbol.
+    /// </summary>
+    /// <param name="symbol">Symbol to get the value from.</param>
+    /// <param name="value">Returned value.</param>
+    /// <returns>True - Symbol found :: False - Symbol not found.</returns>
     public bool TryGetValue(string symbol, [NotNullWhen(returnValue: true)] out object? value)
     {
         if (!IsRoot && Parent is not null)
@@ -68,6 +91,7 @@ public class SymbolTable : IMembers
     /// <returns>True - Symbol found. False - No Symbol found</returns>
     public bool TryGetSymbol(object value, [NotNullWhen(returnValue: true)]out string? symbol)
     {
+        // used for enum indexing, no need to check parent tables
         foreach (var member in Symbols)
         {
             if (Equals(member.Value, value))
