@@ -590,9 +590,9 @@ public class Interpreter : OsmiumParserBaseVisitor<object>, IMembers
         var namespace_visitor = new Interpreter();
         namespace_visitor.VisitProgram_block(context.scope().program_block());
 
-        SymbolTable.SetSymbol(identifier, namespace_visitor.SymbolTable);
+        SymbolTable.SetSymbol(identifier, namespace_visitor.Members);
 
-        return namespace_visitor.SymbolTable;
+        return namespace_visitor.Members;
     }
 
     public override object VisitLiteral([NotNull] LiteralContext context)
