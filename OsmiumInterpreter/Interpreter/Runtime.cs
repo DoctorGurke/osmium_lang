@@ -8,13 +8,13 @@ namespace Osmium.Interpreter;
 /// </summary>
 public class Runtime : IMembers
 {
-    public SymbolTable Members => symbolTable;
-    private SymbolTable symbolTable { get; set; }
+    public SymbolTable Members => SymbolTable;
+    private SymbolTable SymbolTable { get; set; }
 
 
     public Runtime()
     {
-        symbolTable = new SymbolTable();
+        SymbolTable = new SymbolTable();
     }
 
     public void Run(string input, bool local = false)
@@ -24,11 +24,16 @@ public class Runtime : IMembers
         // attach runtime symbol table for direct evaluation
         var visitor = new Interpreter();
         if (!local)
-            visitor.OverrideSymbolTable(symbolTable);
+            visitor.OverrideSymbolTable(SymbolTable);
 
         InterpretTree(visitor, program);
     }
 
+    /// <summary>
+    /// Begin visiting parse tree.
+    /// </summary>
+    /// <param name="visitor">Interpreter to visit.</param>
+    /// <param name="file">Parsed file context.</param>
     private void InterpretTree(Interpreter visitor, OsmiumParser.FileContext file)
     {
         var target = visitor.Visit(file);
@@ -39,8 +44,8 @@ public class Runtime : IMembers
     /// <summary>
     /// Run lexer and parser to get FileContext of given input program.
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
+    /// <param name="input">Unvalidated Osmium program input.</param>
+    /// <returns>Parsed file context on success.</returns>
     private OsmiumParser.FileContext ParseProgram(string input)
     {
         var str = new AntlrInputStream(input);

@@ -19,13 +19,12 @@ public class Enum : IMembers
         if (!members.Any())
             throw new ArgumentException($"Invalid enum declaration {name} with 0 members!");
 
-        // populate all in values in 
-        // keep track of populated values
-        HashSet<int> values = new HashSet<int>();
-        int scratch = 0;
+        // keep track of populated values to forbid redefinition.
+        var values = new HashSet<int>();
+        int defaultValue = 0;
         foreach (var member in members)
         {
-            int value = scratch;
+            int value = defaultValue;
             if (member.Value is int val)
             {
                 value = val;
@@ -38,8 +37,8 @@ public class Enum : IMembers
                 throw new ArgumentException($"Invalid enum member redefinition {name}.{member.Key}!");
             Members.SetSymbol(member.Key, value);
 
-            if (value == scratch)
-                scratch++;
+            if (value == defaultValue)
+                defaultValue++;
         }
     }
 

@@ -42,8 +42,7 @@ public class Range
 
         if (parts.Length == 1)
         {
-            int endIndex;
-            if (int.TryParse(parts[0], out endIndex))
+            if (int.TryParse(parts[0], out int endIndex))
             {
                 return ToEndIndex(endIndex);
             }

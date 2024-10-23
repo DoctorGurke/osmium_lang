@@ -6,20 +6,20 @@ namespace Osmium.Interpreter.Types;
 public class Function : IFunction
 {
     public string? Identifier { get; set; }
-    public Program_blockContext program { get; set; }
-    public string[] param_list { get; set; }
+    private Program_blockContext Program { get; set; }
+    public string[] Parameters { get; set; }
 
     public Function(string? ident, Program_blockContext program, string[] param_list)
     {
         Identifier = ident;
-        this.program = program;
-        this.param_list = param_list;
+        Program = program;
+        Parameters = param_list;
     }
 
     public object? Invoke(Interpreter visitor, object[] args)
     {
         var argCount = args.Length;
-        var paramCount = param_list.Length;
+        var paramCount = Parameters.Length;
 
         if (argCount != paramCount)
         {
@@ -35,7 +35,7 @@ public class Function : IFunction
         // set param symbols based on param_list identifiers and args objects
         for (int i = 0; i < argCount; i++)
         {
-            var symbol = param_list[i];
+            var symbol = Parameters[i];
             if (visitor.Members.HasSymbol(symbol))
                 throw new InvalidOperationException($"local param {symbol} already defined ;(");
 
@@ -45,7 +45,7 @@ public class Function : IFunction
         try
         {
             // visit program
-            visitor.VisitProgram_block(program); ;
+            visitor.VisitProgram_block(Program); ;
         }
         catch (ReturnException returnEx)
         {
@@ -58,6 +58,6 @@ public class Function : IFunction
 
     public override string ToString()
     {
-        return $"{base.ToString()}:[{(Identifier is null ? "Lambda" : Identifier)}] ParamCount:[{param_list.Length}]";
+        return $"{base.ToString()}:[{(Identifier is null ? "Lambda" : Identifier)}] ParamCount:[{Parameters.Length}]";
     }
 }
