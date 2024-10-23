@@ -2,24 +2,26 @@
 
 namespace Osmium.Interpreter;
 
-public class Runtime
+public class Runtime : IMembers
 {
-    public SymbolTable SymbolTable { get; set; }
+    private SymbolTable symbolTable { get; set; }
+
+    SymbolTable IMembers.Members => symbolTable;
 
     public Runtime()
     {
-        SymbolTable = new SymbolTable();
+        symbolTable = new SymbolTable();
     }
 
     public void Run(string input)
     {
-        var program = Evaluate(input);
+        var program = ParseProgram(input);
         InterpretTree(program);
     }
 
     public void RunLocal(string input)
     {
-        var program = Evaluate(input);
+        var program = ParseProgram(input);
         InterpretTree(program, true);
     }
 
@@ -29,7 +31,7 @@ public class Runtime
 
         // attach runtime symbol table for non-local evaluation (direct command line input)
         if (!local)
-            visitor.SymbolTable = SymbolTable;
+            visitor.SymbolTable = symbolTable;
 
         var target = visitor.Visit(file);
         if (target != null)
@@ -41,7 +43,7 @@ public class Runtime
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
-    private OsmiumParser.FileContext Evaluate(string input)
+    private OsmiumParser.FileContext ParseProgram(string input)
     {
         var str = new AntlrInputStream(input);
         var lexer = new OsmiumLexer(str);
