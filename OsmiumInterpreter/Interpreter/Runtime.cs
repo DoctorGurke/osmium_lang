@@ -8,6 +8,12 @@ namespace Osmium.Interpreter;
 /// </summary>
 public class Runtime : IMembers
 {
+    public class RuntimeException : Exception
+    {
+        public RuntimeException() : base() { }
+        public RuntimeException(string message) : base(message) { }
+    }
+
     public SymbolTable Members => SymbolTable;
     private SymbolTable SymbolTable { get; set; }
 
@@ -58,7 +64,7 @@ public class Runtime : IMembers
 
         var error = listener_lexer.HadError;
         if (error)
-            Log.Info($"Lexer failed {listener_lexer.GetErrorMessage()}");
+            throw new RuntimeException($"Lexer failed {listener_lexer.GetErrorMessage()}");
 
         // get parsed token stream
         tokenStream.Fill();
@@ -76,7 +82,7 @@ public class Runtime : IMembers
 
         error = listener_parser.HadError;
         if (error)
-            Log.Info($"Parser failed: {listener_parser.GetErrorMessage()}");
+            throw new RuntimeException($"Parser failed: {listener_parser.GetErrorMessage()}");
 
         return tree;
     }
