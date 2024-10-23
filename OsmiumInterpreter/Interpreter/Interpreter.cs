@@ -1,6 +1,7 @@
 ﻿using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
 using Osmium.Interpreter.Operators;
+using System.Diagnostics.Tracing;
 using System.Text;
 using static Osmium.Interpreter.OsmiumParser;
 
@@ -108,8 +109,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
         {
             var identifier = (string)VisitIdentifier(identifier_context);
 
-            if (!SymbolTable.TryGetValue(identifier, out var value))
-                throw new Exception($"Trying to access undeclared identifier {identifier}!");
+            var value = SymbolTable.GetSymbolValue(identifier);
 
             PrintContext(identifier_context, value);
             return value;
@@ -217,20 +217,15 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
                 return null;
         }
 
-        if (SymbolTable.TryGetValue(identifier, out var symbol))
-        {
-            if (symbol is not Function func)
-                throw new InvalidOperationException($"cannot invoke symbol: {identifier} : {symbol}");
+        var  value = SymbolTable.GetSymbolValue(identifier);
 
-            // new local interpreter for local symboltable => pure funcs
-            var functionVisitor = new Interpreter();
+        if (value is not Function func)
+            throw new InvalidOperationException($"Cannot invoke symbol: '{identifier}' : {value.GetType()}!");
 
-            return func.Invoke(functionVisitor, parameters);
-        }
-        else
-        {
-            throw new InvalidOperationException($"unknown symbol: {identifier}");
-        }
+        // new local interpreter for local symboltable => pure funcs
+        var functionVisitor = new Interpreter();
+
+        return func.Invoke(functionVisitor, parameters);
     }
 
     /// <summary>
@@ -242,8 +237,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
     {
         var identifier = context.VARIABLE().GetText();
 
-        if (!SymbolTable.TryGetValue(identifier, out var obj))
-            throw new Exception($"Trying to access member of undeclared variable '{identifier}'!");
+        var obj = SymbolTable.GetSymbolValue(identifier);
 
         PrintContext(context, $"{identifier} {obj}");
 
@@ -259,10 +253,9 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
         {
             var member = (string)VisitMember(member_context);
 
-            if (!source.Members.TryGetValue(member, out obj))
-                throw new Exception($"Trying to access undeclared member {identifier}.{member}!");
+            var value = source.Members.GetSymbolValue(member);
 
-            return obj;
+            return value;
         }
         else if (context.member_invocation() is Member_invocationContext member_InvocationContext)
         {
@@ -291,8 +284,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
     {
         var identifier = context.VARIABLE().GetText();
 
-        if (!source.Members.TryGetValue(identifier, out var obj))
-            throw new Exception($"Trying to invoke undeclared member variable {identifier}!");
+        var obj = source.Members.GetSymbolValue(identifier);
 
         if (obj is not IFunction func)
             throw new Exception($"Trying to invoke invalid type {obj.GetType()} {identifier}!");
@@ -316,8 +308,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
             return null;
 
         var identifier = (string)VisitIdentifier(ident);
-        if (!SymbolTable.TryGetValue(identifier, out var value))
-            return null;
+        var value = SymbolTable.GetSymbolValue(identifier);
 
         if (value is List<object> list)
         {
@@ -448,22 +439,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
     {
         PrintContext(context);
 
-        if (context.declaration() is DeclarationContext declaration_context)
-        {
-            VisitDeclaration(declaration_context);
-        }
-
-        if (context.jump_statement() is Jump_statementContext jump_statement_context)
-        {
-            VisitJump_statement(jump_statement_context);
-        }
-
-        if (context.control_flow() is Control_flowContext control_flow_context)
-        {
-            VisitControl_flow(control_flow_context);
-        }
-
-        return null;
+        return VisitChildren(context);
     }
 
     public override object VisitJump_statement([NotNull] Jump_statementContext context)

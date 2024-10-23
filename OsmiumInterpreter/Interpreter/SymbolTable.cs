@@ -30,14 +30,14 @@ public class SymbolTable : IMembers
     }
 
     /// <summary>
-    /// Get a value from the symbol table. 
+    /// Get a value from the symbol table. Throws if symbol is undeclared.
     /// </summary>
     /// <param name="symbol">Symbol to check for.</param>
     /// <returns>Value of symbol in symbol table.</returns>
-    /// <exception cref="Exception">Throws if symbol is undeclared.</exception>
-    public object GetSymbol(string symbol)
+    /// <exception cref="Exception"></exception>
+    public object GetSymbolValue(string symbol)
     {
-        if (Symbols.TryGetValue(symbol, out var value)) 
+        if (TryGetValue(symbol, out var value)) 
             return value;
         throw new Exception($"Trying to access undeclared symbol '{symbol}'!");
     }
