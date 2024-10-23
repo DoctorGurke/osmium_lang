@@ -51,19 +51,19 @@ public class ConsoleRunner : IMembers
         {
             case var x when x.StartsWith("exit"):
                 exit = true;
-                break;
+                return;
 
             case var x when x.StartsWith("run "):
                 var script = input[4..];
                 Log.Info($"running {script}");
                 runtime.Run(Script.Load(script), local: true);
-                break;
+                return;
 
             case var x when x.StartsWith("include "):
                 var includeScript = input[8..];
                 Log.Info($"including {includeScript}");
                 runtime.Run(Script.Load(includeScript));
-                break;
+                return;
 
         }
 
