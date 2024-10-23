@@ -115,7 +115,7 @@ op_index
 // type_name.member
 
 member_invocation
-	: VARIABLE LEFT_BRACKET expression_list?  RIGHT_BRACKET
+	: VARIABLE LEFT_BRACKET expression_list? RIGHT_BRACKET
 	;
 
 member
@@ -134,7 +134,7 @@ expression
 	| identifier 
 	| invocation 
 	| op_index // indexof
-	| op_member
+	| op_member 
 	| function_lambda // anonymous implicit expression
 	| function_expression // anonymous function 
 
@@ -152,7 +152,7 @@ expression
 	| operand1=expression op=OP_GREATER_THAN operand2=expression 
 	| operand1=expression op=OP_LESS_THAN operand2=expression 
 	| operand1=expression op=OP_GREATER_THAN_OR_EQUALS operand2=expression 
-	| operand1=expression op=OP_LESS_THAN_OR_EQUALS operand2=expression
+	| operand1=expression op=OP_LESS_THAN_OR_EQUALS operand2=expression 
 	| operand1=expression op=OP_INEQUALITY operand2=expression 
 	| operand1=expression op=OP_EQUALITY operand2=expression 
 	| operand1=expression op=OP_LOGICAL_AND operand2=expression 
