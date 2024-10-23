@@ -2,6 +2,10 @@
 
 namespace Osmium.Interpreter;
 
+/// <summary>
+/// Interpreter interface to run osmium programs. 
+/// Maintains a symbol table but can run programs independently as local.
+/// </summary>
 public class Runtime : IMembers
 {
     SymbolTable IMembers.Members => symbolTable;
