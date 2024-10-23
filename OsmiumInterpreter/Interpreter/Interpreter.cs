@@ -10,9 +10,9 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
 {
     public class ReturnException : Exception
     {
-        public object Value { get; private set; }
+        public object? Value { get; private set; }
 
-        public ReturnException(object value)
+        public ReturnException(object? value)
         {
             Value = value;
         }
@@ -690,11 +690,15 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
 
         if (context.scope() is ScopeContext scope)
         {
-            if (scope.program_block() is not null)
-                control_flow_visitor.VisitProgram_block(scope.program_block());
+            control_flow_visitor.VisitScope(scope);
         }
 
         return null;
+    }
+
+    public override object VisitScope([NotNull] ScopeContext context)
+    {
+        return VisitChildren(context);
     }
 
     public override object VisitCondition([NotNull] ConditionContext context)
