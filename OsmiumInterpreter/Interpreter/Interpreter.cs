@@ -19,7 +19,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>, IMembers
         }
     }
 
-    public SymbolTable SymbolTable { get; set; }
+    private SymbolTable SymbolTable { get; set; }
 
     public Interpreter()
     {
