@@ -435,7 +435,6 @@ public class Test
 
         Log.Info($"TOKENS:");
         Log.Info($"[{input.Length} chars] -> [{tokens.Count} tokens]");
-        DumpTokens(tokenStream, lexer);
         Log.Info("-----");
 
         foreach (var token in tokens)
@@ -463,10 +462,6 @@ public class Test
         // verify that input is erroneous 
         if (verifyError && error)
             Assert.Pass();
-
-        Log.Space();
-
-        Log.Info($"Syntax Tree:\n{tree.ToStringTree(parser)}");
 
         Log.Space();
 
@@ -503,7 +498,7 @@ public class Test
         TryScript(Script.Load(script));
     }
 
-    // used for building tests
+    // used for building token tests
     private static string DumpTokens(CommonTokenStream tokenStream, OsmiumLexer lexer)
     {
         var tokens = tokenStream.GetTokens();
