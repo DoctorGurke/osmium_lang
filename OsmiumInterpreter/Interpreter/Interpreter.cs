@@ -35,6 +35,15 @@ public class Interpreter : OsmiumParserBaseVisitor<object>, IMembers
         SymbolTable = new SymbolTable(parentSymbolTable);
     }
 
+    /// <summary>
+    /// Overrides the symbol table to output to an external reference.
+    /// </summary>
+    /// <param name="outputTable"></param>
+    public void OverrideSymbolTable(SymbolTable outputTable)
+    {
+        SymbolTable = outputTable;
+    }
+
     private static void PrintContext(ParserRuleContext context, object? value = null)
     {
         if (!Debug || context is null)
