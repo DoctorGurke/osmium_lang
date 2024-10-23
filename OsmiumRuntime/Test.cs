@@ -9,7 +9,7 @@ public class Test
     public void TestInitialization()
     {
         var runtime = new Interpreter.Runtime();
-        var instance = new Runtime(runtime);
+        var instance = new ConsoleRunner(runtime);
 
         string var = "x";
         int val = 5;

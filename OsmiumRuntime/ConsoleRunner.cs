@@ -2,23 +2,23 @@
 
 namespace Osmium;
 
-public class Runtime : IMembers
+public class ConsoleRunner : IMembers
 {
     public static void Main(string[] _)
     {
-        var runtime = new Interpreter.Runtime();
-        Instance = new Runtime(runtime);
+        var runtime = new Runtime();
+        Instance = new ConsoleRunner(runtime);
         Instance.StartRuntime();
     }
 
-    public static Runtime? Instance { get; private set; }
+    public static ConsoleRunner? Instance { get; private set; }
 
     public SymbolTable Members => runtime.Members;
 
     private bool exit;
-    private Interpreter.Runtime runtime;
+    private Runtime runtime;
 
-    public Runtime(Interpreter.Runtime runtime)
+    public ConsoleRunner(Runtime runtime)
     {
         this.runtime = runtime;
     }
