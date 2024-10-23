@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace OsmiumInterpreter.Interpreter;
+namespace Osmium.Interpreter;
 
 public class SymbolTable : IMembers
 {
