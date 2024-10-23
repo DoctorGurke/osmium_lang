@@ -16,9 +16,14 @@ file
 	: program_block EOF // regular content
 	;
 
+direct_expression
+	: expression
+	;
+
 // expressions are separated by semicolon
 program_block 
-	: (statement | expression) 
+	: direct_expression EOF
+	| (statement | expression) 
 	| (control_flow | ((statement | expression) terminator))+
 	|
 	;

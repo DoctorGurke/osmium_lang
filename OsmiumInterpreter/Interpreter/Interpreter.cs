@@ -86,6 +86,11 @@ public class Interpreter : OsmiumParserBaseVisitor<object>, IMembers
         return VisitChildren(context);
     }
 
+    public override object VisitDirect_expression([NotNull] Direct_expressionContext context)
+    {
+        throw new ReturnException(VisitChildren(context));
+    }
+
     public override object VisitExpression([NotNull] ExpressionContext context)
     {
         PrintContext(context, context.GetText());
