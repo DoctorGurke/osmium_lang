@@ -4,7 +4,7 @@ namespace Osmium.Interpreter;
 
 /// <summary>
 /// Interpreter interface to run osmium programs. 
-/// Maintains a symbol table but can run programs independently as local.
+/// Maintains a symbol table but supports running programs independently as local.
 /// </summary>
 public class Runtime : IMembers
 {
@@ -20,17 +20,17 @@ public class Runtime : IMembers
     public void Run(string input, bool local = false)
     {
         var program = ParseProgram(input);
-        InterpretTree(program, local);
-    }
 
-    private void InterpretTree(OsmiumParser.FileContext file, bool local = false)
-    {
+        // attach runtime symbol table for direct evaluation
         var visitor = new Interpreter();
-
-        // attach runtime symbol table for non-local evaluation (direct command line input)
         if (!local)
             visitor.OverrideSymbolTable(symbolTable);
 
+        InterpretTree(visitor, program);
+    }
+
+    private void InterpretTree(Interpreter visitor, OsmiumParser.FileContext file)
+    {
         var target = visitor.Visit(file);
         if (target != null)
             Log.Info($"{target}"); // program exit
