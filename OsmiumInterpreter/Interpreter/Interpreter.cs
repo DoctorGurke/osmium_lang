@@ -2,13 +2,12 @@
 using Antlr4.Runtime.Misc;
 using Osmium.Interpreter.Operators;
 using Osmium.Interpreter.Types;
-using OsmiumInterpreter.Interpreter;
 using System.Text;
 using static Osmium.Interpreter.OsmiumParser;
 
 namespace Osmium.Interpreter;
 
-public class Interpreter : OsmiumParserBaseVisitor<object>
+public class Interpreter : OsmiumParserBaseVisitor<object>, IMembers
 {
     public class ReturnException : Exception
     {
@@ -28,6 +27,8 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
     }
 
     public static bool Debug { get; set; } = false;
+
+    public SymbolTable Members => SymbolTable;
 
     public Interpreter(SymbolTable parentSymbolTable)
     {
