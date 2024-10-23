@@ -16,7 +16,7 @@ public class Test
     }
 
     [TestCase("test/syntax/syntax_error.script")]
-    public void TestSyntaxError(string script)
+    public void SyntaxError(string script)
     {
         TryScript(Script.Load(script), verifyFailure: true);
     }
@@ -46,7 +46,7 @@ public class Test
     [TestCase("test/lexer/namespaces.script")]
     [TestCase("test/lexer/operator_priority.script")]
     [TestCase("test/lexer/types/float.script")]
-    public void TestScriptFile(string script)
+    public void ScriptFile(string script)
     {
         TryScriptFile(script);
     }
@@ -360,14 +360,14 @@ public class Test
             "OP_ADD",
             "OP_SUB"
         })]*/
-    public void TestTokenStreamFromScript(string script, params string[] testTokens)
+    public void TokenStreamFromScript(string script, params string[] testTokens)
     {
         var input = Script.Load(script);
 
-        TestTokenStream(input, testTokens);
+        TokenStream(input, testTokens);
     }
 
-    public static void TestTokenStream(string input, params string[] testTokens)
+    public static void TokenStream(string input, params string[] testTokens)
     {
         var str = new AntlrInputStream(input);
         var lexer = new OsmiumLexer(str);

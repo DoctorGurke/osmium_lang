@@ -1,18 +1,18 @@
-﻿{
+﻿global = 0;
+{
 	x = 1;
-	print(x);
-	print("one");
-	assert(x == 1, "x not 1");
+	assert(x == 1, "scope symbol invalid");
+	assert(global == 0, "scope parent symbol invalid");
 };
 {
 	x = 2;
-	print(x);
+	assert(x == 2, "scope symbol invalid");
 };
 {
 	x = 3;
-	print(x);
+	assert(x == 3, "scope symbol invalid");
 };
 {
 	x = 4;
-	print(x);
+	assert(x == 4, "scope symbol invalid");
 };

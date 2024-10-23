@@ -51,7 +51,7 @@ public class SymbolTable : IMembers
     {
         if (!IsRoot && Parent is not null)
         {
-            return Parent?.HasSymbol(symbol) ?? false || Symbols.ContainsKey(symbol);
+            return Parent.HasSymbol(symbol) || Symbols.ContainsKey(symbol);
         }
 
         return Symbols.ContainsKey(symbol);
