@@ -566,9 +566,8 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
 
     public override object VisitAssignment([NotNull] AssignmentContext context)
     {
+        PrintContext(context);
         var identifier = (string)VisitIdentifier(context.identifier());
-
-        PrintContext(context, identifier);
 
         if (SymbolTable.HasSymbol(identifier))
         {
@@ -715,6 +714,8 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
             list = expressions.ToList();
         }
 
+        PrintContext(context, list);
+
         return list;
     }
 
@@ -725,6 +726,9 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
     /// <returns>String of identifier name.</returns>
     public override object VisitIdentifier([NotNull] IdentifierContext context)
     {
-        return $"{context.GetText()}";
+        var identifier = $"{context.GetText()}";
+
+        PrintContext(context, identifier);
+        return identifier;
     }
 }
