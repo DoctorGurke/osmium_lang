@@ -8,7 +8,7 @@ namespace Osmium.Interpreter;
 /// </summary>
 public class Runtime : IMembers
 {
-    SymbolTable IMembers.Members => symbolTable;
+    public SymbolTable Members => symbolTable;
     private SymbolTable symbolTable { get; set; }
 
 
