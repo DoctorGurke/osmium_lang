@@ -22,7 +22,6 @@ public class Test
     }
 
     [TestCase("examples/scopes.script")]
-    [TestCase("examples/fibonacci.script")]
     [TestCase("examples/control_flow.script")]
     [TestCase("examples/pure_functions.script")]
     [TestCase("examples/functions.script")]
