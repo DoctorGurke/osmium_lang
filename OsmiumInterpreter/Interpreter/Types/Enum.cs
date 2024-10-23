@@ -1,4 +1,6 @@
-﻿namespace Osmium.Interpreter;
+﻿using OsmiumInterpreter.Interpreter;
+
+namespace Osmium.Interpreter.Types;
 
 public class Enum : IMembers
 {

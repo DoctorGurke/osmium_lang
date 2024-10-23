@@ -1,4 +1,4 @@
-﻿namespace Osmium.Interpreter;
+﻿namespace Osmium.Interpreter.Types;
 
 public interface IFunction
 {

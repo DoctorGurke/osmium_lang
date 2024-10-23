@@ -1,6 +1,6 @@
 ﻿using static Osmium.Interpreter.OsmiumParser;
 
-namespace Osmium.Interpreter;
+namespace Osmium.Interpreter.Types;
 
 public class Lambda : IFunction
 {

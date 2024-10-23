@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace Osmium.Interpreter;
+namespace OsmiumInterpreter.Interpreter;
 
 public class SymbolTable : IMembers
 {
@@ -37,7 +37,7 @@ public class SymbolTable : IMembers
     /// <exception cref="Exception"></exception>
     public object GetSymbolValue(string symbol)
     {
-        if (TryGetValue(symbol, out var value)) 
+        if (TryGetValue(symbol, out var value))
             return value;
         throw new Exception($"Trying to access undeclared symbol '{symbol}'!");
     }
@@ -89,7 +89,7 @@ public class SymbolTable : IMembers
     /// <param name="value">Value to look for.</param>
     /// <param name="symbol">First declared symbol of value.</param>
     /// <returns>True - Symbol found. False - No Symbol found</returns>
-    public bool TryGetSymbol(object value, [NotNullWhen(returnValue: true)]out string? symbol)
+    public bool TryGetSymbol(object value, [NotNullWhen(returnValue: true)] out string? symbol)
     {
         // used for enum indexing, no need to check parent tables
         foreach (var member in Symbols)

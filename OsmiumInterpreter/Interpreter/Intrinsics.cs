@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using Osmium.Interpreter.Types;
+using System.Text;
 
 namespace Osmium.Interpreter;
 

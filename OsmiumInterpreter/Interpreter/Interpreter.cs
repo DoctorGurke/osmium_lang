@@ -1,7 +1,8 @@
 ﻿using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
 using Osmium.Interpreter.Operators;
-using System.Diagnostics.Tracing;
+using Osmium.Interpreter.Types;
+using OsmiumInterpreter.Interpreter;
 using System.Text;
 using static Osmium.Interpreter.OsmiumParser;
 
@@ -197,7 +198,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
                 return null;
         }
 
-        var  value = SymbolTable.GetSymbolValue(identifier);
+        var value = SymbolTable.GetSymbolValue(identifier);
 
         if (value is not Function func)
             throw new InvalidOperationException($"Cannot invoke symbol: '{identifier}' : {value.GetType()}!");
@@ -302,12 +303,12 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
             // sublist
             if (context.range() is RangeContext range)
             {
-                var indexRange = (Range)VisitRange(range);
+                var indexRange = (Types.Range)VisitRange(range);
                 //Log.Info($"RANGE: {indexRange}");
                 return GetSublist(list, indexRange);
             }
         }
-        else if (value is Enum members)
+        else if (value is Types.Enum members)
         {
             // direct index
             if (context.@int() is IntContext index)
@@ -320,7 +321,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
         return null;
     }
 
-    public static List<object> GetSublist(List<object> list, Range range)
+    public static List<object> GetSublist(List<object> list, Types.Range range)
     {
         int startIndex = range.StartIndex ?? 0;
         int endIndex = range.EndIndex ?? list.Count - 1;
@@ -505,7 +506,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
             }
         }
 
-        var enum_declaration = new Enum(identifier, members);
+        var enum_declaration = new Types.Enum(identifier, members);
 
         SymbolTable.SetSymbol(identifier, enum_declaration);
 
@@ -679,7 +680,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
 
     public override object VisitRange([NotNull] RangeContext context)
     {
-        var evaluate = Range.Parse(context.GetText());
+        var evaluate = Types.Range.Parse(context.GetText());
 
         PrintContext(context, evaluate);
         return evaluate;

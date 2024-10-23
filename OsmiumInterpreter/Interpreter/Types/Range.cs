@@ -1,4 +1,4 @@
-﻿namespace Osmium.Interpreter;
+﻿namespace Osmium.Interpreter.Types;
 
 public class Range
 {
@@ -45,7 +45,7 @@ public class Range
             int endIndex;
             if (int.TryParse(parts[0], out endIndex))
             {
-                return Range.ToEndIndex(endIndex);
+                return ToEndIndex(endIndex);
             }
             else
             {
