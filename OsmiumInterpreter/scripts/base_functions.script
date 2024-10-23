@@ -1,6 +1,6 @@
 ﻿print("hello");
 print(4);
-print(lambda: "fancy" end); // lambda expression
+print(function: return "fancy" end); // lambda expression
 
 list = [0, 1, 2, 3, 4, 5];
 
@@ -8,21 +8,21 @@ list = [0, 1, 2, 3, 4, 5];
 // perform action on every element in a list, returns list of new values
 // multiplies every value in list by 2
 // takes lambda expression with exactly one parameter, this parameter represents the iterated value
-out1 = map(list, lambda(x): x * 2 end);
+out1 = map(list, function(x): return x * 2 end);
 
 // reduce
 // perform action on collection to get a final 
 // sums up every value in the list
 // takes lambda expression with exactly two parameters. one is the previous value, one the current
-out2 = reduce(list, lambda(x, y): x + y end, 0);
+out2 = reduce(list, function(x, y): return x + y end, 0);
 
 // filter
 // filters values in a list
 // filters out every odd number
 // takes lambda epression with exactly one parameter. represents the value to evaluate for filtering
 // if lambda evaluates
-out3 = filter(list, lambda(x): x % 2 == 0 end);
+out3 = filter(list, function(x): return x % 2 == 0 end);
 
 // foreach
 // doesn't return a list, just executes
-foreach(list, lambda(x): print(x) end);
+foreach(list, function(x): print(x) end);

@@ -33,12 +33,12 @@ function z(i, j, k): end;
 z(1, function: end, "a");
 
 // evaluate lambda
-x8 = (lambda:print("hello") end);
+x8 = (function:print("hello") end);
 
 // lambas get evaluated as an expression
 function foo(x): end;
-foo(lambda(x):function:end end);
+foo(function(x):function:end end);
 
 function bar(i, j, k): end;
-bar(1, lambda(x):function:end end, 1);
-bar(1, lambda(x):lambda(x):lambda(x):lambda(x):function:end end end end end, 1);
+bar(1, function(x):function:end end, 1);
+bar(1, function(x): return function(x): return function(x): return function(x): return function:end end end end end, 1);
