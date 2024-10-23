@@ -4,19 +4,19 @@ namespace Osmium.Interpreter.Types;
 
 public class Lambda : IFunction
 {
-    public ExpressionContext expression { get; set; }
-    public string[] param_list { get; set; }
+    private ExpressionContext Expression { get; set; }
+    public string[] Parameters { get; set; }
 
     public Lambda(ExpressionContext expression, string[] param_list)
     {
-        this.expression = expression;
-        this.param_list = param_list;
+        Expression = expression;
+        Parameters = param_list;
     }
 
     public object Invoke(Interpreter visitor, object[] args)
     {
         var argCount = args.Length;
-        var paramCount = param_list.Length;
+        var paramCount = Parameters.Length;
 
         if (argCount != paramCount)
         {
@@ -28,7 +28,7 @@ public class Lambda : IFunction
         // set param symbols based on param_list identifiers and args objects
         for (int i = 0; i < argCount; i++)
         {
-            var symbol = param_list[i];
+            var symbol = Parameters[i];
             if (visitor.Members.HasSymbol(symbol))
                 throw new InvalidOperationException($"local param {symbol} already defined ;(");
 
@@ -36,6 +36,6 @@ public class Lambda : IFunction
         }
 
         // evaluate expression
-        return visitor.VisitExpression(expression);
+        return visitor.VisitExpression(Expression);
     }
 }
