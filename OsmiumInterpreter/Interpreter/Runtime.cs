@@ -1,5 +1,4 @@
 ﻿using Antlr4.Runtime;
-using OsmiumInterpreter.Interpreter;
 
 namespace Osmium.Interpreter;
 
@@ -30,7 +29,7 @@ public class Runtime : IMembers
 
         // attach runtime symbol table for non-local evaluation (direct command line input)
         if (!local)
-            visitor.SymbolTable = symbolTable;
+            visitor.OverrideSymbolTable(symbolTable);
 
         var target = visitor.Visit(file);
         if (target != null)
