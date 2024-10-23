@@ -4,25 +4,19 @@ namespace Osmium.Interpreter;
 
 public class Runtime : IMembers
 {
+    SymbolTable IMembers.Members => symbolTable;
     private SymbolTable symbolTable { get; set; }
 
-    SymbolTable IMembers.Members => symbolTable;
 
     public Runtime()
     {
         symbolTable = new SymbolTable();
     }
 
-    public void Run(string input)
+    public void Run(string input, bool local = false)
     {
         var program = ParseProgram(input);
-        InterpretTree(program);
-    }
-
-    public void RunLocal(string input)
-    {
-        var program = ParseProgram(input);
-        InterpretTree(program, true);
+        InterpretTree(program, local);
     }
 
     private void InterpretTree(OsmiumParser.FileContext file, bool local = false)

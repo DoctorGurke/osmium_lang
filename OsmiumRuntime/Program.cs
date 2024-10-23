@@ -19,7 +19,7 @@ public class Program
                 {
                     var script = input[4..];
                     Log.Info($"running {script}");
-                    runtime.RunLocal(Script.Load(script));
+                    runtime.Run(Script.Load(script), true);
                     continue;
                 }
                 else if (input.StartsWith("include "))
