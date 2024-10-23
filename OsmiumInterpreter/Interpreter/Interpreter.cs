@@ -485,27 +485,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
     {
         PrintContext(context);
 
-        if (context.function_declaration() is Function_declarationContext function_declaration_context)
-        {
-            VisitFunction_declaration(function_declaration_context);
-        }
-
-        if (context.enum_declaration() is Enum_declarationContext enum_declaration_context)
-        {
-            VisitEnum_declaration(enum_declaration_context);
-        }
-
-        if (context.assignment() is AssignmentContext assignment_context)
-        {
-            VisitAssignment(assignment_context);
-        }
-
-        if (context.namespace_declaration() is Namespace_declarationContext namespace_declaration_context)
-        {
-            VisitNamespace_declaration(namespace_declaration_context);
-        }
-
-        return null;
+        return VisitChildren(context);
     }
 
     public override object VisitFunction_declaration([NotNull] Function_declarationContext context)
