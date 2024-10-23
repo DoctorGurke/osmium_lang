@@ -61,7 +61,8 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
         }
         catch (ReturnException programReturn)
         {
-            return programReturn.Value;
+            if (programReturn.Value is not null)
+                return programReturn.Value;
         }
 
         return 0;
@@ -71,27 +72,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
     {
         PrintContext(context);
 
-        if (context is null || context.children is null)
-            return null;
-
-        if (context.children is not null)
-            foreach (var child in context.children)
-            {
-                if (child is StatementContext statement)
-                {
-                    VisitStatement(statement);
-                }
-                else if (child is Control_flowContext control_flow)
-                {
-                    VisitControl_flow(control_flow);
-                }
-                else if (child is ExpressionContext expression)
-                {
-                    VisitExpression(expression);
-                }
-            }
-
-        return null;
+        return VisitChildren(context);
     }
 
     public override object VisitExpression([NotNull] ExpressionContext context)
@@ -176,8 +157,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
             return Arithmetic.TryBinary(context.op.Type, operand1, operand2);
         }
 
-        //Log.Info($"invalid expr: {context} {context.GetText()}");
-        return null;
+        throw new NotImplementedException($"Invalid Expression!");
     }
 
 
