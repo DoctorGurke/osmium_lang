@@ -4,6 +4,7 @@ using Osmium.Interpreter.Operators;
 using Osmium.Interpreter.Types;
 using System.Text;
 using static Osmium.Interpreter.OsmiumParser;
+using static Osmium.Interpreter.Runtime;
 
 namespace Osmium.Interpreter;
 
@@ -238,7 +239,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>, IMembers
         PrintContext(context, $"{identifier} {obj}");
 
         if (obj is not IMembers source)
-            throw new Exception($"Trying to access member of invalid type {obj.GetType()} for {identifier}!");
+            throw new RuntimeException($"Trying to access member of invalid type {obj.GetType()} for {identifier}!");
 
         if (context.op_member() is Op_memberContext op_MemberContext)
         {
@@ -283,7 +284,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>, IMembers
         var obj = source.Members.GetSymbolValue(identifier);
 
         if (obj is not IFunction func)
-            throw new Exception($"Trying to invoke invalid type {obj.GetType()} {identifier}!");
+            throw new RuntimeException($"Trying to invoke invalid type {obj.GetType()} {identifier}!");
 
         object[] parameters = Array.Empty<object>();
 
@@ -582,7 +583,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>, IMembers
         var identifier = (string)context.VARIABLE().GetText();
 
         if (SymbolTable.HasSymbol(identifier))
-            throw new Exception($"Invalid redefinition of identifier {identifier}!");
+            throw new RuntimeException($"Invalid redefinition of identifier {identifier}!");
 
         PrintContext(context, identifier);
 
