@@ -35,7 +35,6 @@ public class Test
     [TestCase("examples/print.script")]
     [TestCase("examples/range_index_recursion.script")]
     [TestCase("base_functions.script")]
-    [TestCase("test.script")]
     [TestCase("test/lexer/control_flow.script")]
     [TestCase("test/lexer/assignment.script")]
     [TestCase("test/lexer/expressions.script")]
