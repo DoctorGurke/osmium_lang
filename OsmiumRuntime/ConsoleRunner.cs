@@ -16,7 +16,7 @@ public class ConsoleRunner : IMembers
     public SymbolTable Members => runtime.Members;
 
     private bool exit;
-    private Runtime runtime;
+    private readonly Runtime runtime;
 
     public ConsoleRunner(Runtime runtime)
     {
