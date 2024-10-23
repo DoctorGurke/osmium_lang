@@ -678,7 +678,8 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
 
     public override object VisitScope([NotNull] ScopeContext context)
     {
-        return VisitChildren(context);
+        PrintContext(context);
+        return VisitProgram_block(context.program_block());
     }
 
     public override object VisitCondition([NotNull] ConditionContext context)
