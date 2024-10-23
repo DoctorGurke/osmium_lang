@@ -76,7 +76,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>, IMembers
                 return programReturn.Value;
         }
 
-        return 0;
+        return null;
     }
 
     public new object? VisitProgram_block([NotNull] Program_blockContext context)
