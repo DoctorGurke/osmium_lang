@@ -10,5 +10,12 @@
   <ItemGroup>
     <ProjectReference Include="..\OsmiumInterpreter\OsmiumInterpreter.csproj" />
   </ItemGroup>
+  
+  <!--get scripts to build location-->
+  <ItemGroup>
+    <None Update="scripts/**/*.script">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 
 </Project>
