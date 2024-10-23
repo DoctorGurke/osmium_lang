@@ -9,18 +9,25 @@ public class SymbolTable : IMembers
 
     public SymbolTable? Parent { get; set; }
 
-    public Dictionary<string, object> Symbols { get; set; } = new Dictionary<string, object>();
-
+    private Dictionary<string, object> Symbols { get; set; } = new Dictionary<string, object>();
 
     public SymbolTable(SymbolTable? parent = null)
     {
         Parent = parent;
     }
 
-    public object this[string symbol]
+    public void SetSymbol(string symbol, object value)
     {
-        get => Symbols[symbol];
-        set => Symbols[symbol] = value;
+        if (HasSymbol(symbol))
+            throw new Exception($"Trying to redefine immutable symbol '{symbol}'!");
+        Symbols[symbol] = value;
+    }
+
+    public object GetSymbol(string symbol)
+    {
+        if (Symbols.TryGetValue(symbol, out var value)) 
+            return value;
+        throw new Exception($"Trying to access undeclared symbol '{symbol}'!");
     }
 
     public bool HasSymbol(string symbol)
@@ -51,5 +58,25 @@ public class SymbolTable : IMembers
 
         value = Symbols[symbol];
         return true;
+    }
+
+    /// <summary>
+    /// Try get a symbol name from a value. 
+    /// </summary>
+    /// <param name="value">Value to look for.</param>
+    /// <param name="symbol">First declared symbol of value.</param>
+    /// <returns>True - Symbol found. False - No Symbol found</returns>
+    public bool TryGetSymbol(object value, [NotNullWhen(returnValue: true)]out string? symbol)
+    {
+        foreach (var member in Symbols)
+        {
+            if (Equals(member.Value, value))
+            {
+                symbol = member.Key;
+                return true;
+            }
+        }
+        symbol = null;
+        return false;
     }
 }

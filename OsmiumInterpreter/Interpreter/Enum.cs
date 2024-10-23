@@ -36,7 +36,7 @@ public class Enum : IMembers
 
             if (!values.Add(value))
                 throw new ArgumentException($"Invalid enum member redefinition {name}.{member.Key}!");
-            Members[member.Key] = value;
+            Members.SetSymbol(member.Key, value);
 
             if (value == scratch)
                 scratch++;
@@ -45,11 +45,8 @@ public class Enum : IMembers
 
     public string GetIndexOf(int value)
     {
-        foreach (var member in Members.Symbols)
-        {
-            if (member.Value is int val && val == value)
-                return member.Key;
-        }
+        if (Members.TryGetSymbol(value, out var symbol))
+            return symbol;
 
         throw new Exception($"Trying to get null state {Name}[{value}]!");
     }

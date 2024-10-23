@@ -23,7 +23,7 @@ public class Lambda : IFunction
             throw new ArgumentException($"Invalid parameter count.");
         }
 
-        visitor.SymbolTable["this"] = this;
+        visitor.SymbolTable.SetSymbol("this", this);
 
         // set param symbols based on param_list identifiers and args objects
         for (int i = 0; i < argCount; i++)
@@ -32,7 +32,7 @@ public class Lambda : IFunction
             if (visitor.SymbolTable.HasSymbol(symbol))
                 throw new InvalidOperationException($"local param {symbol} already defined ;(");
 
-            visitor.SymbolTable[symbol] = args[i];
+            visitor.SymbolTable.SetSymbol(symbol, args[i]);
         }
 
         // evaluate expression

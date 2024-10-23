@@ -510,7 +510,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
 
         var func_declaration = new Function(identifier, program, param_list);
 
-        SymbolTable[identifier] = func_declaration;
+        SymbolTable.SetSymbol(identifier, func_declaration);
 
         return func_declaration;
     }
@@ -551,7 +551,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
 
         var enum_declaration = new Enum(identifier, members);
 
-        SymbolTable[identifier] = enum_declaration;
+        SymbolTable.SetSymbol(identifier, enum_declaration);
 
         return enum_declaration;
     }
@@ -601,7 +601,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
 
         var value = VisitExpression(context.expression());
         //Log.Info($"assign expr: {value}");
-        SymbolTable[identifier] = value;
+        SymbolTable.SetSymbol(identifier, value);
 
         return null;
     }
@@ -618,7 +618,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>
         var namespace_visitor = new Interpreter();
         namespace_visitor.VisitProgram_block(context.scope().program_block());
 
-        SymbolTable[identifier] = namespace_visitor.SymbolTable;
+        SymbolTable.SetSymbol(identifier, namespace_visitor.SymbolTable);
 
         return namespace_visitor.SymbolTable;
     }
