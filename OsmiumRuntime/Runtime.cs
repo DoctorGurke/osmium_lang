@@ -1,6 +1,8 @@
-﻿namespace Osmium;
+﻿using Osmium.Interpreter;
 
-public class Runtime
+namespace Osmium;
+
+public class Runtime : IMembers
 {
     public static void Main(string[] _)
     {
@@ -10,6 +12,9 @@ public class Runtime
     }
 
     public static Runtime? Instance { get; private set; }
+
+    public SymbolTable Members => runtime.Members;
+
     private bool exit;
     private Interpreter.Runtime runtime;
 
@@ -31,6 +36,8 @@ public class Runtime
 
             ProcessInput(input);
         }
+
+        exit = false;
     }
 
     /// <summary>
