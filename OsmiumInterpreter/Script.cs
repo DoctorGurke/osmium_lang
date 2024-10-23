@@ -24,9 +24,7 @@ public abstract class Script
         }
         catch
         {
-            Log.Info($"script not found: {fileFullPath}");
-
-            throw new FileNotFoundException(path);
+            throw new FileNotFoundException(fileFullPath);
         }
     }
 }
