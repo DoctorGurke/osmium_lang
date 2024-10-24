@@ -41,4 +41,18 @@ public class Test
         // then the return value should match the expected function
         Assert.That(runner.Members.GetSymbolValue("x"), Is.EqualTo(55));
     }
+
+    [Test]
+    public void TestLocalRun()
+    {
+        // given a runner and declared symbol
+        var runner = SetupRunner();
+
+        // when declaring the same symbol twice via local run
+        runner.ProcessInput("run fibonacci.script");
+
+        // then allow definition in global scope
+        runner.ProcessInput("fibonacci=1;");
+        Assert.That(runner.Members.GetSymbolValue("fibonacci"), Is.EqualTo(1));
+    }
 }
