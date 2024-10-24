@@ -26,7 +26,7 @@ public static class Intrinsics
             printString = sb.ToString().Trim().Trim(',');
         }
 
-        Log.Info($"{printString}");
+        Console.WriteLine($"{printString}");
     }
 
     public static int Length(object[] args)
