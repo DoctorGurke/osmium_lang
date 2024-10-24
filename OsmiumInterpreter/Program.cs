@@ -5,16 +5,20 @@ namespace Osmium;
 
 public static class Log
 {
+    /// <summary>
+    /// Used for debug logging. Silenced by default.
+    /// </summary>
     public static void Space()
     {
         Info(">");
     }
 
+    /// <summary>
+    /// Used for debug logging. Silenced by default.
+    /// </summary>
+    /// <param name="content"></param>
     public static void Info(object content)
     {
-#if CI_TEST
-        return;
-#endif
         Console.WriteLine($"{content}");
     }
 }
