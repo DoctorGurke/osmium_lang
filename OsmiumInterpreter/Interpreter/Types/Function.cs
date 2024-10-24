@@ -1,15 +1,15 @@
-﻿using static Osmium.Interpreter.Interpreter;
-using static Osmium.Interpreter.OsmiumParser;
+﻿using Antlr4.Runtime;
+using static Osmium.Interpreter.Interpreter;
 
 namespace Osmium.Interpreter.Types;
 
 public class Function : IFunction
 {
     public string? Identifier { get; set; }
-    private Program_blockContext Program { get; set; }
+    private ParserRuleContext Program { get; set; }
     public string[] Parameters { get; set; }
 
-    public Function(string? ident, Program_blockContext program, string[] param_list)
+    public Function(string? ident, ParserRuleContext program, string[] param_list)
     {
         Identifier = ident;
         Program = program;
@@ -45,7 +45,7 @@ public class Function : IFunction
         try
         {
             // visit program
-            visitor.VisitProgram_block(Program); ;
+            visitor.Visit(Program); ;
         }
         catch (ReturnException returnEx)
         {

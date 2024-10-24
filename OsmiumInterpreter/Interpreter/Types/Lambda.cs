@@ -1,13 +1,13 @@
-﻿using static Osmium.Interpreter.OsmiumParser;
+﻿using Antlr4.Runtime;
 
 namespace Osmium.Interpreter.Types;
 
 public class Lambda : IFunction
 {
-    private ExpressionContext Expression { get; set; }
+    private ParserRuleContext Expression { get; set; }
     public string[] Parameters { get; set; }
 
-    public Lambda(ExpressionContext expression, string[] param_list)
+    public Lambda(ParserRuleContext expression, string[] param_list)
     {
         Expression = expression;
         Parameters = param_list;
@@ -36,6 +36,6 @@ public class Lambda : IFunction
         }
 
         // evaluate expression
-        return visitor.VisitExpression(Expression);
+        return visitor.Visit(Expression);
     }
 }
