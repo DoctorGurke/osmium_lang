@@ -2,18 +2,18 @@
 
 namespace Osmium.Interpreter;
 
+public class RuntimeException : Exception
+{
+    public RuntimeException() : base() { }
+    public RuntimeException(string message) : base(message) { }
+}
+
 /// <summary>
 /// Interpreter interface to run osmium programs. 
 /// Maintains a symbol table but supports running programs independently as local.
 /// </summary>
 public class Runtime : IMembers
 {
-    public class RuntimeException : Exception
-    {
-        public RuntimeException() : base() { }
-        public RuntimeException(string message) : base(message) { }
-    }
-
     public SymbolTable Members => SymbolTable;
     private SymbolTable SymbolTable { get; set; }
 
