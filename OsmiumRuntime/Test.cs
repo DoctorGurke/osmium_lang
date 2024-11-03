@@ -5,18 +5,21 @@ namespace Osmium;
 [TestFixture]
 public class Test
 {
+    private ConsoleRunner? runner;
 
-    private ConsoleRunner SetupRunner()
+    [SetUp]
+    public void Setup()
     {
         var runtime = new Interpreter.Runtime();
-        return new ConsoleRunner(runtime);
+        runner = new ConsoleRunner(runtime);
     }
 
     [Test]
     public void TestInitialization()
     {
         // given a runner and basic expression var name and value
-        var runner = SetupRunner();
+        if (runner is null)
+            return;
         string var = "x";
         int val = 5;
 
@@ -32,7 +35,8 @@ public class Test
     public void TestFibonacci()
     {
         // given a runner
-        var runner = SetupRunner();
+        if (runner is null)
+            return;
 
         // when including a script and using a function from it
         runner.ProcessInput("include fibonacci.script");
@@ -46,7 +50,8 @@ public class Test
     public void TestLocalRun()
     {
         // given a runner and declared symbol
-        var runner = SetupRunner();
+        if (runner is null)
+            return;
 
         // when declaring the same symbol twice via local run
         runner.ProcessInput("run fibonacci.script");
