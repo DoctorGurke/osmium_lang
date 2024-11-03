@@ -114,7 +114,7 @@ continue_statement
 return_statement : RETURN expression? ;
 
 op_index 
-	: identifier LEFT_SQUARE_BRACKET (int | range) RIGHT_SQUARE_BRACKET
+	: identifier LEFT_SQUARE_BRACKET (int | range | identifier) RIGHT_SQUARE_BRACKET
 	;
 
 // type_name.member

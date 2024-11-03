@@ -299,10 +299,10 @@ public class Interpreter : OsmiumParserBaseVisitor<object>, IMembers
     {
         // TODO: this should be an operator so I can override it
 
-        if (context.identifier() is not IdentifierContext ident)
+        if (context.identifier() is not IdentifierContext[] ident)
             return null;
 
-        var identifier = (string)VisitIdentifier(ident);
+        var identifier = (string)VisitIdentifier(ident[0]);
         var value = SymbolTable.GetSymbolValue(identifier);
 
         if (value is List<object> list)
@@ -320,6 +320,26 @@ public class Interpreter : OsmiumParserBaseVisitor<object>, IMembers
                 var indexRange = (Types.Range)VisitRange(range);
                 //Log.Info($"RANGE: {indexRange}");
                 return GetSublist(list, indexRange);
+            }
+
+            // identifier
+            if (ident.Length == 2 && ident[1] is IdentifierContext ident2)
+            {
+                var identifierIndex = (string)VisitIdentifier(ident2);
+                var identifierResult = Members.GetSymbolValue(identifierIndex);
+                Log.Info($"{identifierIndex}={identifierResult}");
+
+                if (identifierResult is Types.Range identRange)
+                {
+                    Log.Info($"= {identRange}");
+                    return GetSublist(list, identRange);
+                }
+
+                if (identifierResult is int identIndex)
+                {
+                    Log.Info($"= {identIndex}");
+                    return list[identIndex];
+                }
             }
         }
         else if (value is Types.Enum members)
