@@ -23,6 +23,11 @@ public class Runtime : IMembers
         SymbolTable = new SymbolTable();
     }
 
+    /// <summary>
+    /// Run an osmium program.
+    /// </summary>
+    /// <param name="input">Osmium input program.</param>
+    /// <param name="local"></param>
     public void Run(string input, bool local = false)
     {
         var program = ParseProgram(input);
@@ -37,42 +42,40 @@ public class Runtime : IMembers
             Log.Info($"{programReturn}");
     }
 
+
     /// <summary>
     /// Run lexer and parser to get FileContext of given input program.
     /// </summary>
     /// <param name="input">Unvalidated Osmium program input.</param>
     /// <returns>Parsed file context on success.</returns>
-    private OsmiumParser.FileContext ParseProgram(string input)
+    /// <exception cref="RuntimeException"></exception>
+    private static OsmiumParser.FileContext ParseProgram(string input)
     {
         var str = new AntlrInputStream(input);
         var lexer = new OsmiumLexer(str);
+        var lexerListener = new ErrorListener<int>();
         var tokenStream = new CommonTokenStream(lexer);
-        var listener_lexer = new ErrorListener<int>();
 
         lexer.RemoveErrorListeners();
-        lexer.AddErrorListener(listener_lexer);
+        lexer.AddErrorListener(lexerListener);
 
-        var error = listener_lexer.HadError;
-        if (error)
-            throw new RuntimeException($"Lexer failed {listener_lexer.GetErrorMessage()}");
+        if (lexerListener.HadError)
+            throw new RuntimeException($"Lexer failed {lexerListener.GetErrorMessage()}");
 
-        // get parsed token stream
+        // try lexing token stream from input program
         tokenStream.Fill();
 
-        //-> tokenStream;
-
         var parser = new OsmiumParser(tokenStream);
-        var listener_parser = new ErrorListener<IToken>();
+        var parserListener = new ErrorListener<IToken>();
 
         parser.RemoveErrorListeners();
-        parser.AddErrorListener(listener_parser);
+        parser.AddErrorListener(parserListener);
 
-        // start parsing token stream to tree
+        // try parse token stream as file context
         var tree = parser.file();
 
-        error = listener_parser.HadError;
-        if (error)
-            throw new RuntimeException($"Parser failed: {listener_parser.GetErrorMessage()}");
+        if (parserListener.HadError)
+            throw new RuntimeException($"Parser failed: {parserListener.GetErrorMessage()}");
 
         return tree;
     }
