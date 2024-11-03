@@ -32,19 +32,9 @@ public class Runtime : IMembers
         if (!local)
             visitor.OverrideSymbolTable(SymbolTable);
 
-        InterpretTree(visitor, program);
-    }
-
-    /// <summary>
-    /// Begin visiting parse tree.
-    /// </summary>
-    /// <param name="visitor">Interpreter to visit.</param>
-    /// <param name="file">Parsed file context.</param>
-    private void InterpretTree(Interpreter visitor, OsmiumParser.FileContext file)
-    {
-        var target = visitor.Visit(file);
-        if (target != null)
-            Log.Info($"{target}"); // program exit
+        var programReturn = visitor.Visit(program);
+        if (programReturn != null)
+            Log.Info($"{programReturn}");
     }
 
     /// <summary>
