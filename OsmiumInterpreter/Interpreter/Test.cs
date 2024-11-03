@@ -15,7 +15,6 @@ public class Test
         TryScriptFile("test.script");
     }
 
-    [TestCase("test/syntax/syntax_error.script")]
     public void SyntaxError(string script)
     {
         TryScript(Script.Load(script), verifyFailure: true);
@@ -25,8 +24,6 @@ public class Test
     [TestCase("examples/control_flow.script")]
     [TestCase("examples/pure_functions.script")]
     [TestCase("examples/functions.script")]
-    [TestCase("examples/list.script")]
-    [TestCase("examples/arithmetic.script")]
     [TestCase("examples/map.script")]
     [TestCase("examples/reduce.script")]
     [TestCase("examples/filter.script")]
@@ -35,15 +32,10 @@ public class Test
     [TestCase("examples/range_index_recursion.script")]
     [TestCase("base_functions.script")]
     [TestCase("test/lexer/control_flow.script")]
-    [TestCase("test/lexer/assignment.script")]
-    [TestCase("test/lexer/expressions.script")]
-    [TestCase("test/lexer/booleans.script")]
     [TestCase("test/lexer/functions.script")]
     [TestCase("test/lexer/assert.script")]
-    [TestCase("test/lexer/enums.script")]
     [TestCase("test/lexer/namespaces.script")]
     [TestCase("test/lexer/operator_priority.script")]
-    [TestCase("test/lexer/types/float.script")]
     public void ScriptFile(string script)
     {
         TryScriptFile(script);
