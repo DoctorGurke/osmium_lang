@@ -72,7 +72,7 @@ public class BaseTypes
     [TestCase("result = [];", new object[] { })]
     public void VerifyList(string input, object result)
     {
-        if (result is int[] array)
+        if (result is object[] array)
             RunTest(input, array.ToList());
     }
 
@@ -81,8 +81,19 @@ public class BaseTypes
     [TestCase("list = [\"a\",\"b\",\"c\",\"d\",\"e\"]; result = list[1..3];", new string[] { "b", "c", "d" })]
     public void VerifyListRange(string input, object result)
     {
-        if (result is int[] array)
+        if (result is object[] array)
             RunTest(input, array.ToList());
+    }
+
+    [TestCase("list = [1,2,3]; result = list[0];", 1)]
+    [TestCase("list = [1,2,3]; x = 0; result = list[x];", 1)]
+    [TestCase("list = [1,2,3]; x = 0..; result = list[x];", new int[] { 1, 2, 3 })]
+    public void VerifyListIndexOf(string input, object result)
+    {
+        if (result is object[] array)
+            RunTest(input, array.ToList());
+        else
+            RunTest(input, result);
     }
 
     [TestCase("enum x = [e1,e2,e3]; result = x.e1;", 0)]
