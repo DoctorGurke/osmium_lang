@@ -13,14 +13,15 @@ public class TestExpressions
         runtime = new Runtime();
     }
 
-    [TestCase("x = 5 + (3 + 3) - 4;")]
-    [TestCase("x = 1; y = x * 10 + (1 + x);")]
-    [TestCase("x = [1]; y = x[0] + 10;")]
-    [TestCase("function x: return 1 end; y = x() + 10;")]
-    [TestCase("enum x = [state1]; y = x.state1 + 10;")]
-    public void VerifyExpressions(string input)
+    [TestCase("result = 5 + (3 + 3) - 4;", 7)]
+    [TestCase("x = 1; result = x * 10 + (1 + x);", 12)]
+    [TestCase("x = [1]; result = x[0] + 10;", 11)]
+    [TestCase("function x: return 1 end; result = x() + 10;", 11)]
+    [TestCase("enum x = [state1, state2]; result = x.state2 + 10;", 11)]
+    public void VerifyExpressions(string input, object result)
     {
-        Assert.DoesNotThrow(() => { runtime!.Run(input, local: true); });
+        Assert.DoesNotThrow(() => { runtime!.Run(input); });
+        Assert.That(result, Is.EqualTo(runtime!.Members.GetSymbolValue("result")));
     }
 
     [TestCase("x = 1 * 3;")]
