@@ -39,7 +39,7 @@ public class Test
             return;
 
         // when including a script and using a function from it
-        runner.ProcessInput("include fibonacci.script");
+        runner.ProcessInput("include examples/fibonacci.script");
         runner.ProcessInput("x = fibonacci(10);");
 
         // then the return value should match the expected function
@@ -54,7 +54,7 @@ public class Test
             return;
 
         // when declaring the same symbol twice via local run
-        runner.ProcessInput("run fibonacci.script");
+        runner.ProcessInput("run examples/fibonacci.script");
 
         // then allow definition in global scope
         runner.ProcessInput("fibonacci=1;");
