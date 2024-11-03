@@ -19,8 +19,6 @@ public class Enum : IMembers
         if (!members.Any())
             throw new ArgumentException($"Invalid enum declaration {name} with 0 members!");
 
-        // keep track of populated values to forbid redefinition.
-        var values = new HashSet<int>();
         int defaultValue = 0;
         foreach (var member in members)
         {
@@ -33,8 +31,6 @@ public class Enum : IMembers
             if (value < 0)
                 throw new ArgumentException($"Invalid negative value for enum member {name}.{member.Key}!");
 
-            if (!values.Add(value))
-                throw new ArgumentException($"Invalid enum member redefinition {name}.{member.Key}!");
             Members.SetSymbol(member.Key, value);
 
             if (value == defaultValue)
