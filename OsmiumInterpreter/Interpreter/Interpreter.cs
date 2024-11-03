@@ -4,7 +4,6 @@ using Osmium.Interpreter.Operators;
 using Osmium.Interpreter.Types;
 using System.Text;
 using static Osmium.Interpreter.OsmiumParser;
-using static Osmium.Interpreter.Runtime;
 
 namespace Osmium.Interpreter;
 
@@ -20,16 +19,15 @@ public class Interpreter : OsmiumParserBaseVisitor<object>, IMembers
         }
     }
 
+    public static bool Debug { get; set; } = false;
+
     private SymbolTable SymbolTable { get; set; }
+    public SymbolTable Members => SymbolTable;
 
     public Interpreter()
     {
         SymbolTable = new SymbolTable();
     }
-
-    public static bool Debug { get; set; } = false;
-
-    public SymbolTable Members => SymbolTable;
 
     public Interpreter(SymbolTable parentSymbolTable)
     {
