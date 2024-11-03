@@ -327,17 +327,14 @@ public class Interpreter : OsmiumParserBaseVisitor<object>, IMembers
             {
                 var identifierIndex = (string)VisitIdentifier(ident2);
                 var identifierResult = Members.GetSymbolValue(identifierIndex);
-                Log.Info($"{identifierIndex}={identifierResult}");
 
                 if (identifierResult is Types.Range identRange)
                 {
-                    Log.Info($"= {identRange}");
                     return GetSublist(list, identRange);
                 }
 
                 if (identifierResult is int identIndex)
                 {
-                    Log.Info($"= {identIndex}");
                     return list[identIndex];
                 }
             }
