@@ -1,6 +1,6 @@
 ﻿namespace TestProject;
 
-public static class Test
+public static class RuntimeX
 {
     public static void VerifyResult(this Runtime runtime, string input, object result, string symbolName = "result")
     {
