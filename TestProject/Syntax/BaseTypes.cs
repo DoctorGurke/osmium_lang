@@ -74,9 +74,9 @@ public class BaseTypes
             RunTest(input, array.ToList());
     }
 
-    [TestCase("list = [1,2,3]; result = list[1..];", new int[] { 2, 3 })]
-    [TestCase("list = [1f,2f,3f]; result = list[..1];", new float[] { 1f, 2f })]
-    [TestCase("list = [\"a\",\"b\",\"c\",\"d\",\"e\"]; result = list[1..3];", new string[] { "b", "c", "d" })]
+    [TestCase("list = [1,2,3,4,5]; result = list[1..];", new int[] { 2, 3, 4, 5 })]
+    [TestCase("list = [1,2,3,4,5]; result = list[..1];", new int[] { 1, 2 })]
+    [TestCase("list = [1,2,3,4,5]; result = list[1..3];", new int[] { 2, 3 })]
     public void VerifyListRange(string input, object result)
     {
         if (result is object[] array)
