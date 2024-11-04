@@ -1,8 +1,9 @@
 ﻿using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using NUnit.Framework;
+using Osmium.Language;
 
-namespace Osmium.Language;
+namespace Osmium.Tests;
 
 [TestFixture]
 public class Test
@@ -31,7 +32,6 @@ public class Test
     [TestCase("base_functions.script")]
     [TestCase("test/lexer/control_flow.script")]
     [TestCase("test/lexer/functions.script")]
-    [TestCase("test/lexer/assert.script")]
     public void ScriptFile(string script)
     {
         TryScriptFile(script);

@@ -8,6 +8,7 @@ public class Expressions
     [SetUp]
     public void SetUp()
     {
+        runtime = null;
         runtime = new Runtime();
     }
 
