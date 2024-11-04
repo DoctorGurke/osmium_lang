@@ -25,7 +25,7 @@ public class SymbolTable : IMembers
     public void SetSymbol(string symbol, object value)
     {
         if (HasSymbol(symbol))
-            throw new Exception($"Trying to redefine immutable symbol '{symbol}'!");
+            throw new RuntimeException($"Trying to redefine immutable symbol '{symbol}'!");
         Symbols[symbol] = value;
     }
 
@@ -39,7 +39,7 @@ public class SymbolTable : IMembers
     {
         if (TryGetValue(symbol, out var value))
             return value;
-        throw new Exception($"Trying to access undeclared symbol '{symbol}'!");
+        throw new RuntimeException($"Trying to access undeclared symbol '{symbol}'!");
     }
 
     /// <summary>
