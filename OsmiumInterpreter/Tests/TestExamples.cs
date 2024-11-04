@@ -30,12 +30,14 @@ public class TestExamples
     public static IEnumerable<string> ExampleScripts()
     {
         var executableLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? throw new Exception($"Couldn't find Executable location!");
-        var examplesPath = Path.Combine(executableLocation, "scripts\\examples");
+        var examplesPath = Path.Combine(executableLocation, "scripts/examples");
 
         var scripts = Directory.GetFiles(examplesPath, "*.script", searchOption: SearchOption.AllDirectories);
         foreach (var script in scripts)
         {
-            yield return script.Replace($"{executableLocation}\\scripts\\", "");
+            var patchedScript = script.Replace('\\', '/');
+            var patchedExecutableLocation = executableLocation.Replace('\\', '/');
+            yield return patchedScript.Replace($"{patchedExecutableLocation}/scripts/", "");
         }
     }
 }
