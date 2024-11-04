@@ -1,17 +1,8 @@
 ﻿namespace TestProject.Syntax;
 
 [TestFixture]
-public class Expressions
+public class Expressions : OsmiumTestRunner
 {
-    private Runtime? runtime;
-
-    [SetUp]
-    public void SetUp()
-    {
-        runtime = null;
-        runtime = new Runtime();
-    }
-
     [TestCase("result = 5 + (3 + 3) - 4;", 7)]
     [TestCase("x = 1; result = x * 10 + (1 + x);", 12)]
     [TestCase("x = [1]; result = x[0] + 10;", 11)]
@@ -19,7 +10,7 @@ public class Expressions
     [TestCase("enum x = [state1, state2]; result = x.state2 + 10;", 11)]
     public void VerifyExpressions(string input, object result)
     {
-        runtime!.VerifyResult(input, result);
+        Runtime!.VerifyResult(input, result);
     }
 
     [TestCase("result = 1 * 3;", 3)]
@@ -29,7 +20,7 @@ public class Expressions
     [TestCase("result = 4 - 1;", 3)]
     public void VerifyArithmeticExpression(string input, object result)
     {
-        runtime!.VerifyResult(input, result);
+        Runtime!.VerifyResult(input, result);
     }
 
     [TestCase("x = * 1;")]
@@ -42,7 +33,7 @@ public class Expressions
     [TestCase("x = 4 -;")]
     public void VerifyInvalidArithmeticExpression(string input)
     {
-        Assert.Throws<ParserException>(() => { runtime!.Run(input, local: true); });
+        Assert.Throws<ParserException>(() => { Runtime!.Run(input, local: true); });
     }
 
     [TestCase("result = !true;", false)]
@@ -55,7 +46,7 @@ public class Expressions
     [TestCase("result = true || false;", true)]
     public void VerifyBooleanExpressions(string input, object value)
     {
-        runtime!.VerifyResult(input, value);
+        Runtime!.VerifyResult(input, value);
     }
 
     [TestCase("x = !;")]
@@ -75,7 +66,7 @@ public class Expressions
     [TestCase("x = true ||;")]
     public void VerifyInvalidBooleanExpressions(string input)
     {
-        Assert.Throws<ParserException>(() => { runtime!.Run(input, local: true); });
+        Assert.Throws<ParserException>(() => { Runtime!.Run(input, local: true); });
     }
 
     [TestCase("result = 2 + 3 * 5;", 17)]
@@ -85,6 +76,6 @@ public class Expressions
     [TestCase("result = -3 * 10 - 5;", -35)]
     public void VerifyOperatorPriority(string input, object value)
     {
-        runtime!.VerifyResult(input, value);
+        Runtime!.VerifyResult(input, value);
     }
 }

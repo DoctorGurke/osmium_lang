@@ -1,17 +1,8 @@
 ﻿namespace TestProject.Syntax;
 
 [TestFixture]
-public class Namespaces
+public class Namespaces : OsmiumTestRunner
 {
-    private Runtime? runtime;
-
-    [SetUp]
-    public void SetUp()
-    {
-        runtime = null;
-        runtime = new Runtime();
-    }
-
     [TestCase("scope{x=1;}; result=scope.x;", 1)]
     [TestCase("scope{x=1f;}; result=scope.x;", 1f)]
     [TestCase("scope{x=\"a\";}; result=scope.x;", "a")]
@@ -20,6 +11,6 @@ public class Namespaces
     [TestCase("scope1{scope2{x=1;};}; result=scope1.scope2.x;", 1)]
     public void TestNamespaceMembers(string input, object value)
     {
-        runtime!.VerifyResult(input, value);
+        Runtime!.VerifyResult(input, value);
     }
 }

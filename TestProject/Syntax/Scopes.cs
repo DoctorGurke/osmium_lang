@@ -1,17 +1,8 @@
 ﻿namespace TestProject.Syntax;
 
 [TestFixture]
-public class Scopes
+public class Scopes : OsmiumTestRunner
 {
-    private Runtime? runtime;
-
-    [SetUp]
-    public void SetUp()
-    {
-        runtime = null;
-        runtime = new Runtime();
-    }
-
     [Test]
     public void TestParentSymbols()
     {
@@ -24,10 +15,10 @@ public class Scopes
             """;
 
         // when running the code it should not throw from the assert
-        Assert.DoesNotThrow(() => runtime!.Run(input));
+        Assert.DoesNotThrow(() => Runtime!.Run(input));
 
         // then the global symbol should be in the symbol table
-        Assert.That(runtime!.Members.GetSymbolValue("global"), Is.EqualTo(0));
+        Assert.That(Runtime!.Members.GetSymbolValue("global"), Is.EqualTo(0));
     }
 
     [Test]
@@ -41,9 +32,9 @@ public class Scopes
             """;
 
         // when running the code
-        Assert.DoesNotThrow(() => runtime!.Run(input));
+        Assert.DoesNotThrow(() => Runtime!.Run(input));
 
         // then the symbol should not be defined
-        Assert.That(runtime!.Members.HasSymbol("x"), Is.False);
+        Assert.That(Runtime!.Members.HasSymbol("x"), Is.False);
     }
 }
