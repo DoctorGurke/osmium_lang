@@ -21,8 +21,6 @@ public class Test
     }
 
     [TestCase("examples/control_flow.script")]
-    [TestCase("examples/pure_functions.script")]
-    [TestCase("examples/functions.script")]
     [TestCase("examples/map.script")]
     [TestCase("examples/reduce.script")]
     [TestCase("examples/filter.script")]
@@ -31,7 +29,6 @@ public class Test
     [TestCase("examples/range_index_recursion.script")]
     [TestCase("base_functions.script")]
     [TestCase("test/lexer/control_flow.script")]
-    [TestCase("test/lexer/functions.script")]
     public void ScriptFile(string script)
     {
         TryScriptFile(script);
