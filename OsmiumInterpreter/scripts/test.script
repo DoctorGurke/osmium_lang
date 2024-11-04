@@ -1,7 +1,11 @@
-﻿function test(func, list):
-	return func(list);
+﻿function foo(x):
+	if(x == 0):
+		return 0;
+	else if(x == 1):
+		return 1;
+	else:
+		return -1;
+	end;
 end;
 
-list = [1,2,3,4,5];
-
-test(function(list):print(length(list))end,list);
+result = foo(1);
