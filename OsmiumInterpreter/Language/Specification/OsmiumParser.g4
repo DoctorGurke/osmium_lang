@@ -8,7 +8,15 @@ int : sign? INT ;
 float : sign? FLOAT ;
 string : STRING ;
 boolean : OP_TRUE | OP_FALSE ;
-range : RANGE ;
+
+range_start : INT;
+range_end : INT;
+range 
+	: range_start RANGE 
+	| RANGE range_end
+	| range_start RANGE range_end
+	;
+
 null : NULL ;
 list : OP_INDEX | LEFT_SQUARE_BRACKET expression_list RIGHT_SQUARE_BRACKET ;
 

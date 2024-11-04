@@ -701,7 +701,35 @@ public class Interpreter : OsmiumParserBaseVisitor<object>, IMembers
 
     public override object VisitRange([NotNull] RangeContext context)
     {
-        var evaluate = Types.Range.Parse(context.GetText());
+        int? start = null;
+        if (context.range_start() is Range_startContext rangeStartContext)
+        {
+            start = (int?)Visit(rangeStartContext);
+        }
+
+        int? end = null;
+        if (context.range_end() is Range_endContext rangeEndContext)
+        {
+            end = (int?)Visit(rangeEndContext);
+        }
+
+        var range = new Types.Range(start, end);
+
+        PrintContext(context, range);
+        return range;
+    }
+
+    public override object VisitRange_start([NotNull] Range_startContext context)
+    {
+        var evaluate = int.Parse(context.GetText());
+
+        PrintContext(context, evaluate);
+        return evaluate;
+    }
+
+    public override object VisitRange_end([NotNull] Range_endContext context)
+    {
+        var evaluate = int.Parse(context.GetText());
 
         PrintContext(context, evaluate);
         return evaluate;

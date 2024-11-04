@@ -101,9 +101,7 @@ STRING : QUOTE ('""'|~'"')* QUOTE ;
 
 // range
 RANGE 
-	: DIGIT+ POINT POINT DIGIT+		// 0..1
-	| POINT POINT DIGIT+			// ..1
-	| DIGIT+ POINT POINT			// 0..
+	: POINT POINT
 	;
 
 // identifier
