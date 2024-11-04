@@ -27,7 +27,7 @@ public class Test
     [TestCase("examples/foreach.script")]
     [TestCase("examples/print.script")]
     [TestCase("examples/range_index_recursion.script")]
-    [TestCase("base_functions.script")]
+    [TestCase("examples/base_functions.script")]
     public void ScriptFile(string script)
     {
         TryScriptFile(script);
