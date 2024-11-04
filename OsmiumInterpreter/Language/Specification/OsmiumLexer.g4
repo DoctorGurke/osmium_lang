@@ -39,8 +39,6 @@ IN				: 'in' ;
 IF				: 'if' ;
 ELSE			: 'else' ;
 FOR				: 'for' ;
-DO				: 'do' ;
-WHILE			: 'while' ;
 ENUM			: 'enum' ;
 LAMBDA			: 'lambda' ;
 FUNCTION		: 'function' ;
@@ -55,7 +53,7 @@ NULL			: 'null' ;
 // operators
 //
 
-OP_LOGICAL_NOT				: '!' ; // factorial? "!x, !5" or maybe inverse? "x!, 5!"
+OP_LOGICAL_NOT				: '!' ;
 OP_LOGICAL_AND				: '&&' ;
 OP_LOGICAL_OR				: '||' ;
 
@@ -65,22 +63,12 @@ OP_MULTIPLY					: '*' ;
 OP_DIVISION					: '/' ;
 OP_MODULUS					: '%' ;
 
-OP_BITWISE_AND				: '&' ;
-OP_BITWISE_OR				: '|' ;
-OP_EXCLUSIVE_OR				: '^' ;
-OP_ONES_COMPLEMENT			: '~' ;
-OP_LEFT_SHIFT				: '<<' ;
-OP_RIGHT_SHIFT				: '>>' ;
-
 OP_EQUALITY					: '==' ;
 OP_INEQUALITY				: '!=' ;
 OP_LESS_THAN				: '<' ;
 OP_GREATER_THAN				: '>' ;
 OP_LESS_THAN_OR_EQUALS		: '<=' ;
 OP_GREATER_THAN_OR_EQUALS	: '>=' ;
-
-OP_INCREMENT				: '++' ;
-OP_DECREMENT				: '--' ;
 
 OP_TRUE						: 'true' ;
 OP_FALSE					: 'false' ;
@@ -95,18 +83,11 @@ OP_ASSIGN					: '=' ;
 
 // numerics
 fragment DIGIT			: '0'..'9' ;
-//fragment HEX_PREFIX		: '0x' ;
-//fragment HEX_INT		: HEX_PREFIX [0-9a-fA-F]+ ;
 
 // int
 INT
 	: DIGIT+ 
 	;
-
-// float
-//fragment FLOAT_EXPONENTIAL 
-//	: (PURE_INT | PURE_FLOAT | DOUBLE ) 'e' (OP_ADD | OP_SUB)? (PURE_INT | PURE_FLOAT | DOUBLE) 
-//	;
 
 FLOAT 
 	: DIGIT* POINT DIGIT+ 'f'?
