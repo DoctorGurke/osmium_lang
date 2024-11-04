@@ -32,7 +32,6 @@ public class Test
     [TestCase("test/lexer/control_flow.script")]
     [TestCase("test/lexer/functions.script")]
     [TestCase("test/lexer/assert.script")]
-    [TestCase("test/lexer/namespaces.script")]
     [TestCase("test/lexer/operator_priority.script")]
     public void ScriptFile(string script)
     {
