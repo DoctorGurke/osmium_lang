@@ -3,7 +3,7 @@ using Antlr4.Runtime.Tree;
 using NUnit.Framework;
 using System.Text;
 
-namespace Osmium.Interpreter;
+namespace Osmium.Language;
 
 [TestFixture]
 public class Test

@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using Enum = Osmium.Interpreter.Types.Enum;
+using Enum = Osmium.Language.Types.Enum;
 
 namespace Osmium.Tests;
 

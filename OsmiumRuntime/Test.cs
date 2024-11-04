@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 
-namespace Osmium;
+namespace OsmiumRuntime;
 
 [TestFixture]
 public class Test
@@ -10,7 +10,7 @@ public class Test
     [SetUp]
     public void Setup()
     {
-        var runtime = new Interpreter.Runtime();
+        var runtime = new Osmium.Runtime();
         runner = new ConsoleRunner(runtime);
     }
 

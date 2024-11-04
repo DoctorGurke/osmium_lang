@@ -1,6 +1,7 @@
 ﻿using Antlr4.Runtime;
+using Osmium.Language;
 
-namespace Osmium.Interpreter;
+namespace Osmium;
 
 public class RuntimeException : Exception
 {
@@ -18,6 +19,16 @@ public class ParserException : RuntimeException
 {
     public ParserException() : base() { }
     public ParserException(string message) : base(message) { }
+}
+
+public class ReturnException : Exception
+{
+    public object? Value { get; private set; }
+
+    public ReturnException(object? value)
+    {
+        Value = value;
+    }
 }
 
 /// <summary>

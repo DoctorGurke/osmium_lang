@@ -1,6 +1,6 @@
 ﻿using Antlr4.Runtime;
 
-namespace Osmium.Interpreter.Types;
+namespace Osmium.Language.Types;
 
 public class Lambda : IFunction
 {

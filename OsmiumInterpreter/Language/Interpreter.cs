@@ -1,24 +1,14 @@
 ﻿using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
-using Osmium.Interpreter.Operators;
-using Osmium.Interpreter.Types;
+using Osmium.Language.Operators;
+using Osmium.Language.Types;
 using System.Text;
-using static Osmium.Interpreter.OsmiumParser;
+using static Osmium.Language.OsmiumParser;
 
-namespace Osmium.Interpreter;
+namespace Osmium.Language;
 
 public class Interpreter : OsmiumParserBaseVisitor<object>, IMembers
 {
-    public class ReturnException : Exception
-    {
-        public object? Value { get; private set; }
-
-        public ReturnException(object? value)
-        {
-            Value = value;
-        }
-    }
-
     public static bool Debug { get; set; } = false;
 
     private SymbolTable SymbolTable { get; set; }
@@ -595,7 +585,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>, IMembers
 
     public override object VisitNamespace_declaration([NotNull] Namespace_declarationContext context)
     {
-        var identifier = (string)context.VARIABLE().GetText();
+        var identifier = context.VARIABLE().GetText();
 
         if (SymbolTable.HasSymbol(identifier))
             throw new RuntimeException($"Invalid redefinition of identifier {identifier}!");

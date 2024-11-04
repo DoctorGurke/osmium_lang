@@ -2,7 +2,7 @@
 using Antlr4.Runtime.Misc;
 using System.Text;
 
-namespace Osmium.Interpreter;
+namespace Osmium.Language;
 
 public class ParseTreeListener : OsmiumParserBaseListener
 {

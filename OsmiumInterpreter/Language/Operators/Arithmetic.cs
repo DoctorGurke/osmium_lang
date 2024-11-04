@@ -1,4 +1,4 @@
-﻿namespace Osmium.Interpreter.Operators;
+﻿namespace Osmium.Language.Operators;
 
 public static class Arithmetic
 {

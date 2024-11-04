@@ -1,6 +1,4 @@
-﻿using Osmium.Interpreter;
-
-namespace TestProject.Syntax;
+﻿namespace TestProject.Syntax;
 
 [TestFixture]
 public class BaseTypes

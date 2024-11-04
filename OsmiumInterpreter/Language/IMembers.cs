@@ -1,4 +1,4 @@
-﻿namespace Osmium.Interpreter;
+﻿namespace Osmium.Language;
 
 public interface IMembers
 {

@@ -1,6 +1,4 @@
-﻿using Osmium.Interpreter;
-
-namespace Osmium;
+﻿namespace OsmiumRuntime;
 
 public class ConsoleRunner : IMembers
 {

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
@@ -18,12 +18,12 @@
   <!--add our antlr4 lexer and parser definitions-->
   <ItemGroup>
 
-    <Antlr4 Include="Interpreter\OsmiumLexer.g4">
-      <Package>Osmium.Interpreter</Package>
+    <Antlr4 Include="Language\Specification\OsmiumLexer.g4">
+      <Package>Osmium.Language</Package>
     </Antlr4>
 
-    <Antlr4 Include="Interpreter\OsmiumParser.g4">
-      <Package>Osmium.Interpreter</Package>
+    <Antlr4 Include="Language\Specification\OsmiumParser.g4">
+      <Package>Osmium.Language</Package>
     </Antlr4>
 
   </ItemGroup>

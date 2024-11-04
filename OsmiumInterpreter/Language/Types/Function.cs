@@ -1,7 +1,6 @@
 ﻿using Antlr4.Runtime;
-using static Osmium.Interpreter.Interpreter;
 
-namespace Osmium.Interpreter.Types;
+namespace Osmium.Language.Types;
 
 public class Function : IFunction
 {

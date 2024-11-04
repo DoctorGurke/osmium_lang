@@ -1,7 +1,7 @@
-﻿using Osmium.Interpreter.Types;
+﻿using Osmium.Language.Types;
 using System.Text;
 
-namespace Osmium.Interpreter;
+namespace Osmium.Language;
 
 public static class Intrinsics
 {
