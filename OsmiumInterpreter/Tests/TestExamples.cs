@@ -15,6 +15,12 @@ public class TestExamples
         Runtime = new Runtime();
     }
 
+    [Test]
+    public void VerifyTestScript()
+    {
+        Assert.DoesNotThrow(() => Runtime!.Run(Script.Load("test.script")));
+    }
+
     [TestCaseSource(nameof(ExampleScripts))]
     public void VerifyScript(string script)
     {
