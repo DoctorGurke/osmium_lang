@@ -1,7 +1,4 @@
-﻿global using System;
-global using System.Collections.Generic;
-
-namespace Osmium;
+﻿namespace Osmium;
 
 public static class Log
 {
