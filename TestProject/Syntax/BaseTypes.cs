@@ -12,17 +12,10 @@ public class BaseTypes
         runtime = new Runtime();
     }
 
-    private void RunTest(string input, object result)
-    {
-        Assert.DoesNotThrow(() => { runtime!.Run(input); });
-        var output = runtime!.Members.GetSymbolValue("result");
-        Assert.That(output, Is.EqualTo(result));
-    }
-
     [Test]
     public void VerifyNull()
     {
-        RunTest("result = null;", null);
+        runtime!.VerifyResult("result = null;", null);
     }
 
     [TestCase("result = true;", true)]
@@ -32,14 +25,14 @@ public class BaseTypes
     [TestCase("result = true && false;", false)]
     public void VerifyBoolean(string input, object result)
     {
-        RunTest(input, result);
+        runtime!.VerifyResult(input, result);
     }
 
     [TestCase("result = 1;", 1)]
     [TestCase("result = -1;", -1)]
     public void VerifyInt(string input, object result)
     {
-        RunTest(input, result);
+        runtime!.VerifyResult(input, result);
     }
 
     [TestCase("result = 0.1f;", 0.1f)]
@@ -54,14 +47,14 @@ public class BaseTypes
     [TestCase("result = -1f;", -1f)]
     public void VerifyFloat(string input, object result)
     {
-        RunTest(input, result);
+        runtime!.VerifyResult(input, result);
     }
 
     [TestCase("result = \"Hello, World!\";", "Hello, World!")]
     [TestCase("result = \"äöüß'~^°\";", "äöüß'~^°")]
     public void VerifyString(string input, object result)
     {
-        RunTest(input, result);
+        runtime!.VerifyResult(input, result);
     }
 
     [TestCase("result = [1,2,3];", new int[] { 1, 2, 3 })]
@@ -71,7 +64,7 @@ public class BaseTypes
     public void VerifyList(string input, object result)
     {
         if (result is object[] array)
-            RunTest(input, array.ToList());
+            runtime!.VerifyResult(input, array.ToList());
     }
 
     [TestCase("list = [1,2,3,4,5]; result = list[1..];", new int[] { 2, 3, 4, 5 })]
@@ -80,7 +73,7 @@ public class BaseTypes
     public void VerifyListRange(string input, object result)
     {
         if (result is object[] array)
-            RunTest(input, array.ToList());
+            runtime!.VerifyResult(input, array.ToList());
     }
 
     [TestCase("list = [1,2,3]; result = list[0];", 1)]
@@ -89,9 +82,9 @@ public class BaseTypes
     public void VerifyListIndexOf(string input, object result)
     {
         if (result is object[] array)
-            RunTest(input, array.ToList());
+            runtime!.VerifyResult(input, array.ToList());
         else
-            RunTest(input, result);
+            runtime!.VerifyResult(input, result);
     }
 
     [TestCase("enum x = [e1,e2,e3]; result = x.e1;", 0)]
@@ -101,6 +94,6 @@ public class BaseTypes
     [TestCase("enum x = [e1,e2=3,e3]; result = x[3];", "e2")]
     public void VerifyEnum(string input, object result)
     {
-        RunTest(input, result);
+        runtime!.VerifyResult(input, result);
     }
 }

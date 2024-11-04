@@ -18,18 +18,17 @@ public class Expressions
     [TestCase("enum x = [state1, state2]; result = x.state2 + 10;", 11)]
     public void VerifyExpressions(string input, object result)
     {
-        Assert.DoesNotThrow(() => { runtime!.Run(input); });
-        Assert.That(runtime!.Members.GetSymbolValue("result"), Is.EqualTo(result));
+        runtime!.VerifyResult(input, result);
     }
 
-    [TestCase("x = 1 * 3;")]
-    [TestCase("x = 10 / 5;")]
-    [TestCase("x = 17 % 2;")]
-    [TestCase("x = 3 + 1;")]
-    [TestCase("x = 4 - 1;")]
-    public void VerifyArithmeticExpression(string input)
+    [TestCase("result = 1 * 3;", 3)]
+    [TestCase("result = 10 / 5;", 2)]
+    [TestCase("result = 17 % 2;", 1)]
+    [TestCase("result = 3 + 1;", 4)]
+    [TestCase("result = 4 - 1;", 3)]
+    public void VerifyArithmeticExpression(string input, object result)
     {
-        Assert.DoesNotThrow(() => { runtime!.Run(input, local: true); });
+        runtime!.VerifyResult(input, result);
     }
 
     [TestCase("x = * 1;")]
@@ -45,17 +44,17 @@ public class Expressions
         Assert.Throws<ParserException>(() => { runtime!.Run(input, local: true); });
     }
 
-    [TestCase("x = !true;")]
-    [TestCase("x = 5 > 3;")]
-    [TestCase("x = 10 >= 10;")]
-    [TestCase("x = 1 <= 3;")]
-    [TestCase("x = 5 != 1;")]
-    [TestCase("x = 1 == 1;")]
-    [TestCase("x = true && true;")]
-    [TestCase("x = true || false;")]
-    public void VerifyBooleanExpressions(string input)
+    [TestCase("result = !true;", false)]
+    [TestCase("result = 5 > 3;", true)]
+    [TestCase("result = 10 >= 10;", true)]
+    [TestCase("result = 1 <= 3;", true)]
+    [TestCase("result = 5 != 1;", true)]
+    [TestCase("result = 1 == 1;", true)]
+    [TestCase("result = true && true;", true)]
+    [TestCase("result = true || false;", true)]
+    public void VerifyBooleanExpressions(string input, object value)
     {
-        Assert.DoesNotThrow(() => { runtime!.Run(input, local: true); });
+        runtime!.VerifyResult(input, value);
     }
 
     [TestCase("x = !;")]
