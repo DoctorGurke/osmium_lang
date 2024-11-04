@@ -76,4 +76,14 @@ public class Expressions
     {
         Assert.Throws<ParserException>(() => { runtime!.Run(input, local: true); });
     }
+
+    [TestCase("result = 2 + 3 * 5;", 17)]
+    [TestCase("result = (2 + 3) * 5;", 25)]
+    [TestCase("result = 1 + 1 + 1 + 1 + 1 + 1 * 5;", 10)]
+    [TestCase("result = (1 + 1 + 1 + 1 + 1 + 1) * 5;", 30)]
+    [TestCase("result = -3 * 10 - 5;", -35)]
+    public void VerifyOperatorPriority(string input, object value)
+    {
+        runtime!.VerifyResult(input, value);
+    }
 }
