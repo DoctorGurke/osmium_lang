@@ -31,6 +31,11 @@ public class ReturnException : Exception
     }
 }
 
+public class AssertException : Exception
+{
+    public AssertException(string message) : base(message) { }
+}
+
 /// <summary>
 /// Interpreter interface to run osmium programs. 
 /// Maintains a symbol table but supports running programs independently as local.

@@ -111,11 +111,6 @@ public static class Intrinsics
         return returnCollection;
     }
 
-    public class AssertException : Exception
-    {
-        public AssertException(string message) : base(message) { }
-    }
-
     public static void Assert(object[] args)
     {
         if (args.Length < 1)
