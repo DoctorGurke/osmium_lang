@@ -16,7 +16,7 @@ public class BaseTypes
     {
         Assert.DoesNotThrow(() => { runtime!.Run(input); });
         var output = runtime!.Members.GetSymbolValue("result");
-        Assert.That(result, Is.EqualTo(output));
+        Assert.That(output, Is.EqualTo(result));
     }
 
     [Test]

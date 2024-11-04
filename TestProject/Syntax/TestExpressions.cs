@@ -19,7 +19,7 @@ public class TestExpressions
     public void VerifyExpressions(string input, object result)
     {
         Assert.DoesNotThrow(() => { runtime!.Run(input); });
-        Assert.That(result, Is.EqualTo(runtime!.Members.GetSymbolValue("result")));
+        Assert.That(runtime!.Members.GetSymbolValue("result"), Is.EqualTo(result));
     }
 
     [TestCase("x = 1 * 3;")]
