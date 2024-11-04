@@ -1,7 +1,7 @@
 ﻿namespace TestProject.Syntax;
 
 [TestFixture]
-public class TestExpressions
+public class Expressions
 {
     private Runtime? runtime;
 
