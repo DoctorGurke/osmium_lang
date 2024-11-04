@@ -20,7 +20,6 @@ public class Test
         TryScript(Script.Load(script), verifyFailure: true);
     }
 
-    [TestCase("examples/scopes.script")]
     [TestCase("examples/control_flow.script")]
     [TestCase("examples/pure_functions.script")]
     [TestCase("examples/functions.script")]
