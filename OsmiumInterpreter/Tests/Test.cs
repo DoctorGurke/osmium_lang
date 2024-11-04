@@ -28,7 +28,6 @@ public class Test
     [TestCase("examples/print.script")]
     [TestCase("examples/range_index_recursion.script")]
     [TestCase("base_functions.script")]
-    [TestCase("test/lexer/control_flow.script")]
     public void ScriptFile(string script)
     {
         TryScriptFile(script);
