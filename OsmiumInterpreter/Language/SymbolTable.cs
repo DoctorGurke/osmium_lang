@@ -16,6 +16,14 @@ public class SymbolTable : IMembers
         Parent = parent;
     }
 
+    public void UpdateIntrinsicFunctions()
+    {
+        if (Parent is null && Runtime.Instance is not null)
+        {
+            Runtime.Instance.GetIntrinsicFunctions().ToList().ForEach(pair => Symbols.Add(pair.Key, pair.Value));
+        }
+    }
+
     /// <summary>
     /// Set a symbol
     /// </summary>
