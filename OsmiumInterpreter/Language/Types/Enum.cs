@@ -45,4 +45,9 @@ public class Enum : IMembers
 
         throw new Exception($"Trying to get null state {Name}[{value}]!");
     }
+
+    public override string ToString()
+    {
+        return $"Enum:[Identifier:{Name}] Members:[{Members}]";
+    }
 }
