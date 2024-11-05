@@ -1,5 +1,6 @@
 # osmium_lang
 Custom interpreted functional programming language made with antlr4 and csharp.
+Automated testing done with NUnit3.
 
 # Main Features
 - Immutable variables
@@ -10,10 +11,17 @@ Custom interpreted functional programming language made with antlr4 and csharp.
 - Namespaces and scopes
 - Built-in functions `print`, `length`, `foreach`, `map`, `reduce`, `filter`, `assert`
 
+# Project Structure
 Targets .NET 7.0
 
-Build and run OsmiumRuntime to run osmium in a terminal.
-Interpreter, Parser and Lexer are in OsmiumInterpreter.
+### OsmiumInterpreter
+This contains the language specification via antlr4 .g4 files and the Runtime interface with the Interpreter and associated types.
+
+### OsmiumRuntime
+This contains the default console runner runtime, acting as an example usage of the OsmiumInterpreter.Runtime interface.
+
+### TestProject
+This contains syntax tests to verify everything works and no invalid syntax becomes valid.
 
 # Syntax Examples
 
@@ -135,3 +143,5 @@ tools {
 ```
 
 ## More examples can be found under project/scripts.
+
+
