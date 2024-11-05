@@ -332,6 +332,18 @@ public class Interpreter : OsmiumParserBaseVisitor<object>, IMembers
                 var intIndex = (int)VisitInt(index);
                 return members.GetIndexOf(intIndex);
             }
+
+            // identifier
+            if (ident.Length == 2 && ident[1] is IdentifierContext ident2)
+            {
+                var identifierIndex = (string)VisitIdentifier(ident2);
+                var identifierResult = Members.GetSymbolValue(identifierIndex);
+
+                if (identifierResult is int identIndex)
+                {
+                    return members.GetIndexOf(identIndex);
+                }
+            }
         }
         else if (value is string sourceString)
         {
