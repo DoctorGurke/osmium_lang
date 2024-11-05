@@ -83,6 +83,7 @@ public class BaseTypes : OsmiumTestRunner
     [TestCase("enum x = [e1,e2=3,e3]; result = x.e3;", 1)]
     [TestCase("enum x = [e1,e2,e3]; result = x[0];", "e1")]
     [TestCase("enum x = [e1,e2=3,e3]; result = x[3];", "e2")]
+    [TestCase("enum x = [e1,e2=3,e3]; y=3; result = x[y];", "e2")]
     public void VerifyEnum(string input, object result)
     {
         Runtime!.VerifyResult(input, result);
