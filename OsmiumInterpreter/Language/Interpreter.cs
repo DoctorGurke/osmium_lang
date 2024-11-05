@@ -17,6 +17,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>, IMembers
     public Interpreter()
     {
         SymbolTable = new SymbolTable();
+        SymbolTable.UpdateIntrinsicFunctions();
     }
 
     public Interpreter(SymbolTable parentSymbolTable)
@@ -175,37 +176,15 @@ public class Interpreter : OsmiumParserBaseVisitor<object>, IMembers
             parameters = (object[])VisitExpression_list(expression_list_context);
         }
 
-        // TODO: find intrinsics with attribute?
-        switch (identifier)
-        {
-            case "print":
-                Intrinsics.Print(parameters);
-                return null;
-            case "length":
-                return Intrinsics.Length(parameters);
-            case "foreach":
-                Intrinsics.ForEach(parameters);
-                return null;
-            case "map":
-                return Intrinsics.Map(parameters);
-            case "reduce":
-                return Intrinsics.Reduce(parameters);
-            case "filter":
-                return Intrinsics.Filter(parameters);
-            case "assert":
-                Intrinsics.Assert(parameters);
-                return null;
-        }
-
         var value = SymbolTable.GetSymbolValue(identifier);
 
-        if (value is not Function func)
+        if (value is not IFunction function)
             throw new InvalidOperationException($"Cannot invoke symbol: '{identifier}' : {value.GetType()}!");
 
         // new local interpreter for local symboltable => pure funcs
         var functionVisitor = new Interpreter();
 
-        return func.Invoke(functionVisitor, parameters);
+        return function.Invoke(functionVisitor, parameters);
     }
 
     /// <summary>

@@ -66,7 +66,6 @@ public static class Intrinsics
         foreach (var item in list)
         {
             var visitor = new Interpreter();
-            visitor.Members.UpdateIntrinsicFunctions();
             function.Invoke(visitor, new object[] { item });
         }
     }
@@ -85,7 +84,6 @@ public static class Intrinsics
         foreach (var item in list)
         {
             var visitor = new Interpreter();
-            visitor.Members.UpdateIntrinsicFunctions();
             var eval = function.Invoke(visitor, new object[] { item });
             returnCollection.Add(eval);
         }
@@ -107,7 +105,6 @@ public static class Intrinsics
         foreach (var item in list)
         {
             var visitor = new Interpreter();
-            visitor.Members.UpdateIntrinsicFunctions();
             acc = function.Invoke(visitor, new object[] { acc, item });
         }
 
@@ -128,7 +125,6 @@ public static class Intrinsics
         foreach (var item in list)
         {
             var visitor = new Interpreter();
-            visitor.Members.UpdateIntrinsicFunctions();
             var cond = (bool)(function.Invoke(visitor, new object[] { item }) ?? false);
             if (cond)
                 returnCollection.Add(item);
