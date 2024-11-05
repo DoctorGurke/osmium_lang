@@ -24,6 +24,7 @@ public class MethodWrapper : IFunction
         }
         catch (TargetInvocationException ex)
         {
+            // Need to peel back to get AssertException
             ExceptionDispatchInfo.Capture(ex.InnerException!).Throw();
         }
 
