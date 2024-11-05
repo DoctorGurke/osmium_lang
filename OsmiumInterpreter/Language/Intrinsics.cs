@@ -1,5 +1,4 @@
 ﻿using Osmium.Language.Types;
-using System.Text;
 
 namespace Osmium.Language;
 
@@ -29,14 +28,7 @@ public static class Intrinsics
         // list parameter
         if (parameter is List<object> list)
         {
-            var sb = new StringBuilder();
-
-            foreach (var item in list)
-            {
-                sb.Append($"{item}, ");
-            }
-
-            printString = sb.ToString().Trim().Trim(',');
+            printString = $"[{string.Join(", ", list.ToArray())}]";
         }
 
         Console.WriteLine($"{printString}");
