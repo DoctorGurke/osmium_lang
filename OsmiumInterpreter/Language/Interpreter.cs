@@ -739,18 +739,36 @@ public class Interpreter : OsmiumParserBaseVisitor<object>, IMembers
 
     public override object VisitRange_start([NotNull] Range_startContext context)
     {
-        var evaluate = int.Parse(context.GetText());
+        int? start;
+        if (context.identifier() is IdentifierContext identifierContext)
+        {
+            var identifier = (string)VisitIdentifier(identifierContext);
+            start = (int)SymbolTable.GetSymbolValue(identifier);
+        }
+        else
+        {
+            start = int.Parse(context.GetText());
+        }
 
-        PrintContext(context, evaluate);
-        return evaluate;
+        PrintContext(context, start);
+        return start;
     }
 
     public override object VisitRange_end([NotNull] Range_endContext context)
     {
-        var evaluate = int.Parse(context.GetText());
+        int? end;
+        if (context.identifier() is IdentifierContext identifierContext)
+        {
+            var identifier = (string)VisitIdentifier(identifierContext);
+            end = (int)SymbolTable.GetSymbolValue(identifier);
+        }
+        else
+        {
+            end = int.Parse(context.GetText());
+        }
 
-        PrintContext(context, evaluate);
-        return evaluate;
+        PrintContext(context, end);
+        return end;
     }
 
     public override object VisitList([NotNull] ListContext context)

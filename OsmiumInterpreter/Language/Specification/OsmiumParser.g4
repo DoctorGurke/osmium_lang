@@ -9,8 +9,8 @@ float : sign? FLOAT ;
 string : STRING ;
 boolean : OP_TRUE | OP_FALSE ;
 
-range_start : INT;
-range_end : INT;
+range_start : INT | identifier;
+range_end : INT | identifier;
 range 
 	: range_start RANGE 
 	| RANGE range_end
