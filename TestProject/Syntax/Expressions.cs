@@ -78,4 +78,13 @@ public class Expressions : OsmiumTestRunner
     {
         Runtime!.VerifyResult(input, value);
     }
+
+    [TestCase("result=\"foo\"+\"bar\";", "foobar")]
+    [TestCase("result=\"foo\"+1;", "foo1")]
+    [TestCase("x=1;result=\"foo\"+x;", "foo1")]
+    [TestCase("result=\"foo\"+null+\"bar\";", "foobar")]
+    public void VerifyStringConcat(string input, object value)
+    {
+        Runtime!.VerifyResult(input, value);
+    }
 }
