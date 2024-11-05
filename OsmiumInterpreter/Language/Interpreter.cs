@@ -118,11 +118,6 @@ public class Interpreter : OsmiumParserBaseVisitor<object>, IMembers
             return VisitOp_index(op_index_context);
         }
 
-        if (context.function_lambda() is Function_lambdaContext lambda_context)
-        {
-            return VisitFunction_lambda(lambda_context);
-        }
-
         if (context.function_expression() is Function_expressionContext function_expression_context)
         {
             return VisitFunction_expression(function_expression_context);
@@ -354,22 +349,6 @@ public class Interpreter : OsmiumParserBaseVisitor<object>, IMembers
         }
 
         return list.GetRange(startIndex, count);
-    }
-
-    public override object VisitFunction_lambda([NotNull] Function_lambdaContext context)
-    {
-        PrintContext(context);
-
-        var expression = context.expression();
-
-        string[] param_list = Array.Empty<string>();
-
-        if (context.@params()?.identifier_list() is Identifier_listContext list)
-        {
-            param_list = (string[])VisitIdentifier_list(list);
-        }
-
-        return new Lambda(expression, param_list);
     }
 
     /// <summary>

@@ -138,7 +138,6 @@ expression
 	| invocation 
 	| op_index // indexof
 	| op_member 
-	| function_lambda // anonymous implicit expression
 	| function_expression // anonymous function 
 
 	| LEFT_BRACKET expression RIGHT_BRACKET
@@ -182,11 +181,6 @@ enum_declaration
 //
 // function
 //
-
-// anonymous function implicitly evaluated as an expression
-function_lambda 
-	: LAMBDA params? COLON expression END 
-	;
 
 // anonymous function
 function_expression 

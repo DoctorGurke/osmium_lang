@@ -40,7 +40,6 @@ IF				: 'if' ;
 ELSE			: 'else' ;
 FOR				: 'for' ;
 ENUM			: 'enum' ;
-LAMBDA			: 'lambda' ;
 FUNCTION		: 'function' ;
 RETURN			: 'return' ;
 END				: 'end' ;
