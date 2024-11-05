@@ -333,6 +333,43 @@ public class Interpreter : OsmiumParserBaseVisitor<object>, IMembers
                 return members.GetIndexOf(intIndex);
             }
         }
+        else if (value is string sourceString)
+        {
+            // direct index
+            if (context.@int() is IntContext index)
+            {
+                var intIndex = (int)VisitInt(index);
+                return sourceString.Substring(intIndex, 1);
+            }
+
+            // substring
+            if (context.range() is RangeContext range)
+            {
+                var indexRange = (Types.Range)VisitRange(range);
+                var start = indexRange.StartIndex ?? 0;
+                var length = (indexRange.EndIndex + 1 ?? sourceString.Length) - start;
+                return sourceString.Substring(start, length);
+            }
+
+            // identifier
+            if (ident.Length == 2 && ident[1] is IdentifierContext ident2)
+            {
+                var identifierIndex = (string)VisitIdentifier(ident2);
+                var identifierResult = Members.GetSymbolValue(identifierIndex);
+
+                if (identifierResult is Types.Range identRange)
+                {
+                    var start = identRange.StartIndex ?? 0;
+                    var length = (identRange.EndIndex ?? sourceString.Length) - start;
+                    return sourceString.Substring(start, length);
+                }
+
+                if (identifierResult is int identIndex)
+                {
+                    return sourceString.Substring(identIndex, 1);
+                }
+            }
+        }
 
         return null;
     }
