@@ -53,4 +53,19 @@ public class TestBaseFunctions
     {
         Assert.Throws<ArgumentException>(() => Intrinsics.Length(parameters));
     }
+
+    [TestCase(new object[] { 1 })]
+    [TestCase(new object[] { 1, 2, 3 })]
+    public void VerifyForEach(object[] list)
+    {
+        Assert.Throws<NotImplementedException>(() => Intrinsics.ForEach(new object[] { list.ToList(), new MockFunction() }));
+    }
+
+    [TestCase()]
+    [TestCase("")]
+    [TestCase("", "", "")]
+    public void VerifyInvalidForEach(params object[] parameters)
+    {
+        Assert.Throws<ArgumentException>(() => Intrinsics.ForEach(parameters));
+    }
 }
