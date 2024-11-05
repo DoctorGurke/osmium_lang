@@ -54,6 +54,7 @@ public class Runtime : IMembers
         Instance = this;
 
         SymbolTable = new SymbolTable();
+        SymbolTable.UpdateIntrinsicFunctions();
         Debug = debug;
     }
 
