@@ -8,6 +8,7 @@ public abstract class OsmiumTestRunner
     protected void SetUp()
     {
         Runtime = null;
-        Runtime = new Runtime();
+        Runtime = new Runtime(debug: true);
+
     }
 }

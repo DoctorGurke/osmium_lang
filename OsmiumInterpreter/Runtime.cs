@@ -44,11 +44,12 @@ public class Runtime : IMembers
 {
     public SymbolTable Members => SymbolTable;
     private SymbolTable SymbolTable { get; set; }
+    public bool Debug { get; private set; }
 
-
-    public Runtime()
+    public Runtime(bool debug = false)
     {
         SymbolTable = new SymbolTable();
+        Debug = debug;
     }
 
     /// <summary>
@@ -61,7 +62,7 @@ public class Runtime : IMembers
         var program = ParseProgram(input);
 
         // attach runtime symbol table for direct evaluation
-        var visitor = new Interpreter();
+        var visitor = new Interpreter() { Debug = this.Debug };
         if (!local)
             visitor.OverrideSymbolTable(SymbolTable);
 

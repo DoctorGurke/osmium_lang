@@ -9,7 +9,7 @@ namespace Osmium.Language;
 
 public class Interpreter : OsmiumParserBaseVisitor<object>, IMembers
 {
-    public static bool Debug { get; set; } = false;
+    public bool Debug { get; set; } = false;
 
     private SymbolTable SymbolTable { get; set; }
     public SymbolTable Members => SymbolTable;
@@ -33,7 +33,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>, IMembers
         SymbolTable = outputTable;
     }
 
-    private static void PrintContext(ParserRuleContext context, object? value = null)
+    private void PrintContext(ParserRuleContext context, object? value = null)
     {
         if (!Debug || context is null)
             return;
