@@ -372,24 +372,6 @@ public class Interpreter : OsmiumParserBaseVisitor<object>, IMembers
         return new Lambda(expression, param_list);
     }
 
-    public override object VisitFunction_expression([NotNull] Function_expressionContext context)
-    {
-        PrintContext(context);
-
-        var program = context.program_block();
-
-        string[] param_list = Array.Empty<string>();
-
-        if (context.@params()?.identifier_list() is Identifier_listContext list)
-        {
-            param_list = (string[])VisitIdentifier_list(list);
-        }
-
-        var func = new Function(null, program, param_list);
-
-        return func;
-    }
-
     /// <summary>
     /// Returns expression list as object array.
     /// </summary>
@@ -466,16 +448,29 @@ public class Interpreter : OsmiumParserBaseVisitor<object>, IMembers
         return VisitChildren(context);
     }
 
+    public override object VisitFunction_expression([NotNull] Function_expressionContext context)
+    {
+        PrintContext(context);
+
+        var program = context.program_block();
+
+        string[] param_list = Array.Empty<string>();
+
+        if (context.@params()?.identifier_list() is Identifier_listContext list)
+        {
+            param_list = (string[])VisitIdentifier_list(list);
+        }
+
+        var func = new Function(null, program, param_list);
+
+        return func;
+    }
+
     public override object VisitFunction_declaration([NotNull] Function_declarationContext context)
     {
         PrintContext(context);
 
         var identifier = (string)VisitIdentifier(context.identifier());
-
-        if (SymbolTable.HasSymbol(identifier))
-        {
-            throw new InvalidOperationException($"Cannot re-define immutable identifier: {identifier}");
-        }
 
         var program = context.program_block();
 
@@ -510,11 +505,6 @@ public class Interpreter : OsmiumParserBaseVisitor<object>, IMembers
         var identifier = (string)VisitIdentifier(context.identifier());
 
         PrintContext(context, identifier);
-
-        if (SymbolTable.HasSymbol(identifier))
-        {
-            throw new InvalidOperationException($"Cannot re-define immutable identifier: {identifier}");
-        }
 
         Dictionary<string, int?> members = new();
         if (context.enum_member_list() is Enum_member_listContext enum_member_list_context)
