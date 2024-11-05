@@ -103,4 +103,9 @@ public class SymbolTable : IMembers
         symbol = null;
         return false;
     }
+
+    public override string ToString()
+    {
+        return $"SymbolTable MemberCount:[{Symbols.Count}]";
+    }
 }
