@@ -2,9 +2,15 @@
 
 public class ConsoleRunner : IMembers
 {
-    public static void Main(string[] _)
+    public static void Main(string[] args)
     {
-        var runtime = new Runtime();
+        var debug = false;
+        if (args.Length > 0 && args[0] == "-debug")
+        {
+            debug = true;
+            Log.Info($"Debug Enabled.");
+        }
+        var runtime = new Runtime(debug: debug);
         Instance = new ConsoleRunner(runtime);
         Instance.StartRuntime();
     }

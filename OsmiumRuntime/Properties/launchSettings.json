@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "OsmiumRuntime": {
+      "commandName": "Project",
+      "commandLineArgs": "-debug"
+    }
+  }
+}
