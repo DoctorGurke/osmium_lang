@@ -54,6 +54,6 @@ public class Function : IFunction
 
     public override string ToString()
     {
-        return $"Function:[{(Identifier is null ? "Lambda" : $"Identifier:{Identifier}")}] ParamCount:[{Parameters.Length}]";
+        return $"Function:[{(Identifier is null ? "Lambda" : $"{Identifier}")}] Params:[{string.Join(", ", Parameters)}]";
     }
 }

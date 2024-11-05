@@ -19,4 +19,9 @@ public class MethodWrapper : IFunction
     {
         throw new NotImplementedException();
     }
+
+    public override string ToString()
+    {
+        return $"Function:[{Identifier}] Params:[{string.Join(", ", Parameters)}]";
+    }
 }
