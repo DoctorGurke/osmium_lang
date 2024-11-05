@@ -35,9 +35,6 @@ public class Function : IFunction
         for (int i = 0; i < argCount; i++)
         {
             var symbol = Parameters[i];
-            if (visitor.Members.HasSymbol(symbol))
-                throw new InvalidOperationException($"local param {symbol} already defined ;(");
-
             visitor.Members.SetSymbol(symbol, args[i]);
         }
 
