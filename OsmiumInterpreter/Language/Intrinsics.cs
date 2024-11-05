@@ -17,7 +17,7 @@ public class IntrinsicFunctionAttribute : Attribute
 
 public static class Intrinsics
 {
-    [IntrinsicFunction(identifier: "print", "list")]
+    [IntrinsicFunction(identifier: "print", "message")]
     public static void Print(object[] args)
     {
         if (args is null || args.Length != 1)
@@ -65,7 +65,9 @@ public static class Intrinsics
 
         foreach (var item in list)
         {
-            function.Invoke(new Interpreter(), new object[] { item });
+            var visitor = new Interpreter();
+            visitor.Members.UpdateIntrinsicFunctions();
+            function.Invoke(visitor, new object[] { item });
         }
     }
 
@@ -82,7 +84,9 @@ public static class Intrinsics
 
         foreach (var item in list)
         {
-            var eval = function.Invoke(new Interpreter(), new object[] { item });
+            var visitor = new Interpreter();
+            visitor.Members.UpdateIntrinsicFunctions();
+            var eval = function.Invoke(visitor, new object[] { item });
             returnCollection.Add(eval);
         }
 
@@ -102,7 +106,9 @@ public static class Intrinsics
 
         foreach (var item in list)
         {
-            acc = function.Invoke(new Interpreter(), new object[] { acc, item });
+            var visitor = new Interpreter();
+            visitor.Members.UpdateIntrinsicFunctions();
+            acc = function.Invoke(visitor, new object[] { acc, item });
         }
 
         return acc;
@@ -121,7 +127,9 @@ public static class Intrinsics
 
         foreach (var item in list)
         {
-            var cond = (bool)(function.Invoke(new Interpreter(), new object[] { item }) ?? false);
+            var visitor = new Interpreter();
+            visitor.Members.UpdateIntrinsicFunctions();
+            var cond = (bool)(function.Invoke(visitor, new object[] { item }) ?? false);
             if (cond)
                 returnCollection.Add(item);
         }
