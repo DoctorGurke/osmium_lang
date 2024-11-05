@@ -1,5 +1,6 @@
 ﻿using Antlr4.Runtime;
 using Osmium.Language;
+using Osmium.Language.Types;
 
 namespace Osmium;
 
@@ -45,26 +46,46 @@ public class Runtime : IMembers
     public SymbolTable Members => SymbolTable;
     private SymbolTable SymbolTable { get; set; }
     public bool Debug { get; private set; }
+    public static Runtime? Instance { get; set; }
 
     public Runtime(bool debug = false)
     {
+        Instance = null;
+        Instance = this;
+
         SymbolTable = new SymbolTable();
-        GetIntrinsicFunctions();
         Debug = debug;
     }
 
-    private void GetIntrinsicFunctions()
+    private Dictionary<string, IFunction>? _intrinsicFunctions { get; set; }
+    public Dictionary<string, IFunction> GetIntrinsicFunctions()
     {
+        if (_intrinsicFunctions is not null)
+            return _intrinsicFunctions;
+
         var intrinsics = AppDomain.CurrentDomain.GetAssemblies() // Returns all currenlty loaded assemblies
         .SelectMany(x => x.GetTypes()) // returns all types defined in this assemblies
         .Where(x => x.IsClass) // only yields classes
         .SelectMany(x => x.GetMethods()) // returns all methods defined in those classes
         .Where(x => x.IsStatic && x.GetCustomAttributes(typeof(IntrinsicFunctionAttribute), false).FirstOrDefault() != null); // returns only methods that have the InvokeAttribute
 
+        var dict = new Dictionary<string, IFunction>();
+
         foreach (var symbol in intrinsics)
         {
-            Log.Info(symbol);
+            var attribute = symbol.GetCustomAttributes(typeof(IntrinsicFunctionAttribute), false).FirstOrDefault();
+            if (attribute is not IntrinsicFunctionAttribute intrinsic)
+                continue;
+
+            var identifier = intrinsic.Identifier;
+            var parameters = intrinsic.Parameters;
+            var method = new MethodWrapper(identifier, symbol, parameters);
+            Log.Info($"{method}");
+            dict.Add(identifier, method);
         }
+
+        _intrinsicFunctions = dict;
+        return dict;
     }
 
     /// <summary>
