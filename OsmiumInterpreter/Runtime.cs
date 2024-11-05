@@ -81,7 +81,6 @@ public class Runtime : IMembers
             var identifier = intrinsic.Identifier;
             var parameters = intrinsic.Parameters;
             var method = new MethodWrapper(identifier, symbol, parameters);
-            Log.Info($"{method}");
             dict.Add(identifier, method);
         }
 
