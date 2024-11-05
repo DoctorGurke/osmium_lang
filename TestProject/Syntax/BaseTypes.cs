@@ -48,6 +48,16 @@ public class BaseTypes : OsmiumTestRunner
         Runtime!.VerifyResult(input, result);
     }
 
+    [TestCase("x=\"foobar\";result=x[0];", "f")]
+    [TestCase("x=\"foobar\";y=0;result=x[y];", "f")]
+    [TestCase("x=\"foobar\";result=x[0..];", "foobar")]
+    [TestCase("x=\"foobar\";result=x[..3];", "foob")]
+    [TestCase("x=\"foobar\";result=x[1..3];", "oob")]
+    public void VerifyStringIndexOf(string input, object result)
+    {
+        Runtime!.VerifyResult(input, result);
+    }
+
     [TestCase("result = [1,2,3];", new int[] { 1, 2, 3 })]
     [TestCase("result = [1f,2f,3f];", new float[] { 1f, 2f, 3f })]
     [TestCase("result = [\"a\",\"b\",\"c\"];", new string[] { "a", "b", "c" })]
