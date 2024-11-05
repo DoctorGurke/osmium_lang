@@ -47,6 +47,14 @@ public static class Arithmetic
         {
             return TryBinaryBooleanArithmetic(op, @bool, operand2);
         }
+        else if (operand1 is string || operand2 is string)
+        {
+            switch (op)
+            {
+                case OsmiumParser.OP_ADDITION:
+                    return $"{operand1}{operand2}";
+            }
+        }
 
         throw new InvalidOperationException($"Invalid binary operation: {op} [{operand1?.GetType()}]->[{operand2?.GetType()}]");
     }
