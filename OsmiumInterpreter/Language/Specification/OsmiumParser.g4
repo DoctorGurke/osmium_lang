@@ -103,14 +103,6 @@ for_statement
 	| FOR LEFT_BRACKET int RIGHT_BRACKET COLON program_block END
 	;
 
-do_while_statement 
-	: DO WHILE LEFT_BRACKET expression RIGHT_BRACKET COLON program_block END
-	;
-
-while_statement 
-	: WHILE LEFT_BRACKET expression RIGHT_BRACKET COLON program_block END
-	;
-
 break_statement 
 	: BREAK 
 	;
