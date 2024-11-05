@@ -22,6 +22,13 @@ public class TestBaseFunctions
         Assert.DoesNotThrow(() => Intrinsics.Print(parameters));
     }
 
+    [Test]
+    public void VerifyListPrint()
+    {
+        var list = new int[] { 1, 2, 3 };
+        Assert.DoesNotThrow(() => Intrinsics.Print(new object[] { list.ToList() }));
+    }
+
     [TestCase("", "")]
     [TestCase()]
     public void VerifyInvalidPrint(params object[] parameters)
