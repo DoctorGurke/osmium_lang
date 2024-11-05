@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Runtime.ExceptionServices;
 
 namespace Osmium.Language.Types;
 
@@ -17,7 +18,16 @@ public class MethodWrapper : IFunction
 
     public object? Invoke(Interpreter visitor, object[] parameters)
     {
-        throw new NotImplementedException();
+        try
+        {
+            return Method.Invoke(null, new object[] { parameters });
+        }
+        catch (TargetInvocationException ex)
+        {
+            ExceptionDispatchInfo.Capture(ex.InnerException!).Throw();
+        }
+
+        return null;
     }
 
     public override string ToString()
