@@ -20,7 +20,7 @@ public static class Intrinsics
     public static void Print(object[] args)
     {
         if (args is null || args.Length != 1)
-            throw new ArgumentException($"Invalid arg count for intrinsic Print. Expected: object");
+            throw new ArgumentException($"Invalid arg count for function 'print'. Expected: object");
 
         var parameter = args[0];
         string printString = $"{parameter}";
@@ -38,10 +38,10 @@ public static class Intrinsics
     public static int Length(object[] args)
     {
         if (args is null || args.Length != 1)
-            throw new ArgumentException($"Invalid arg count for intrinsic Length. Expected: list");
+            throw new ArgumentException($"Invalid arg count for function 'length'. Expected: list");
 
         if (args[0] is not IList<object> list)
-            throw new ArgumentException($"Invalid arg types for intrinsic Length. Expected: list. Got: {args[0].GetType()}");
+            throw new ArgumentException($"Invalid arg types for function 'length'. Expected: list. Got: {args[0].GetType()}");
 
         return list.Count;
     }
@@ -50,10 +50,10 @@ public static class Intrinsics
     public static void ForEach(object[] args)
     {
         if (args is null || args.Length != 2)
-            throw new ArgumentException($"Invalid arg count for intrinsic ForEach. Expected: list, lambda");
+            throw new ArgumentException($"Invalid arg count for function 'foreach'. Expected: list, lambda");
 
         if (args[0] is not IList<object> list || args[1] is not IFunction function)
-            throw new ArgumentException($"Invalid arg types for intrinsic ForEach. Expected: list, lambda. Got: {args[0].GetType()}, {args[1].GetType()}");
+            throw new ArgumentException($"Invalid arg types for function 'foreach'. Expected: list, lambda. Got: {args[0].GetType()}, {args[1].GetType()}");
 
         foreach (var item in list)
         {
@@ -66,10 +66,10 @@ public static class Intrinsics
     public static List<object?> Map(object[] args)
     {
         if (args is null || args.Length != 2)
-            throw new ArgumentException($"Invalid arg count for intrinsic Map. Expected: list, lambda");
+            throw new ArgumentException($"Invalid arg count for function 'map'. Expected: list, lambda");
 
         if (args[0] is not IList<object> list || args[1] is not IFunction function)
-            throw new ArgumentException($"Invalid arg types for intrinsic Map. Expected: list, lambda. Got: {args[0].GetType()}, {args[1].GetType()}");
+            throw new ArgumentException($"Invalid arg types for function 'map'. Expected: list, lambda. Got: {args[0].GetType()}, {args[1].GetType()}");
 
         var returnCollection = new List<object?>();
 
@@ -87,10 +87,10 @@ public static class Intrinsics
     public static object Reduce(object[] args)
     {
         if (args is null || args.Length != 3)
-            throw new ArgumentException($"Invalid arg count for intrinsic Reduce. Expected: list, lambda, object");
+            throw new ArgumentException($"Invalid arg count for function 'reduce'. Expected: list, lambda, object");
 
         if (args[0] is not IList<object> list || args[1] is not IFunction function)
-            throw new ArgumentException($"Invalid arg types for intrinsic Reduce. Expected: list, lambda, object. Got: {args[0].GetType()}, {args[1].GetType()}, {args[2].GetType()}");
+            throw new ArgumentException($"Invalid arg types for function 'reduce'. Expected: list, lambda, object. Got: {args[0].GetType()}, {args[1].GetType()}, {args[2].GetType()}");
 
         var acc = args[2];
 
@@ -107,10 +107,10 @@ public static class Intrinsics
     public static List<object> Filter(object[] args)
     {
         if (args is null || args.Length != 2)
-            throw new ArgumentException($"Invalid arg count for intrinsic Filter. Expected: list, lambda");
+            throw new ArgumentException($"Invalid arg count for function 'filter'. Expected: list, lambda");
 
         if (args[0] is not IList<object> list || args[1] is not IFunction function)
-            throw new ArgumentException($"Invalid arg types for intrinsic Filter. Expected: list, lambda. Got: {args[0].GetType()}, {args[1].GetType()}");
+            throw new ArgumentException($"Invalid arg types for function 'filter'. Expected: list, lambda. Got: {args[0].GetType()}, {args[1].GetType()}");
 
         var returnCollection = new List<object>();
 
@@ -129,10 +129,10 @@ public static class Intrinsics
     public static void Assert(object[] args)
     {
         if (args.Length < 1)
-            throw new ArgumentException($"Invalid arg count for assert. Expected 2: condition, optional:message. Got {args.Length}.");
+            throw new ArgumentException($"Invalid arg count for function 'assert'. Expected 2: condition, optional:message. Got {args.Length}.");
 
         if (args[0] is not bool condition)
-            throw new ArgumentException($"Invalid arg types for assert. Expected condition. Got: {args[0].GetType()}");
+            throw new ArgumentException($"Invalid arg types for function 'assert'. Expected condition. Got: {args[0].GetType()}");
 
         if (condition)
             return;
