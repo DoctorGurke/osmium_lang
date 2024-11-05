@@ -3,8 +3,12 @@ using System.Text;
 
 namespace Osmium.Language;
 
+[AttributeUsage(AttributeTargets.Method)]
+public class IntrinsicFunctionAttribute : Attribute { }
+
 public static class Intrinsics
 {
+    [IntrinsicFunction]
     public static void Print(object[] args)
     {
         if (args is null || args.Length != 1)
@@ -29,6 +33,7 @@ public static class Intrinsics
         Console.WriteLine($"{printString}");
     }
 
+    [IntrinsicFunction]
     public static int Length(object[] args)
     {
         if (args is null || args.Length != 1)
@@ -40,6 +45,7 @@ public static class Intrinsics
         return collection.Count;
     }
 
+    [IntrinsicFunction]
     public static void ForEach(object[] args)
     {
         if (args is null || args.Length != 2)
@@ -54,6 +60,7 @@ public static class Intrinsics
         }
     }
 
+    [IntrinsicFunction]
     public static List<object?> Map(object[] args)
     {
         if (args is null || args.Length != 2)
@@ -73,6 +80,7 @@ public static class Intrinsics
         return returnCollection;
     }
 
+    [IntrinsicFunction]
     public static object Reduce(object[] args)
     {
         if (args is null || args.Length != 3)
@@ -91,6 +99,7 @@ public static class Intrinsics
         return acc;
     }
 
+    [IntrinsicFunction]
     public static List<object> Filter(object[] args)
     {
         if (args is null || args.Length != 2)
@@ -111,6 +120,7 @@ public static class Intrinsics
         return returnCollection;
     }
 
+    [IntrinsicFunction]
     public static void Assert(object[] args)
     {
         if (args.Length < 1)

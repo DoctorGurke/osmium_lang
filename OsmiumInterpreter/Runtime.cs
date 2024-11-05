@@ -49,7 +49,22 @@ public class Runtime : IMembers
     public Runtime(bool debug = false)
     {
         SymbolTable = new SymbolTable();
+        GetIntrinsicFunctions();
         Debug = debug;
+    }
+
+    private void GetIntrinsicFunctions()
+    {
+        var intrinsics = AppDomain.CurrentDomain.GetAssemblies() // Returns all currenlty loaded assemblies
+        .SelectMany(x => x.GetTypes()) // returns all types defined in this assemblies
+        .Where(x => x.IsClass) // only yields classes
+        .SelectMany(x => x.GetMethods()) // returns all methods defined in those classes
+        .Where(x => x.IsStatic && x.GetCustomAttributes(typeof(IntrinsicFunctionAttribute), false).FirstOrDefault() != null); // returns only methods that have the InvokeAttribute
+
+        foreach (var symbol in intrinsics)
+        {
+            Log.Info(symbol);
+        }
     }
 
     /// <summary>
