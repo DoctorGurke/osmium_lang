@@ -68,4 +68,73 @@ public class TestBaseFunctions
     {
         Assert.Throws<ArgumentException>(() => Intrinsics.ForEach(parameters));
     }
+
+    [TestCase(new object[] { 1 })]
+    [TestCase(new object[] { 1, 2, 3 })]
+    public void VerifyMap(object[] list)
+    {
+        Assert.Throws<NotImplementedException>(() => Intrinsics.Map(new object[] { list.ToList(), new MockFunction() }));
+    }
+
+    [TestCase()]
+    [TestCase("")]
+    [TestCase("", "", "")]
+    public void VerifyInvalidMap(params object[] parameters)
+    {
+        Assert.Throws<ArgumentException>(() => Intrinsics.Map(parameters));
+    }
+
+    [TestCase(new object[] { 1 })]
+    [TestCase(new object[] { 1, 2, 3 })]
+    public void VerifyReduce(object[] list)
+    {
+        Assert.Throws<NotImplementedException>(() => Intrinsics.Reduce(new object[] { list.ToList(), new MockFunction(), 0 }));
+    }
+
+    [TestCase()]
+    [TestCase("")]
+    [TestCase("", "", "", "")]
+    public void VerifyInvalidReduce(params object[] parameters)
+    {
+        Assert.Throws<ArgumentException>(() => Intrinsics.Map(parameters));
+    }
+
+    [TestCase(new object[] { 1 })]
+    [TestCase(new object[] { 1, 2, 3 })]
+    public void VerifyFilter(object[] list)
+    {
+        Assert.Throws<NotImplementedException>(() => Intrinsics.Filter(new object[] { list.ToList(), new MockFunction() }));
+    }
+
+    [TestCase()]
+    [TestCase("")]
+    [TestCase("", "", "")]
+    public void VerifyInvalidFilter(params object[] parameters)
+    {
+        Assert.Throws<ArgumentException>(() => Intrinsics.Filter(parameters));
+    }
+
+    [TestCase(true)]
+    [TestCase(true, "message")]
+    [TestCase(true, 1)]
+    public void VerifyAssertPass(params object[] parameters)
+    {
+        Assert.DoesNotThrow(() => Intrinsics.Assert(parameters));
+    }
+
+    [TestCase(false)]
+    [TestCase(false, "message")]
+    [TestCase(false, 1)]
+    public void VerifyAssertFail(params object[] parameters)
+    {
+        Assert.Throws<AssertException>(() => Intrinsics.Assert(parameters));
+    }
+
+    [TestCase()]
+    [TestCase(1)]
+    [TestCase("")]
+    public void VerifyInvalidAssert(params object[] parameters)
+    {
+        Assert.Throws<ArgumentException>(() => Intrinsics.Assert(parameters));
+    }
 }
