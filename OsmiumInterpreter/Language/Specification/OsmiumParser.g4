@@ -72,9 +72,7 @@ jump_statement
 control_flow 
 	: scope 
 	| if_statement 
-	| for_statement 
-	| do_while_statement 
-	| while_statement
+	| for_statement
 	;
 
 scope 
