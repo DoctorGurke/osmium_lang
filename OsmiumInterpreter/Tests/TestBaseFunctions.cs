@@ -35,4 +35,22 @@ public class TestBaseFunctions
     {
         Assert.Throws<ArgumentException>(() => Intrinsics.Print(parameters));
     }
+
+    [TestCase(new object[] { }, 0)]
+    [TestCase(new object[] { 1 }, 1)]
+    [TestCase(new object[] { 1, 2, 3 }, 3)]
+    public void VerifyLength(object[] list, int count)
+    {
+        int result = -1;
+        Assert.DoesNotThrow(() => { result = Intrinsics.Length(new object[] { list.ToList() }); });
+        Assert.That(result, Is.EqualTo(count));
+    }
+
+    [TestCase()]
+    [TestCase("")]
+    [TestCase(1, 2)]
+    public void VerifyInvalidLength(params object[] parameters)
+    {
+        Assert.Throws<ArgumentException>(() => Intrinsics.Length(parameters));
+    }
 }
