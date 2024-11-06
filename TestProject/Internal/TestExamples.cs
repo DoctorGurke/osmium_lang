@@ -1,7 +1,6 @@
-﻿using NUnit.Framework;
-using System.Reflection;
+﻿using System.Reflection;
 
-namespace Osmium.Tests;
+namespace TestProject.Internal;
 
 [TestFixture]
 public class TestExamples

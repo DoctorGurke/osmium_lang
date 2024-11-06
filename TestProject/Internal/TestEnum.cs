@@ -1,7 +1,6 @@
-﻿using NUnit.Framework;
-using Enum = Osmium.Language.Types.Enum;
+﻿using Enum = Osmium.Language.Types.Enum;
 
-namespace Osmium.Tests;
+namespace TestProject.Internal;
 
 [TestFixture]
 public class TestEnum

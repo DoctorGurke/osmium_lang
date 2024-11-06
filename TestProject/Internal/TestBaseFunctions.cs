@@ -1,7 +1,4 @@
-﻿using NUnit.Framework;
-using Osmium.Language;
-
-namespace Osmium.Tests;
+﻿namespace TestProject.Internal;
 
 [TestFixture]
 public class TestBaseFunctions

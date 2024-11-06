@@ -1,7 +1,6 @@
-﻿using Osmium.Language;
-using Osmium.Language.Types;
+﻿using Osmium.Language.Types;
 
-namespace Osmium.Tests;
+namespace TestProject.Internal;
 
 internal sealed class MockFunction : IFunction
 {
