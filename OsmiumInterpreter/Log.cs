@@ -8,7 +8,7 @@ public static class Log
     /// <param name="message"></param>
     public static void Print(object message)
     {
-        Console.WriteLine($">{message}");
+        Console.WriteLine($"> {message}");
     }
 
     /// <summary>
