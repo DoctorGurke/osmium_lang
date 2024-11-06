@@ -31,7 +31,7 @@ public static class Intrinsics
             printString = $"[{string.Join(", ", list.ToArray())}]";
         }
 
-        Console.WriteLine($"{printString}");
+        Log.Print($"{printString}");
     }
 
     [IntrinsicFunction(identifier: "length", "list")]
