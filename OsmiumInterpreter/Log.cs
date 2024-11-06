@@ -15,7 +15,7 @@ public static class Log
     /// Used for debug logging. Silenced by default.
     /// </summary>
     /// <param name="content"></param>
-    public static void Info(object content)
+    public static void Debug(object content)
     {
         Console.WriteLine($"{content}");
     }

@@ -8,7 +8,7 @@ public class ConsoleRunner : IMembers
         if (args.Length > 0 && args[0] == "-debug")
         {
             debug = true;
-            Log.Info($"Debug Enabled.");
+            Log.Debug($"Debug Enabled.");
         }
         var runtime = new Runtime(debug: debug);
         Instance = new ConsoleRunner(runtime);

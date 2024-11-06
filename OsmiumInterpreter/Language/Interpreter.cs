@@ -46,7 +46,7 @@ public class Interpreter : OsmiumParserBaseVisitor<object>, IMembers
             pad.Append("  ");
         }
 
-        Log.Info($":: {pad}[] {ruleNames[context.RuleIndex]} {(value != null ? $" -> {value}" : "")}");
+        Log.Debug($":: {pad}[] {ruleNames[context.RuleIndex]} {(value != null ? $" -> {value}" : "")}");
     }
 
     public override object VisitFile([NotNull] FileContext context)

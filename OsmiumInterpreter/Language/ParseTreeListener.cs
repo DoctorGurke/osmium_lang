@@ -14,6 +14,6 @@ public class ParseTreeListener : OsmiumParserBaseListener
             pad.Append("  ");
         }
 
-        Log.Info($"{pad}-{OsmiumParser.ruleNames[context.RuleIndex]}");
+        Log.Debug($"{pad}-{OsmiumParser.ruleNames[context.RuleIndex]}");
     }
 }
