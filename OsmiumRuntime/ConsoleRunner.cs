@@ -59,13 +59,13 @@ public class ConsoleRunner : IMembers
 
             case var x when x.StartsWith("run "):
                 var script = input[4..];
-                Log.Info($"running {script}");
+                Log.Print($"running {script}");
                 runtime.Run(Script.Load(script), local: true);
                 return;
 
             case var x when x.StartsWith("include "):
                 var includeScript = input[8..];
-                Log.Info($"including {includeScript}");
+                Log.Print($"including {includeScript}");
                 runtime.Run(Script.Load(includeScript));
                 return;
 
