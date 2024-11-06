@@ -104,7 +104,7 @@ public class Runtime : IMembers
 
         var programReturn = visitor.Visit(program);
         if (programReturn != null)
-            Log.Info($"{programReturn}");
+            Log.Print($"{programReturn}");
     }
 
 
