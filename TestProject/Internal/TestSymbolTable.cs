@@ -114,7 +114,10 @@ public class TestSymbolTable
         symbolTable.SetSymbol(identifier, value);
 
         // then TryGetSymbol should get the idenfitier
-        Assert.That(symbolTable.TryGetSymbol(value, out var symbolOut), Is.True);
-        Assert.That(symbolOut, Is.EqualTo(identifier));
+        Assert.Multiple(() =>
+        {
+            Assert.That(symbolTable.TryGetSymbol(value, out var symbolOut), Is.True);
+            Assert.That(symbolOut, Is.EqualTo(identifier));
+        });
     }
 }
